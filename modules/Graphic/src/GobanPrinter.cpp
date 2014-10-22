@@ -20,7 +20,7 @@ void	GobanPrinter::print(void) const
     std::cout << "#";
     for (x = 0; x < Goban::SIZE; ++x) {
       if (_goban[y * Goban::SIZE + x].has(Goban::Flag::TAKEN)) {
-	if (_goban[y * Goban::SIZE + x].has(Player::WHITE)) {
+	if (_goban[y * Goban::SIZE + x].has(PlayerColor::WHITE)) {
 	  std::cout << "O";
 	} else {
 	  std::cout << "X";

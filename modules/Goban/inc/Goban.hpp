@@ -4,7 +4,7 @@
 # include <vector>
 
 # include "BitMask.hpp"
-# include "Player.hpp"
+# include "PlayerInfo.hpp"
 
 class GobanPrinter;
 
@@ -22,7 +22,8 @@ public:
       TRIPLE		= 0x0020,
       DOUBLE_TRIPLE	= 0x0040,
       QUAD		= 0x0080,
-      PENTA		= 0x0100
+      PENTA		= 0x0100,
+      OPEN		= 0x0200
     };
 
   Goban(void);
@@ -32,14 +33,14 @@ public:
 
   const BitMask&	operator[](unsigned index) const;
 
-  bool			setPawn(Player player, unsigned index);
-  bool			setPawn(Player player, unsigned x, unsigned y);
-  Player		isGameOver(void) const;
+  bool			setPawn(PlayerColor player, unsigned index);
+  bool			setPawn(PlayerColor player, unsigned x, unsigned y);
+  PlayerColor		isGameOver(void) const;
 
 private:
 
   std::vector<BitMask>	_spaces;
-  Player		_winner;
+  PlayerColor		_winner;
   bool			_rule1;
   bool			_rule2;
 };

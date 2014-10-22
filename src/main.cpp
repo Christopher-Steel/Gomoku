@@ -1,14 +1,9 @@
-#include "Goban.hpp"
-#include "GobanPrinter.hpp"
+#include "Game.hpp"
 
 int		main(void)
 {
-  Goban		goban;
-  GobanPrinter	printer(goban);
+  Game		game;
 
-  for (unsigned i = 0; i < Goban::SIZE * Goban::SIZE; ++i) {
-    goban.setPawn((i % 2 ? Player::BLACK : Player::WHITE), i);
-  }
-  printer.print();
+  game.run(PlayerType::HUMAN, PlayerType::HUMAN);
   return (0);
 }

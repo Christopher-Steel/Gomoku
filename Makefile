@@ -18,9 +18,7 @@ MODDIR		=	./modules/
 # Modules
 #
 # To use a module, all you need to do is append its
-# directory's path to the MODULE_DIRS variable.
-# MODDIR is the directory that contains the modules,
-# so you need to add "$(MODDIR)Module_name".
+# name to the MODULE_DIRS variable.
 #
 # The module will then automatically be included by
 # its make_module.mk file.
@@ -31,12 +29,13 @@ MODDIR		=	./modules/
 #
 ##
 
-MODULE_DIRS	=	$(MODDIR)Goban		\
-			$(MODDIR)Referee	\
-			$(MODDIR)Player		\
-			$(MODDIR)Graphic
+MODULE_DIRS	=	Game		\
+			Goban		\
+			Graphic		\
+			Player		\
+			Referee
 
-MODULES		=	$(addsuffix /make_module.mk, $(MODULE_DIRS))
+MODULES		=	$(addsuffix /make_module.mk, $(addprefix $(MODDIR), $(MODULE_DIRS)))
 
 # Sources
 
@@ -60,10 +59,10 @@ OBJ		=	$(SRC:.cpp=.o)
 DEBUG		?=	false
 
 ifneq		($(DEBUG), false)
-CXXFLAGS		+=	-DDEBUG
-CXXFLAGS		+=	-g3
+CXXFLAGS	+=	-DDEBUG
+CXXFLAGS	+=	-g3
 else
-CXXFLAGS		+=	-O3
+CXXFLAGS	+=	-O3
 endif
 
 # Binary tools
