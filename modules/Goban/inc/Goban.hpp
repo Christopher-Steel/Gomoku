@@ -37,7 +37,6 @@ public:
   Player		isGameOver(void) const;
 
 private:
-  friend class GobanPrinter;
 
   std::vector<BitMask>	_spaces;
   Player		_winner;
