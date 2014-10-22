@@ -13,7 +13,23 @@ LOCAL		=	$(ROOT)$(SRC_FOLDER)
 
 MODDIR		=	./modules/
 
+##
+#
 # Modules
+#
+# To use a module, all you need to do is append its
+# directory's path to the MODULE_DIRS variable.
+# MODDIR is the directory that contains the modules,
+# so you need to add "$(MODDIR)Module_name".
+#
+# The module will then automatically be included by
+# its make_module.mk file.
+#
+# You can find a template for make_module.mk file
+# contents at the root of this repository called
+# .make_module.mk
+#
+##
 
 MODULE_DIRS	=	$(MODDIR)Goban		\
 			$(MODDIR)Referee	\
@@ -31,7 +47,15 @@ include $(MODULES)
 
 OBJ		=	$(SRC:.cpp=.o)
 
+##
+#
 # Debug
+#
+# Set DEBUG to anything other than false in
+# your environment before calling make to
+# build the project in debug mode.
+#
+##
 
 DEBUG		?=	false
 
@@ -82,4 +106,4 @@ re		:	fclean all
 
 .PHONY		:	all clean fclean re
 
-.SUFFIXES	:	%.cpp
+.SUFFIXES	:
