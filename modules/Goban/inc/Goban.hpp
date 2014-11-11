@@ -3,8 +3,9 @@
 
 # include <vector>
 
-# include "BitMask.hpp"
 # include "PlayerInfo.hpp"
+# include "Point.hpp"
+# include "Referee.hpp"
 
 class GobanPrinter;
 
@@ -13,36 +14,54 @@ class Goban
 public:
   static const unsigned	SIZE = 19;
 
-  enum Flag
-    {
-      NONE		= 0x0000,
-      TAKEN		= 0x0004,
-      SOLO		= 0x0008,
-      PAIR		= 0x0010,
-      TRIPLE		= 0x0020,
-      DOUBLE_TRIPLE	= 0x0040,
-      QUAD		= 0x0080,
-      PENTA		= 0x0100,
-      OPEN		= 0x0200
-    };
-
   Goban(void);
   virtual ~Goban(void) = default;
-  Goban(const Goban& other) = delete;
-  Goban&		operator=(const Goban& other) = delete;
+  Goban(const Goban &other) = delete;
+  Goban			&operator=(const Goban &other) = delete;
 
-  const BitMask&	operator[](unsigned index) const;
+  const Point&		operator[](unsigned index) const;
 
-  bool			setPawn(PlayerColor player, unsigned index);
-  bool			setPawn(PlayerColor player, unsigned x, unsigned y);
+  /*
+  ** The two following functions can fail and return false
+  ** if the referee judges that the move is illegal. You should
+  ** take into account any refusals, notify the player and give
+  ** him the opportunity to try another move
+  */
+  bool			setStone(PlayerColor player, unsigned index);
+  bool			setStone(PlayerColor player, unsigned x, unsigned y);
+
   PlayerColor		isGameOver(void) const;
 
-private:
 
-  std::vector<BitMask>	_spaces;
+private:
+  void			_startPropagation(unsigned index, PlayerColor color,
+					  bool capture = false);
+  bool			_propagateInfo(unsigned index, Point::Direction dir,
+				       PlayerColor color, int diff);
+
+  /*
+  ** The reason I have set Referee as a friend class is
+  ** because I believe that the Referee needing to be able
+  ** to access _winner to set its value doesn't justify
+  ** adding a public method to set the winner as it would
+  ** permit future developers to manually set the winner
+  ** from outside the game logic (for example they could
+  ** create a cheat code to automatically win the game, and
+  ** this is not something I want.
+  **
+  ** If you have any problems with the use of the friend
+  ** keyword then I'll expect you to explain thoroughly to
+  ** me why using friend is not good in this situation.
+  ** You should do some research on the uses of the keyword
+  ** before though because it's use is advocated by many
+  ** developers in cases like this one where it enhances
+  ** encapsulation (including Bjarne Stroustrup himself).
+  */
+  friend class		Referee;
+
+  std::vector<Point>	_points;
   PlayerColor		_winner;
-  bool			_rule1;
-  bool			_rule2;
+  Referee		_referee;
 };
 
 #endif /* GOBAN_H */

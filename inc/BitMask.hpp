@@ -5,7 +5,7 @@ class BitMask
 {
 public:
 
-  BitMask(short mask);
+  BitMask(short mask = 0);
   virtual ~BitMask(void) = default;
   BitMask(const BitMask& other) = default;
   BitMask&	operator=(const BitMask& other) = default;

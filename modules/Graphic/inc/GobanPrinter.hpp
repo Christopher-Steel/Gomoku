@@ -13,6 +13,7 @@ public:
   GobanPrinter&	operator=(const GobanPrinter& other) = delete;
 
   void		print(void) const;
+  void		printVictory(PlayerColor victor) const;
 
 private:
 

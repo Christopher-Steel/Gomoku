@@ -20,16 +20,19 @@ PlayerColor	Game::run(PlayerType black, PlayerType white)
       [](PlayerColor c){ return new Human(c); } // replace with AI
     };
   APlayer::Move	move;
+  APlayer	*currentPlayer = nullptr;
 
   _black.reset(playerFactory[static_cast<unsigned>(black) - 1](PlayerColor::BLACK));
   _white.reset(playerFactory[static_cast<unsigned>(white) - 1](PlayerColor::WHITE));
 
-  while (true) {
-    move = _black->getMove();
-    _goban.setPawn(_black->getColor(), move.x, move.y);
+  _printer.print();
+  currentPlayer = _black.get();
+  while (not _goban.isGameOver()) {
+    move = currentPlayer->getMove();
+    _goban.setStone(currentPlayer->getColor(), move.x, move.y);
     _printer.print();
-    move = _white->getMove();
-    _goban.setPawn(_white->getColor(), move.x, move.y);
-    _printer.print();
+    //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
+  _printer.printVictory(_goban.isGameOver());
+  return _goban.isGameOver();
 }

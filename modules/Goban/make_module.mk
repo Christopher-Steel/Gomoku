@@ -2,7 +2,9 @@ GOBAN_DIR	:=	$(dir $(lastword $(MAKEFILE_LIST)))
 
 ############################################################
 
-GOBAN		=	Goban.cpp
+GOBAN		=	Goban.cpp	\
+			Point.cpp	\
+			Traveller.cpp
 
 ############################################################
 

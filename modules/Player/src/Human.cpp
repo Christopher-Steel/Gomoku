@@ -1,4 +1,6 @@
 #include <iostream>
+#include <sstream>
+#include <string>
 
 #include "Human.hpp"
 
@@ -8,13 +10,17 @@ Human::Human(PlayerColor color) :
 
 }
 
-auto	Human::getMove(void) const -> Move
+auto		Human::getMove(void) const -> Move
 {
-  Move	move;
-  char	ignored;
+  std::string		line;
+  std::stringstream	ss;
+  Move			move;
+  char			ignored;
 
-  std::cin >> move.x;
-  std::cin >> ignored;
-  std::cin >> move.y;
+  std::cin >> line;
+  ss << line;
+  ss >> move.x;
+  ss >> ignored;
+  ss >> move.y;
   return move;
 }

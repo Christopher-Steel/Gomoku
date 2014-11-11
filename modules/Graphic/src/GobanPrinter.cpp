@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "GobanPrinter.hpp"
 
@@ -8,9 +9,9 @@ GobanPrinter::GobanPrinter(Goban& target) :
 
 }
 
-void	GobanPrinter::print(void) const
+void		GobanPrinter::print(void) const
 {
-  unsigned x;
+  unsigned	x;
 
   for (x = 0; x < Goban::SIZE + 2; ++x) {
     std::cout << "#";
@@ -19,8 +20,8 @@ void	GobanPrinter::print(void) const
   for (unsigned y = 0; y < Goban::SIZE; ++y) {
     std::cout << "#";
     for (x = 0; x < Goban::SIZE; ++x) {
-      if (_goban[y * Goban::SIZE + x].has(Goban::Flag::TAKEN)) {
-	if (_goban[y * Goban::SIZE + x].has(PlayerColor::WHITE)) {
+      if (_goban[y * Goban::SIZE + x].isTaken()) {
+	if (_goban[y * Goban::SIZE + x].isTaken() == PlayerColor::WHITE) {
 	  std::cout << "O";
 	} else {
 	  std::cout << "X";
@@ -36,4 +37,16 @@ void	GobanPrinter::print(void) const
   }
   std::cout << std::endl;
 
+}
+
+void		GobanPrinter::printVictory(PlayerColor victor) const
+{
+  std::string	messages[] =
+    {
+      "Hey ! Nobody won !",
+      "Congratulations white player, you win !",
+      "Congratulations black player, you win !"
+    };
+
+  std::cout << "End of game : " << messages[static_cast<unsigned>(victor)] << std::endl;
 }

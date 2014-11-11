@@ -1,11 +1,16 @@
 #ifndef	PLAYERINFO_H
 # define PLAYERINFO_H
 
+// Do not change values for PlayerColor,
+// it is important that they be this way
+// because they are used with Flags
+// inside bitmasks and other values are
+// probably already used
 enum PlayerColor
   {
-    NONE	= 0x0000,
-    WHITE	= 0x0001,
-    BLACK	= 0x0002
+    NONE	= 0,
+    WHITE	= 1,
+    BLACK	= 2
   };
 
 enum class PlayerType : char

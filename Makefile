@@ -59,9 +59,9 @@ OBJ		=	$(SRC:.cpp=.o)
 DEBUG		?=	false
 
 ifneq		($(DEBUG), false)
-CXXFLAGS	+=	-DDEBUG
 CXXFLAGS	+=	-g3
 else
+CXXFLAGS	+=	-DNDEBUG
 CXXFLAGS	+=	-O3
 endif
 
@@ -77,6 +77,7 @@ PRINTF		?=	/usr/bin/printf
 # Flags
 
 CXXFLAGS	+=	-std=gnu++11		\
+			-Wall			\
 			$(addprefix -I, $(INCPATH))
 
 # Rules
