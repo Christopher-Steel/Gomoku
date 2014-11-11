@@ -3,8 +3,9 @@
 
 struct Radar
 {
-  unsigned char color : 4;
-  unsigned char length : 4;
+  unsigned char color : 2;
+  unsigned char open : 1;
+  unsigned char length : 5;
 };
 
 #endif /* RADAR_H */

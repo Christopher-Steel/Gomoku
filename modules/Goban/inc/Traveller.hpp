@@ -8,7 +8,7 @@ class Traveller
 {
 public:
   static unsigned	travel(unsigned index, Point::Direction dir,
-			       bool &out_of_bounds);
+			       bool &out_of_bounds, unsigned distance = 1);
 
 private:
   static unsigned	_travelLeft		(unsigned index, bool &out_of_bounds);

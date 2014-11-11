@@ -1,7 +1,7 @@
 #include "Traveller.hpp"
 
 unsigned Traveller::travel(unsigned index, Point::Direction dir,
-			   bool &out_of_bounds)
+			   bool &out_of_bounds, unsigned distance)
 {
   unsigned	(*directions[])(unsigned, bool &) =
     {
@@ -16,7 +16,11 @@ unsigned Traveller::travel(unsigned index, Point::Direction dir,
     };
 
   out_of_bounds = false;
-  return (directions[static_cast<unsigned>(dir)])(index, out_of_bounds);
+  while (distance > 0) {
+    index = (directions[static_cast<unsigned>(dir)])(index, out_of_bounds);
+    --distance;
+  }
+  return index;
 }
 
 unsigned Traveller::_travelLeft(unsigned index, bool &out_of_bounds)
