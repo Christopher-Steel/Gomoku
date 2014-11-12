@@ -14,6 +14,9 @@ public:
 
   void		print(void) const;
   void		printVictory(PlayerColor victor) const;
+  void		printIllegalMove(void) const;
+
+  void		handleInput(std::function<APlayer::Move(void)> callback);
 
 private:
 

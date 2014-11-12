@@ -4,7 +4,9 @@
 
 Point::Point(void)
 {
-
+  for (int i = 0; i < 8; ++i) {
+    _directions[static_cast<unsigned>(i)].open = true;
+  }
 }
 
 void		Point::take(PlayerColor player)

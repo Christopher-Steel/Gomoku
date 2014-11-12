@@ -29,7 +29,10 @@ PlayerColor	Game::run(PlayerType black, PlayerType white)
   currentPlayer = _black.get();
   while (not _goban.isGameOver()) {
     move = currentPlayer->getMove();
-    _goban.setStone(currentPlayer->getColor(), move.x, move.y);
+    if (not _goban.setStone(currentPlayer->getColor(), move.x, move.y)) {
+      _printer.printIllegalMove();
+      continue;
+    }
     _printer.print();
     //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }

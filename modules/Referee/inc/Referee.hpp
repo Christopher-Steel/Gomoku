@@ -18,7 +18,7 @@ public:
   Referee(const Referee &other) = delete;
   Referee	&operator=(const Referee &other) = delete;
 
-  bool		isLegalMove(PlayerColor player, const Point& point);
+  bool		isLegalMove(PlayerColor player, unsigned index);
   bool		isCapture(unsigned index, PlayerColor player,
 			  std::vector<unsigned> &captured);
 
@@ -51,8 +51,21 @@ public:
 private:
   typedef std::vector<std::pair<unsigned, Point::Direction>>	t_fives;
 
-  bool		_isVacant(PlayerColor player, const Point& point);
-  bool		_isntDoubleTriple(PlayerColor player, const Point& point);
+  struct BoardSegment
+  {
+    unsigned		origin;
+    unsigned char	length : 5; // 0-31
+    unsigned char	direction : 3; // 0-7
+  };
+
+  bool		_isVacant(PlayerColor player, unsigned index);
+
+  bool		_isntDoubleTriple(PlayerColor player, unsigned index);
+  unsigned	_findOpenDoubles(PlayerColor player, unsigned index,
+				 std::vector<BoardSegment> &found,
+				 Point::Direction ignoreDir = Point::Direction::BOTTOMLEFT);
+  unsigned	_getExtendableLength(PlayerColor player, unsigned index,
+				     Point::Direction dir, bool &extended) const;
 
   Goban		&_goban;
   t_fives	_watchlist;

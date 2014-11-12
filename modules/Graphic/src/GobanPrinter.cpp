@@ -50,3 +50,13 @@ void		GobanPrinter::printVictory(PlayerColor victor) const
 
   std::cout << "End of game : " << messages[static_cast<unsigned>(victor)] << std::endl;
 }
+
+void		GobanPrinter::printIllegalMove(void) const
+{
+  std::cout << "Illegal move ! try again..." << std::endl;
+}
+
+void		GobanPrinter::handleInput(std::function<APlayer::Move(void)> callback)
+{
+
+}

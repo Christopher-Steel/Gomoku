@@ -11,12 +11,13 @@ Referee::Referee(Goban &goban, bool rule1, bool rule2) :
   _breakableFives(rule1),
   _doubleTriples(rule2)
 {
-
+  _captures[0] = 0;
+  _captures[1] = 0;
 }
 
-bool	Referee::isLegalMove(PlayerColor player, const Point& point)
+bool	Referee::isLegalMove(PlayerColor player, unsigned index)
 {
-  bool	(Referee::*checks[])(PlayerColor, const Point&) =
+  bool	(Referee::*checks[])(PlayerColor, unsigned) =
     {
       &Referee::_isVacant,
       &Referee::_isntDoubleTriple
@@ -24,7 +25,7 @@ bool	Referee::isLegalMove(PlayerColor player, const Point& point)
   bool	rc = true;
 
   for (auto check : checks) {
-    if (not (this->*check)(player, point)) {
+    if (not (this->*check)(player, index)) {
       rc = false;
       break;
     }
@@ -34,7 +35,7 @@ bool	Referee::isLegalMove(PlayerColor player, const Point& point)
 
 bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned> &captured)
 {
-  unsigned		player_color_id = static_cast<unsigned>(player);
+  unsigned		player_color_id = static_cast<unsigned>(player) - 1;
   unsigned		captured_idx;
   Point::Direction	dir;
   bool			out_of_bounds;
@@ -45,7 +46,7 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
   for (unsigned i = 0; i < 8; ++i) {
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
-    std::cout << "\tdirectional radar => length " << (unsigned)r.length << " color " << (unsigned)r.color << "(searching for " << (unsigned)player << ")" << std::endl;
+    std::cout << "\tdirectional radar => length " << (unsigned)r.length << " color " << (unsigned)r.color << "(searching for " << (unsigned)player << ") open " << (unsigned)r.open << std::endl;
     if (r.length == 2 and r.color != player and r.color != PlayerColor::NONE) {
       std::cout << "Spotted a double next to me !" << std::endl;
       captured_idx = index;
@@ -65,28 +66,24 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 
 bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 {
-  // if (not _breakableFives) {
-  //   return true;
-  // }
+  if (not _breakableFives) {
+    return true;
+  }
   bool			out_of_bounds;
-  PlayerColor		color = _goban[index].isTaken();
   Point::Direction	direction;
   unsigned		axisLength;
   unsigned		cursor;
 
-  assert(color != PlayerColor::NONE);
+  assert(_goban[index].isTaken() != PlayerColor::NONE);
   cursor = index;
   for (unsigned i = 0; i < 5; ++i) {
-    std::cout << "validating fiver : " << i << std::endl;
     for (unsigned j = 0; j < 4; ++j) {
       direction = static_cast<Point::Direction>(j);
       axisLength = _goban[cursor].axis(direction);
-      std::cout << "\t direction radar => length " << (unsigned)axisLength << "(searching for " << (unsigned)color << ")" << std::endl;
       if (axisLength == 2) {
 	if (not watched) {
 	  _watchlist.push_back(std::make_pair(index, dir));
 	}
-	std::cout << "getting out" << std::endl;
 	return false;
       }
     }
@@ -107,16 +104,113 @@ void	Referee::consult(void)
 }
 
 bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
-			const Point &point)
+			   unsigned index)
 {
-  return not (point.isTaken());
+  return not (_goban[index].isTaken());
 }
 
-bool	Referee::_isntDoubleTriple(PlayerColor player, const Point &point)
+bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
 {
+  bool	rc = true;
   if (not _doubleTriples)
-    return true;
-  return true; // This line will have to be replaced with proper checks
+    return rc;
+  std::vector<BoardSegment>	found;
+  unsigned			doubles;
+  unsigned			cursor;
+  int				i;
+  bool				out_of_bounds = false;
+  Point::Direction		dir;
+
+  doubles = _findOpenDoubles(player, index, found);
+  if (doubles != 1) {
+    rc = (doubles == 0);
+  } else {
+    for (BoardSegment &seg : found) {
+      cursor = seg.origin;
+      i = 0;
+      dir = static_cast<Point::Direction>(seg.direction);
+      while (rc and i <= seg.length and not out_of_bounds) {
+	std::vector<BoardSegment>	segments;
+
+      	if (_findOpenDoubles(player, cursor, segments,
+			     Point::oppositeDirection(dir)) > 0) {
+	  rc = false;
+	  break;
+	}
+	cursor = Traveller::travel(cursor, dir, out_of_bounds);
+	++i;
+      }
+      if (not rc) {
+	break;
+      }
+    }
+  }
+  return rc;
+}
+
+unsigned	Referee::_findOpenDoubles(PlayerColor player, unsigned index,
+					  std::vector<BoardSegment> &found,
+					  Point::Direction ignoreDir)
+{
+  Point::Direction	dir;
+  bool			out_of_bounds;
+  bool			extended;
+  unsigned		origin;
+  unsigned char		len;
+  Point::Direction	direction;
+
+  for (unsigned i = 0; i < 4; ++i) {
+    extended = false;
+    dir = static_cast<Point::Direction>(i);
+    if (dir == ignoreDir) {
+      continue;
+    }
+    direction = Point::oppositeDirection(dir);
+    len = _getExtendableLength(player, index, dir, extended);
+    origin = Traveller::travel(index, dir, out_of_bounds, len + (extended ? 1 : 0));
+    len += _getExtendableLength(player, index, Point::oppositeDirection(dir), extended);
+    if (len >= 2) {
+      len += (extended ? 1 : 0);
+      found.push_back({origin, len, direction});
+    }
+  }
+  return found.size();
+}
+
+unsigned	Referee::_getExtendableLength(PlayerColor player, unsigned index,
+					      Point::Direction dir, bool &extended) const
+{
+  Radar		r;
+  unsigned	len = 0;
+  unsigned	cursor;
+  bool		out_of_bounds;
+  bool		tried_extend = false;
+
+  cursor = index;
+  r = _goban[cursor].cdirection(dir);
+  if (r.color == player) {
+    len = r.length;
+    cursor = Traveller::travel(cursor, dir, out_of_bounds, len);
+    if (out_of_bounds) {
+      return 0;
+    }
+    r = _goban[cursor].cdirection(dir);
+  }
+  if (r.color == PlayerColor::NONE and not extended) {
+    tried_extend = true;
+    cursor = Traveller::travel(cursor, dir, out_of_bounds);
+    if (out_of_bounds) {
+      return len;
+    }
+    r = _goban[cursor].cdirection(dir);
+  }
+  if (r.color != player) {
+    return len;
+  }
+  if (tried_extend) {
+    extended = true;
+  }
+  return r.length + len;
 }
 
 /*
