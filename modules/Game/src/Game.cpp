@@ -34,7 +34,7 @@ PlayerColor	Game::run(PlayerType black, PlayerType white)
       continue;
     }
     _printer.print();
-    //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
+    currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
   _printer.printVictory(_goban.isGameOver());
   return _goban.isGameOver();

@@ -42,13 +42,10 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
   bool			is_capture = false;
   Radar			r;
 
-  std::cout << "checking for captures" << std::endl;
   for (unsigned i = 0; i < 8; ++i) {
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
-    std::cout << "\tdirectional radar => length " << (unsigned)r.length << " color " << (unsigned)r.color << "(searching for " << (unsigned)player << ") open " << (unsigned)r.open << std::endl;
     if (r.length == 2 and r.color != player and r.color != PlayerColor::NONE) {
-      std::cout << "Spotted a double next to me !" << std::endl;
       captured_idx = index;
       is_capture = true;
       for (unsigned j = 0; j < 2; ++j) {

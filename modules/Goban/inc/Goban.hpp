@@ -32,12 +32,14 @@ public:
 
   PlayerColor		isGameOver(void) const;
 
-
 private:
-  void			_startPropagation(unsigned index, PlayerColor color,
-					  bool capture = false);
+  void			_startPropagation(unsigned index, PlayerColor color);
   bool			_propagateInfo(unsigned index, Point::Direction dir,
 				       PlayerColor color, int diff);
+
+  void			_reversePropagation(unsigned index, PlayerColor color);
+  void			_propagateDestruction(unsigned index, Point::Direction dir,
+					      PlayerColor color, int diff);
 
   /*
   ** The reason I have set Referee as a friend class is
