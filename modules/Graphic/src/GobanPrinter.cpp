@@ -4,7 +4,7 @@
 #include "GobanPrinter.hpp"
 
 GobanPrinter::GobanPrinter(Goban& target) :
-  _goban(target)
+  AGraphic(target)
 {
 
 }
@@ -58,5 +58,5 @@ void		GobanPrinter::printIllegalMove(void) const
 
 void		GobanPrinter::handleInput(std::function<APlayer::Move(void)> callback)
 {
-
+  (void)callback;
 }
