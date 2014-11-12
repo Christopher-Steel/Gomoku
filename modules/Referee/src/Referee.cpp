@@ -46,12 +46,15 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
     if (r.length == 2 and r.color != player and r.color != PlayerColor::NONE) {
-      captured_idx = index;
-      is_capture = true;
-      for (unsigned j = 0; j < 2; ++j) {
-	captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
-	captured.push_back(captured_idx);
-	++_captures[player_color_id];
+      unsigned	other_side(Traveller::travel(index, dir, out_of_bounds, 3));
+      if (not out_of_bounds and _goban[other_side].isTaken() == player) {
+	captured_idx = index;
+	is_capture = true;
+	for (unsigned j = 0; j < 2; ++j) {
+	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
+	  captured.push_back(captured_idx);
+	  ++_captures[player_color_id];
+	}
       }
     }
   }
