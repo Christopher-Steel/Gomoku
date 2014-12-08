@@ -9,33 +9,34 @@ Game::Game(void) :
   _black(nullptr),
   _white(nullptr)
 {
-
 }
 
-PlayerColor	Game::run(PlayerType black, PlayerType white)
-{
-  std::function<APlayer *(PlayerColor)>	playerFactory[] =
+void      Game::initPlayer(PlayerType black, PlayerType white) {
+  std::function<APlayer *(PlayerColor)> playerFactory[] =
     {
       [](PlayerColor c){ return new Human(c); },
       [](PlayerColor c){ return new Human(c); } // replace with AI
     };
-  APlayer::Move	move;
-  APlayer	*currentPlayer = nullptr;
 
   _black.reset(playerFactory[static_cast<unsigned>(black) - 1](PlayerColor::BLACK));
   _white.reset(playerFactory[static_cast<unsigned>(white) - 1](PlayerColor::WHITE));
+}
 
-  _printer.print();
+PlayerColor	Game::run()
+{
+  APlayer::Move move;
+  APlayer *currentPlayer = nullptr;
+  //_printer.print();
   currentPlayer = _black.get();
-  while (not _goban.isGameOver()) {
+  if (not _goban.isGameOver()) {
     move = currentPlayer->getMove();
     if (not _goban.setStone(currentPlayer->getColor(), move.x, move.y)) {
       _printer.printIllegalMove();
-      continue;
+      // continue;
     }
-    _printer.print();
+    //_printer.print();
     currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
-  _printer.printVictory(_goban.isGameOver());
+  //_printer.printVictory(_goban.isGameOver());
   return _goban.isGameOver();
 }

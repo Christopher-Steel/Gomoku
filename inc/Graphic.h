@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "SFML/Graphics.hpp"
+#include "Game.hpp"
 
 class										Graphic
 {
@@ -15,6 +16,7 @@ public:
 	~Graphic();
 
 	void									run();
+	void									drawMenuStart();
 
 private:
 
@@ -24,7 +26,8 @@ private:
 		int									posX;
 		int									posY;
 	};
-
+	unsigned int 							findX(unsigned int pos);
+	unsigned int 							findY(unsigned int pos);
 	void									draw();
 	void									drawMenu();
 	void									loadTexture();

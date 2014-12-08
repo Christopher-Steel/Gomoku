@@ -6,6 +6,8 @@
 # include "Goban.hpp"
 # include "GobanPrinter.hpp"
 # include "APlayer.hpp"
+# include "SFML/Graphics.hpp"
+# include "Graphic.h"
 
 class Game
 {
@@ -15,13 +17,16 @@ public:
   Game(const Game& other) = delete;
   Game&	operator=(const Game& other) = delete;
 
-  PlayerColor	run(PlayerType black, PlayerType white);
+  PlayerColor	run();
+  void      	initPlayer(PlayerType black, PlayerType white);
 
 private:
-  Goban				_goban;
-  GobanPrinter			_printer;
+  Goban											_goban;
+  GobanPrinter							_printer;
   std::unique_ptr<APlayer>	_black;
   std::unique_ptr<APlayer>	_white;
+
+
 };
 
 #endif /* GAME_H */

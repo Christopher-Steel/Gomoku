@@ -16,6 +16,7 @@ Graphic::Graphic(sf::RenderWindow &window) : _window(window)
 	_sprite["jvsj"] = new sf::Sprite;
 	_texture["jvsia"] = new sf::Texture;
 	_sprite["jvsia"] = new sf::Sprite;
+	// _game = new Game();
 }
 
 Graphic::~Graphic()
@@ -28,6 +29,7 @@ void					Graphic::run()
 	bool				player = false;
 	Player				p;
 	bool				menu = true;
+	Game   				game;
 
 	loadTexture();
 	while (_window.isOpen())
@@ -45,8 +47,11 @@ void					Graphic::run()
 					p.posY = sf::Mouse::getPosition(_window).y;
 					if ((p.posX >= 60 && p.posY >= 90) && (p.posX <= 966 && p.posY >= 90))
 					{
-						if (putPion(p, player) == true)
+						if (putPion(p, player) == true) {
+							std::cout << findX(p.posX - 64) << std::endl;
+							std::cout << findY(p.posY - 95) << std::endl;
 							player = !player;
+						}
 						else
 							player = player;
 					}
@@ -56,10 +61,14 @@ void					Graphic::run()
 					if (_jvsj.contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))))
 					{
 						menu = false;
+						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
+						std::cout << "Players" << std::endl;
 					}
 					else if (_jvsia.contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))))
 					{
 						menu = false;
+						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
+						std::cout << "Player" << std::endl;
 					}
 				}
 			}
@@ -71,6 +80,26 @@ void					Graphic::run()
 			drawMenu();
 		_window.display();
 	}
+}
+
+unsigned int 			Graphic::findX(unsigned int pos) {
+	unsigned int ret = 0;
+	unsigned int tmp = pos;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 50;
+	}
+	return (ret);
+}
+
+unsigned int 			Graphic::findY(unsigned int pos) {
+	unsigned int ret = 0;
+	unsigned int tmp = pos;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 35;
+	}
+	return (ret);
 }
 
 void					Graphic::draw()
