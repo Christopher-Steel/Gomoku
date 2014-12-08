@@ -40,6 +40,7 @@ MODULES		=	$(addsuffix /make_module.mk, $(addprefix $(MODDIR), $(MODULE_DIRS)))
 # Sources
 
 SRC		=	$(LOCAL)BitMask.cpp	\
+			$(LOCAL)Graphic.cpp	\
 			$(LOCAL)main.cpp
 
 include $(MODULES)
@@ -77,7 +78,8 @@ PRINTF		?=	/usr/bin/printf
 # Flags
 
 CXXFLAGS	+=	-std=gnu++11		\
-			-Wall			\
+			-Wall \
+			-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio \
 			$(addprefix -I, $(INCPATH))
 
 # Rules

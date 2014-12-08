@@ -1,9 +1,14 @@
-#include "Game.hpp"
+#include "SFML/Graphics.hpp"
 
-int		main(void)
+#include "Graphic.h"
+
+//#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+
+int						main()
 {
-  Game		game;
-
-  game.run(PlayerType::HUMAN, PlayerType::HUMAN);
-  return (0);
+	sf::RenderWindow	window(sf::VideoMode(1024, 768), "Gomoku");
+	Graphic				*graphic = new Graphic(window);
+	
+	graphic->run();
+	return 0;
 }
