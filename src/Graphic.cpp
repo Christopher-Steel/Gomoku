@@ -47,13 +47,15 @@ void					Graphic::run()
 					p.posY = sf::Mouse::getPosition(_window).y;
 					if ((p.posX >= 60 && p.posY >= 90) && (p.posX <= 966 && p.posY >= 90))
 					{
+						//std::cout << "putpion" << std::endl;
 						if (putPion(p, player) == true) {
-							std::cout << findX(p.posX - 64) << std::endl;
-							std::cout << findY(p.posY - 95) << std::endl;
+// important				std::cout << findX(p.posX - 64) << "-" << findY(p.posY - 95) << std::endl;
+							game.run(findX(p.posX - 64), findY(p.posY - 95), player);
 							player = !player;
 						}
-						else
+						else {
 							player = player;
+						}
 					}
 				}
 				else
@@ -62,13 +64,11 @@ void					Graphic::run()
 					{
 						menu = false;
 						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
-						std::cout << "Players" << std::endl;
 					}
 					else if (_jvsia.contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))))
 					{
 						menu = false;
 						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
-						std::cout << "Player" << std::endl;
 					}
 				}
 			}
@@ -80,26 +80,6 @@ void					Graphic::run()
 			drawMenu();
 		_window.display();
 	}
-}
-
-unsigned int 			Graphic::findX(unsigned int pos) {
-	unsigned int ret = 0;
-	unsigned int tmp = pos;
-	while (tmp > 0) {
-		ret++;
-		tmp -= 50;
-	}
-	return (ret);
-}
-
-unsigned int 			Graphic::findY(unsigned int pos) {
-	unsigned int ret = 0;
-	unsigned int tmp = pos;
-	while (tmp > 0) {
-		ret++;
-		tmp -= 35;
-	}
-	return (ret);
 }
 
 void					Graphic::draw()
@@ -227,4 +207,24 @@ bool					Graphic::checkPosition(const Player &player) {
 		}
 	}
 	return (true);
+}
+
+unsigned int 	Graphic::findX(unsigned int pos) {
+	unsigned int tmp = pos;
+	unsigned int ret = 0;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 50;	
+	}
+	return (ret);
+}
+
+unsigned int 	Graphic::findY(unsigned int pos) {
+	unsigned int tmp = pos;
+	unsigned int ret = 0;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 35;
+	}
+	return (ret);
 }

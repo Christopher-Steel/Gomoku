@@ -17,7 +17,7 @@ public:
   Game(const Game& other) = delete;
   Game&	operator=(const Game& other) = delete;
 
-  PlayerColor	run();
+  PlayerColor	run(unsigned int x, unsigned int y, bool player);
   void      	initPlayer(PlayerType black, PlayerType white);
 
 private:

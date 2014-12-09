@@ -22,21 +22,26 @@ void      Game::initPlayer(PlayerType black, PlayerType white) {
   _white.reset(playerFactory[static_cast<unsigned>(white) - 1](PlayerColor::WHITE));
 }
 
-PlayerColor	Game::run()
+PlayerColor	Game::run(unsigned int x, unsigned int y, bool player)
 {
-  APlayer::Move move;
+  //APlayer::Move move;  
   APlayer *currentPlayer = nullptr;
   //_printer.print();
-  currentPlayer = _black.get();
+  if (player == false) {
+    currentPlayer = _black.get();
+  }
+  else {
+    currentPlayer = _white.get();
+  }
   if (not _goban.isGameOver()) {
-    move = currentPlayer->getMove();
-    if (not _goban.setStone(currentPlayer->getColor(), move.x, move.y)) {
+    if (not _goban.setStone(currentPlayer->getColor(), x, y)) {
       _printer.printIllegalMove();
       // continue;
     }
     //_printer.print();
-    currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
+    //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
-  //_printer.printVictory(_goban.isGameOver());
+  else
+    _printer.printVictory(_goban.isGameOver());
   return _goban.isGameOver();
 }
