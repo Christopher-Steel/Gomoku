@@ -16,7 +16,6 @@ Graphic::Graphic(sf::RenderWindow &window) : _window(window)
 	_sprite["jvsj"] = new sf::Sprite;
 	_texture["jvsia"] = new sf::Texture;
 	_sprite["jvsia"] = new sf::Sprite;
-	// _game = new Game();
 }
 
 Graphic::~Graphic()
@@ -24,12 +23,16 @@ Graphic::~Graphic()
 
 }
 
-void					Graphic::run()
+PlayerColor					Graphic::run()
 {
 	bool				player = false;
 	Player				p;
 	bool				menu = true;
-	Game   				game;
+	PlayerColor			plcl;
+	PlayerColor			plclTmp;
+	int 				tmpX;
+	int 				tmpY;
+	Game 				*_game = new Game();
 
 	loadTexture();
 	while (_window.isOpen())
@@ -47,11 +50,16 @@ void					Graphic::run()
 					p.posY = sf::Mouse::getPosition(_window).y;
 					if ((p.posX >= 60 && p.posY >= 90) && (p.posX <= 966 && p.posY >= 90))
 					{
-						//std::cout << "putpion" << std::endl;
-						if (putPion(p, player) == true) {
-// important				std::cout << findX(p.posX - 64) << "-" << findY(p.posY - 95) << std::endl;
-							game.run(findX(p.posX - 64), findY(p.posY - 95), player);
-							player = !player;
+						averagePosition(p, &tmpX, &tmpY);
+						if (checkPosition(p) == true) {
+							if ((plcl = _game->run(findX(p.posX - 64), findY(p.posY - 95), player)) == PlayerColor::END) {
+								return plclTmp;
+							} else if (plcl == PlayerColor::ERROR) {
+							} else {
+								plclTmp = plcl;
+								putPion(p, player);
+								player = !player;
+							}
 						}
 						else {
 							player = player;
@@ -63,12 +71,12 @@ void					Graphic::run()
 					if (_jvsj.contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))))
 					{
 						menu = false;
-						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
+						_game->initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
 					}
 					else if (_jvsia.contains(_window.mapPixelToCoords(sf::Mouse::getPosition(_window))))
 					{
 						menu = false;
-						game.initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
+						_game->initPlayer(PlayerType::HUMAN, PlayerType::HUMAN);
 					}
 				}
 			}
@@ -80,6 +88,7 @@ void					Graphic::run()
 			drawMenu();
 		_window.display();
 	}
+	return PlayerColor::END;
 }
 
 void					Graphic::draw()
@@ -91,6 +100,11 @@ void					Graphic::draw()
 		_window.draw(it->sprite);
 	for (std::vector<Player>::iterator it = _player2.begin(); it != _player2.end(); ++it)
 		_window.draw(it->sprite);
+}
+
+void					Graphic::clear() {
+	_player1.clear();
+	_player2.clear();
 }
 
 void					Graphic::loadTexture()

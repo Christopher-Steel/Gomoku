@@ -15,7 +15,8 @@ public:
 	Graphic(sf::RenderWindow &);
 	~Graphic();
 
-	void									run();
+	PlayerColor								run();
+	void									clear();
 	void									drawMenuStart();
 
 private:
@@ -42,4 +43,5 @@ private:
 	std::vector<Player>						_player2;
 	sf::FloatRect							_jvsj;
 	sf::FloatRect							_jvsia;
+	Game									*_game;
 };

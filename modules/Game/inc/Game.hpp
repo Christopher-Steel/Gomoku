@@ -7,7 +7,6 @@
 # include "GobanPrinter.hpp"
 # include "APlayer.hpp"
 # include "SFML/Graphics.hpp"
-# include "Graphic.h"
 
 class Game
 {

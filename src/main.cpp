@@ -7,6 +7,7 @@ int						main()
 {
 	sf::RenderWindow	window(sf::VideoMode(1024, 768), "Gomoku");
 	Graphic				*graphic = new Graphic(window);
+	PlayerColor			pl;
 	//Game				game;
 
 	//Goban goban;
@@ -15,6 +16,15 @@ int						main()
 
 //	game.run(PlayerType::HUMAN, PlayerType::HUMAN);
 	//std::cout << "SFML" << std::endl;
-	graphic->run();
+	while ((pl =graphic->run()) != PlayerColor::END) {
+		if (pl == PlayerColor::WHITE) {
+			std::cout << "player White win" << std::endl;
+		}
+		else {
+			std::cout << "player Black win" << std::endl;
+
+		}
+		graphic->clear();
+	}
 	return 0;
 }

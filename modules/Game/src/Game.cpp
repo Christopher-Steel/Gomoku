@@ -36,12 +36,13 @@ PlayerColor	Game::run(unsigned int x, unsigned int y, bool player)
   if (not _goban.isGameOver()) {
     if (not _goban.setStone(currentPlayer->getColor(), x, y)) {
       _printer.printIllegalMove();
+      return PlayerColor::ERROR;
       // continue;
     }
     //_printer.print();
     //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
   else
-    _printer.printVictory(_goban.isGameOver());
+    return (PlayerColor::END);
   return _goban.isGameOver();
 }
