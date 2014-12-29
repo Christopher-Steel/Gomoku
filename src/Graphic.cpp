@@ -28,8 +28,8 @@ PlayerColor					Graphic::run()
 	bool				player = false;
 	Player				p;
 	bool				menu = true;
-	PlayerColor			plcl;
-	PlayerColor			plclTmp;
+	PlayerColor			plcl = PlayerColor::NONE;
+	PlayerColor			plclTmp = PlayerColor::NONE;
 	int 				tmpX;
 	int 				tmpY;
 	Game 				*_game = new Game();
