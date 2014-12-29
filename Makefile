@@ -77,7 +77,8 @@ PRINTF		?=	/usr/bin/printf
 
 # Flags
 
-CXXFLAGS	+=	-std=gnu++11		\
+CXXFLAGS	+=	-std=gnu++11 \
+			-L./lib/ -lGLEW -Wl,-rpath=./lib \
 			-Wall \
 			-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio \
 			$(addprefix -I, $(INCPATH))
