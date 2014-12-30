@@ -1,6 +1,8 @@
 #include <stack>
 
 #include "Game.h"
+#include "GameState.h"
+#include "GUIState.h"
 
 Game::Game() : _window(NULL), factory(_resourceManager)
 {
@@ -27,7 +29,6 @@ bool										Game::initialize(const sf::Vector2u &size, const std::string &titl
 void										Game::run()
 {
 	sf::Event								event;
-	sf::Time								elapsed;
 	std::vector<AState *>::reverse_iterator	rit;
 	AState									*state;
 	std::stack<AState *>					drawStack;
@@ -50,7 +51,7 @@ void										Game::run()
 		for (rit = _states.rbegin(); rit != _states.rend(); ++rit)
 		{
 			state = *rit;
-			state->update(elapsed);
+			state->update();
 			drawStack.push(state);
 			if (state->isBlocking())
 				break;
@@ -96,25 +97,25 @@ bool										Game::loadTextures()
 {
 	std::string								textures[19] =
 	{
-		// "textures/menu_background.png",
-		// "textures/unicolor.png",
-		// "textures/missile_icon.png",
-		// "textures/mine_icon.png",
-		// "textures/laser_icon.png",
-		// "textures/load_icon.png",
-		// "textures/hero.png",
-		// "textures/background.png",
-		// "textures/fireMotor.png",
-		// "textures/background_reversed.png",
-		// "textures/missile.png",
-		// "textures/greenLaserRay.png",
-		// "textures/explosion0.png",
-		// "textures/explosion1.png",
-		// "textures/explosion2.png",
-		// "textures/explosion3.png",
-		// "textures/explosion4.png",
-		// "textures/explosion5.png",
-		// "textures/intercepter.png"
+		"textures/menu_background.png",
+		"textures/unicolor.png",
+		"textures/missile_icon.png",
+		"textures/mine_icon.png",
+		"textures/laser_icon.png",
+		"textures/load_icon.png",
+		"textures/hero.png",
+		"textures/background.png",
+		"textures/fireMotor.png",
+		"textures/background_reversed.png",
+		"textures/missile.png",
+		"textures/greenLaserRay.png",
+		"textures/explosion0.png",
+		"textures/explosion1.png",
+		"textures/explosion2.png",
+		"textures/explosion3.png",
+		"textures/explosion4.png",
+		"textures/explosion5.png",
+		"textures/intercepter.png"
 	};
 
 	for (unsigned int i = 0; i != 19; ++i)
@@ -130,8 +131,8 @@ bool										Game::loadFonts()
 {
 	std::string								fonts[2] =
 	{
-		// "fonts/SPACEBAR.ttf",
-		// "fonts/BMSPA.ttf",
+		"fonts/SPACEBAR.ttf",
+		"fonts/BMSPA.ttf",
 	};
 
 	for (unsigned int i = 0; i != 2; ++i)

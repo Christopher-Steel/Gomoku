@@ -5,7 +5,7 @@ GUIEndState::GUIEndState(Game *game, const Result &result) : AState(game)
 {
 	(result == WIN) ? _result = "You Win" : _result = "You Lose";
 	_isBlocking = false;
-	_state = RType::EndMenu::EXIT;
+	_state = Gomoku::EndMenu::EXIT;
 }
 
 GUIEndState::~GUIEndState()
@@ -26,17 +26,17 @@ bool						GUIEndState::handleKeyState()
 
 bool						GUIEndState::handleKeyEvent(const sf::Event &event)
 {
-	_state = RType::EndMenu::EXIT;
+	_state = Gomoku::EndMenu::EXIT;
 	_world.textComponents[_id[_state]]->highlighted = true;
 
 	if (event.type == sf::Event::KeyPressed)
 	{
-		unsigned int		prev = _state;
+		//unsigned int		prev = _state;
 
 		switch (event.key.code)
 		{
 		case sf::Keyboard::Return:
-			if (_state == RType::EndMenu::EXIT)
+			if (_state == Gomoku::EndMenu::EXIT)
 			{
 				_game->popState();
 				_game->popState();

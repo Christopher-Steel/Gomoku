@@ -24,5 +24,5 @@ private:
 
 	std::string					_result;
 	unsigned int				_state;
-	unsigned int				_id[RType::EndMenu::MAX];
+	unsigned int				_id[Gomoku::EndMenu::MAX];
 };

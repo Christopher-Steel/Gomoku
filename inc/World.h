@@ -10,12 +10,6 @@ public:
 	World();
 	~World();
 
-	const unsigned int					createParticleEffect(const unsigned int maxParticleCount,
-		const bool respawn,
-		const sf::Texture * const texture,
-		const sf::Vector2f &position,
-		const sf::Vector2f &scale = sf::Vector2f(1, 1));
-
 	const unsigned int					createEmptyEntity();
 
 	void								destroyEntity(const unsigned int id);

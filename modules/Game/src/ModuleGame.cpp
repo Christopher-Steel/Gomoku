@@ -1,17 +1,17 @@
 #include <functional>
 
 
-#include "Game.hpp"
+#include "ModuleGame.hpp"
 #include "Human.hpp"
 
-Game::Game(void) :
+ModuleGame::ModuleGame(void) :
   _printer(_goban),
   _black(nullptr),
   _white(nullptr)
 {
 }
 
-void      Game::initPlayer(PlayerType black, PlayerType white) {
+void      ModuleGame::initPlayer(PlayerType black, PlayerType white) {
   std::function<APlayer *(PlayerColor)> playerFactory[] =
     {
       [](PlayerColor c){ return new Human(c); },
@@ -22,7 +22,7 @@ void      Game::initPlayer(PlayerType black, PlayerType white) {
   _white.reset(playerFactory[static_cast<unsigned>(white) - 1](PlayerColor::WHITE));
 }
 
-PlayerColor	Game::run(unsigned int x, unsigned int y, bool player)
+PlayerColor	ModuleGame::run(unsigned int x, unsigned int y, bool player)
 {
   //APlayer::Move move;  
   APlayer *currentPlayer = nullptr;

@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "SFML/Graphics.hpp"
-#include "Game.hpp"
+#include "ModuleGame.hpp"
 
 class										Graphic
 {
@@ -43,5 +43,5 @@ private:
 	std::vector<Player>						_player2;
 	sf::FloatRect							_jvsj;
 	sf::FloatRect							_jvsia;
-	Game									*_game;
+	ModuleGame								*_game;
 };

@@ -16,5 +16,5 @@ public:
 private:
 
 	unsigned int				_state;
-	unsigned int				_id[RType::PauseMenu::MAX];
+	unsigned int				_id[Gomoku::PauseMenu::MAX];
 };

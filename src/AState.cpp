@@ -8,10 +8,10 @@ AState::~AState()
 {
 }
 
-void							AState::update(const sf::Time &elapsed)
+void							AState::update()
 {
-	TimerSystem::update(_world, elapsed);
-	TransformSystem::update(_world, elapsed, _game->getScreenSize());
+	//TimerSystem::update(_world, elapsed);
+	TransformSystem::update(_world, _game->getScreenSize());
 }
 
 void							AState::draw(sf::RenderWindow *window)

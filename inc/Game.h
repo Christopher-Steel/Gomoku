@@ -6,8 +6,7 @@
 
 #include "ResourceManager.h"
 #include "GameSpecificFactory.h"
-#include "GUIState.h"
-#include "GameState.h"
+#include "GameEnums.h"
 
 class							AState;
 
@@ -35,6 +34,5 @@ private:
 
 	ResourceManager				_resourceManager;
 	sf::RenderWindow			*_window;
-	sf::Clock					_clock;
 	std::vector<AState *>		_states;
 };

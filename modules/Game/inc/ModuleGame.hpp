@@ -1,5 +1,4 @@
-#ifndef	GAME_H
-# define GAME_H
+#pragma once
 
 # include <memory>
 
@@ -8,13 +7,13 @@
 # include "APlayer.hpp"
 # include "SFML/Graphics.hpp"
 
-class Game
+class ModuleGame
 {
 public:
-  Game(void);
-  virtual ~Game(void) = default;
-  Game(const Game& other) = delete;
-  Game&	operator=(const Game& other) = delete;
+  ModuleGame(void);
+  virtual ~ModuleGame(void) = default;
+  ModuleGame(const ModuleGame& other) = delete;
+  ModuleGame&	operator=(const ModuleGame& other) = delete;
 
   PlayerColor	run(unsigned int x, unsigned int y, bool player);
   void      	initPlayer(PlayerType black, PlayerType white);
@@ -27,5 +26,3 @@ private:
 
 
 };
-
-#endif /* GAME_H */

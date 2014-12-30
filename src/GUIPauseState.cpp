@@ -4,7 +4,7 @@
 GUIPauseState::GUIPauseState(Game *game) : AState(game)
 {
 	_isBlocking = false;
-	_state = RType::PauseMenu::CONTINUE;
+	_state = Gomoku::PauseMenu::CONTINUE;
 }
 
 GUIPauseState::~GUIPauseState()
@@ -34,14 +34,14 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 		{
 		case sf::Keyboard::Up:
 			if ((_state--) == 0)
-				_state = RType::PauseMenu::EXIT;
+				_state = Gomoku::PauseMenu::EXIT;
 			_world.textComponents[_id[_state]]->highlighted = true;
 			_world.textComponents[_id[prev]]->highlighted = false;
 			return(true);
 
 		case sf::Keyboard::Down:
-			if ((++_state) == RType::PauseMenu::EXIT + 1)
-				_state = RType::PauseMenu::CONTINUE;
+			if ((++_state) == Gomoku::PauseMenu::EXIT + 1)
+				_state = Gomoku::PauseMenu::CONTINUE;
 			_world.textComponents[_id[_state]]->highlighted = true;
 			_world.textComponents[_id[prev]]->highlighted = false;
 			return(true);
@@ -51,7 +51,7 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 			return (false);
 
 		case sf::Keyboard::Return:
-			if (_state == RType::PauseMenu::CONTINUE)
+			if (_state == Gomoku::PauseMenu::CONTINUE)
 			{
 				_game->popState();
 				return (false);
@@ -62,7 +62,6 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 				_game->popState();
 				return (false);
 			}
-
 		default:
 			return (true);
 		}

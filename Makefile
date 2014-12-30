@@ -29,7 +29,7 @@ MODDIR		=	./modules/
 #
 ##
 
-MODULE_DIRS	=	Game		\
+MODULE_DIRS	=	Game	\
 			Goban		\
 			Graphic		\
 			Player		\
@@ -50,7 +50,6 @@ SRC		=	$(LOCAL)BitMask.cpp	\
 			$(LOCAL)RenderSystem.cpp \
 			$(LOCAL)ResourceManager.cpp \
 			$(LOCAL)TextSystem.cpp \
-			$(LOCAL)TimerSystem.cpp \
 			$(LOCAL)TransformSystem.cpp \
 			$(LOCAL)World.cpp \
 			$(LOCAL)GUIPauseState.cpp \

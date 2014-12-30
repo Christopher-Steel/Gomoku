@@ -12,9 +12,10 @@ public:
 	void						stop(void);
 	bool						handleKeyEvent(const sf::Event &event);
 	bool						handleKeyState();
-	void						update(const sf::Time &elapsed);
+	void						update();
 	
 private:
+
 	void						updateBackground();
 	void						updateHUD();
 

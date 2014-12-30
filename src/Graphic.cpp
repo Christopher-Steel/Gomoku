@@ -32,7 +32,7 @@ PlayerColor					Graphic::run()
 	PlayerColor			plclTmp = PlayerColor::NONE;
 	int 				tmpX;
 	int 				tmpY;
-	Game 				*_game = new Game();
+	ModuleGame 				*_game = new ModuleGame();
 
 	loadTexture();
 	while (_window.isOpen())

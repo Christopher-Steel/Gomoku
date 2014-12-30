@@ -1,4 +1,6 @@
+#include "GUIState.h"
 #include "GameState.h"
+#include "GUIEndState.h"
 
 GUIState::GUIState(Game *game) : AState(game)
 {
