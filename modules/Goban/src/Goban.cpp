@@ -1,3 +1,4 @@
+
 #include <cassert>
 #include <iostream>
 
@@ -28,6 +29,7 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     Point&			point = _points[index];
     std::vector<unsigned>	captured;
     PlayerColor			target;
+
     rc = true;
     point.take(player);
     _startPropagation(index, player);
@@ -97,6 +99,7 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
     next = Traveller::travel(index, dir, out_of_bounds);
     if (not out_of_bounds and point.isTaken() == color) {
       isOpen = not _propagateInfo(next, dir, color, diff);
+      std::cout << isOpen << std::endl;
       point.direction(oppositeDir).open = isOpen;
       if (point.direction(dir).color == color) {
 	point.direction(dir).open = isOpen;

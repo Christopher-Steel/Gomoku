@@ -1,5 +1,5 @@
 #include <functional>
-
+#include <iostream>
 
 #include "Game.hpp"
 #include "Human.hpp"
@@ -37,10 +37,10 @@ PlayerColor	Game::run(unsigned int x, unsigned int y, bool player)
     if (not _goban.setStone(currentPlayer->getColor(), x, y)) {
       _printer.printIllegalMove();
       return PlayerColor::ERROR;
-      // continue;
+      //continue;
     }
     //_printer.print();
-    //currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
+    currentPlayer = (currentPlayer == _black.get() ? _white.get() : _black.get());
   }
   else
     return (PlayerColor::END);

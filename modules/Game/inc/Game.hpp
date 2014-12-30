@@ -20,7 +20,7 @@ public:
   void      	initPlayer(PlayerType black, PlayerType white);
 
 private:
-  Goban											_goban;
+  Goban								_goban;
   GobanPrinter							_printer;
   std::unique_ptr<APlayer>	_black;
   std::unique_ptr<APlayer>	_white;
