@@ -90,8 +90,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			// std::cout << p.posX << " " << p.posY << std::endl;
 			averagePosition(p, &tmpX, &tmpY);
 			if (checkPosition(p) == true) {
-				// if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END) {
-				// 	return plclTmp;
+				if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END)
+					return plclTmp;
 				// } else if (plcl == PlayerColor::ERROR) {
 				// } else {
 				// 	// plclTmp = plcl;

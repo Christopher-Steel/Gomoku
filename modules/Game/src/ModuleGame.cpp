@@ -4,6 +4,8 @@
 #include "ModuleGame.hpp"
 #include "Human.hpp"
 
+#include <iostream>
+
 ModuleGame::ModuleGame(void) :
   _printer(_goban),
   _black(nullptr),
@@ -25,6 +27,7 @@ void      ModuleGame::initPlayer(PlayerType black, PlayerType white) {
 PlayerColor	ModuleGame::run(unsigned int x, unsigned int y, bool player)
 {
   //APlayer::Move move;  
+  std::cout << "x = " << x << " y = " << y << std::endl;
   APlayer *currentPlayer = nullptr;
   //_printer.print();
   if (player == false) {
@@ -35,7 +38,7 @@ PlayerColor	ModuleGame::run(unsigned int x, unsigned int y, bool player)
   }
   if (not _goban.isGameOver()) {
     if (not _goban.setStone(currentPlayer->getColor(), x, y)) {
-      _printer.printIllegalMove();
+      // _printer.printIllegalMove();
       return PlayerColor::ERROR;
       // continue;
     }

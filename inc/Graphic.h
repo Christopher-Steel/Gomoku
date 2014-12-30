@@ -39,9 +39,10 @@ private:
 	sf::RenderWindow						&_window;
 	std::map<std::string, sf::Sprite*>		_sprite;
 	std::map<std::string, sf::Texture*>		_texture;
-	std::vector<Player>						_player1;
-	std::vector<Player>						_player2;
 	sf::FloatRect							_jvsj;
 	sf::FloatRect							_jvsia;
+	std::vector<Player>						_player1;
+	std::vector<Player>						_player2;
+
 	ModuleGame								*_game;
 };
