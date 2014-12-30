@@ -54,7 +54,7 @@ void								GameSpecificFactory::createLoadMenu(unsigned int *id, World &world, 
 void								GameSpecificFactory::createPauseMenu(unsigned int *id, World &world, const sf::Vector2u &screenSize)
 {
 	id[Gomoku::PauseMenu::FILTER] = world.createEmptyEntity();
-	world.addRenderComponent(id[Gomoku::PauseMenu::FILTER], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(0, 0, 0, 150)));
+	world.addRenderComponent(id[Gomoku::PauseMenu::FILTER], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(0, 0, 0, 150)));
 	world.addTransformComponent(id[Gomoku::PauseMenu::FILTER], ComponentFactory::createTransformComponent(sf::Vector2f(screenSize), sf::Vector2f(0.0f, 0.0f)));
 
 	id[Gomoku::PauseMenu::CONTINUE] = world.createEmptyEntity();

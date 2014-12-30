@@ -1,6 +1,8 @@
 #include "GUIPauseState.h"
 #include "GameState.h"
 
+#include <iostream>
+
 GUIPauseState::GUIPauseState(Game *game) : AState(game)
 {
 	_isBlocking = false;
@@ -66,6 +68,51 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 			return (true);
 		}
 	}
+
+
+
+	if (event.type == sf::Event::MouseButtonReleased) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
+			int x = event.mouseButton.x;
+			int y = event.mouseButton.y;
+    		if (x > 430 && x < 850 && y > 270 && y < 350)
+    		{
+    			_game->popState();
+				return (true);
+    		}
+    		if (x > 560 && x < 720 && y > 420 && y < 470)
+    		{
+    			_game->popState();
+    			_game->popState();
+				return (true);
+    		}
+		}
+	}
+
+
+
+	if (event.type == sf::Event::MouseMoved) {
+		int x = event.mouseMove.x;
+		int y = event.mouseMove.y;
+		unsigned int			prev = _state;
+		if (x > 430 && x < 850 && y > 270 && y < 350)
+		{
+			if (_state != Gomoku::PauseMenu::CONTINUE) {
+				_state = Gomoku::PauseMenu::CONTINUE;
+				_world.textComponents[_id[_state]]->highlighted = true;
+				_world.textComponents[_id[prev]]->highlighted = false;
+			}
+		}
+		if (x > 560 && x < 720 && y > 420 && y < 470)
+		{
+			if (_state != Gomoku::PauseMenu::EXIT) {
+				_state = Gomoku::PauseMenu::EXIT;
+				_world.textComponents[_id[_state]]->highlighted = true;
+				_world.textComponents[_id[prev]]->highlighted = false;
+			}
+		}
+	}
+
 
 	return (true);
 }

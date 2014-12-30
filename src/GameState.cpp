@@ -17,8 +17,8 @@ void						GameState::initialize()
 
 	// _client = Network::Client::connect<Network::udp::ip4>(Network::Client::Config("127.0.0.1", 6325), ::hpl::bind(&GameState::onConnectEvent, this, ::hpl::Placeholder::_1));
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
-	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
-	_game->factory.createPlayer(_idPlayer, _world);
+	//_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
+	//_game->factory.createPlayer(_idPlayer, _world);
 	//_game->factory.createTestEnemy(id, _world);
 }
 
@@ -36,10 +36,10 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	}
 
 	// simuler une fin de partie
-	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
-		_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
-		return (true);
-	}
+	// if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
+	// 	_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
+	// 	return (true);
+	// }
 	return (true);
 }
 
@@ -93,7 +93,7 @@ void						GameState::update()
 	this->updateBackground();
 	this->updateHUD();
 
-	// Si vous voulez savoir ce que ça fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingame
+	// Si vous voulez savoir ce que Ã§a fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingame
 	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = sf::Vector2f(0.0f, 0.0f);
 }
 

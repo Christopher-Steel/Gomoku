@@ -55,6 +55,11 @@ bool						GUIState::handleKeyEvent(const sf::Event &event)
 				_game->pushState(new GameState(_game));
 				return (true);
 			}
+			else if (_state == Gomoku::MainMenu::PLAYERIA)
+			{
+				_game->pushState(new GameState(_game));
+				return (true);
+			}
 			else
 			{
 				_game->popState();
@@ -73,11 +78,13 @@ bool						GUIState::handleKeyEvent(const sf::Event &event)
 			int y = event.mouseButton.y;
     		if (x > 230 && x < 1040 && y > 180 && y < 250)
     		{
-    			std::cout << "PLAYERPLAYER" << std::endl;
+    			_game->pushState(new GameState(_game));
+				return (true);
     		}
     		if (x > 400 && x < 1000 && y > 330 && y < 390)
     		{
-    			std::cout << "PLAYERIA" << std::endl;
+    			_game->pushState(new GameState(_game));
+				return (true);
     		}
 			if (x > 550 && x < 860 && y > 480 && y < 530)
     		{

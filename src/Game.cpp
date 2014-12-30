@@ -95,7 +95,7 @@ sf::Vector2u								Game::getScreenSize() const
 
 bool										Game::loadTextures()
 {
-	std::string								textures[6] =
+	std::string								textures[7] =
 	{
 		"ressources/background.png",
 		"ressources/white.png",
@@ -103,9 +103,10 @@ bool										Game::loadTextures()
 		"ressources/jvsia.png",
 		"ressources/jvsj.png",
 		"ressources/plateau.png",
+		"ressources/unicolor.png"
 	};
 
-	for (unsigned int i = 0; i != 6; ++i)
+	for (unsigned int i = 0; i != 7; ++i)
 	{
 		if (!_resourceManager.loadTexture(textures[i]))
 			return (false);
@@ -119,7 +120,6 @@ bool										Game::loadFonts()
 	std::string								fonts[1] =
 	{
 		"fonts/go3v2.ttf",
-		// "fonts/BMSPA.ttf",
 	};
 
 	for (unsigned int i = 0; i != 1; ++i)
