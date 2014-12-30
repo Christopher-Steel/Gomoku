@@ -34,7 +34,7 @@ private:
 	void									loadTexture();
 	bool									putPion(Player &, bool);
 	bool									checkPosition(const Player &);
-	void									averagePosition(Player &, int *, int *);
+	bool									averagePosition(Player &, int *, int *);
 
 	sf::RenderWindow						&_window;
 	std::map<std::string, sf::Sprite*>		_sprite;

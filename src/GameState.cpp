@@ -1,25 +1,61 @@
 #include "GameState.h"
 #include "GUIPauseState.h"
 #include "GUIEndState.h"
-//#include "RFCClient.h"
+#include "PlayerInfo.hpp"
+#include <iostream>
 
 GameState::GameState(Game *game) : AState(game)
 {
-	//game->_rfc = &_rfc;
 	_isBlocking = true;
+	_player = false;
 }
 
 GameState::~GameState() {}
 
+void					GameState::averagePosition(Player &p, int *x2, int *y2) {
+	int					x;
+	int					y;
+
+	y = (p.posY - 195) % 35;
+	x = (p.posX - 215) % 50;
+	if (y <= (35 / 2))
+		*y2 = p.posY - (y % 35);
+	else
+		*y2 = p.posY - (y % 35) + 35;
+	if (x < (50 / 2))
+		*x2 = p.posX - (x % 50);
+	else
+		*x2 = p.posX - (x % 50) + 50;
+	p.posX = *x2;
+	p.posY = *y2;
+}
+
+unsigned int 	GameState::findX(unsigned int pos) {
+	unsigned int tmp = pos;
+	unsigned int ret = 0;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 50;	
+	}
+	return (ret);
+}
+
+unsigned int 	GameState::findY(unsigned int pos) {
+	unsigned int tmp = pos;
+	unsigned int ret = 0;
+	while (tmp > 0) {
+		ret++;
+		tmp -= 35;
+	}
+	return (ret);
+}
+
+
 void						GameState::initialize()
 {
-	//unsigned int			id[1];
-
-	// _client = Network::Client::connect<Network::udp::ip4>(Network::Client::Config("127.0.0.1", 6325), ::hpl::bind(&GameState::onConnectEvent, this, ::hpl::Placeholder::_1));
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
 	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
-	//_game->factory.createPlayer(_idPlayer, _world);
-	//_game->factory.createTestEnemy(id, _world);
+	_moduleGame = new ModuleGame();
 }
 
 void						GameState::stop(void)
@@ -40,11 +76,95 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 		_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
 		return (true);
 	}
+
+	if (event.type == sf::Event::MouseButtonReleased) {
+		if (event.mouseButton.button == sf::Mouse::Left) {
+			Player				p;
+			int 				tmpX;
+			int 				tmpY;
+			PlayerColor			plcl = PlayerColor::NONE;
+			PlayerColor			plclTmp = PlayerColor::NONE;
+
+			p.posX = event.mouseButton.x;
+			p.posY = event.mouseButton.y;
+			// std::cout << p.posX << " " << p.posY << std::endl;
+			averagePosition(p, &tmpX, &tmpY);
+			if (checkPosition(p) == true) {
+				// if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END) {
+				// 	return plclTmp;
+				// } else if (plcl == PlayerColor::ERROR) {
+				// } else {
+				// 	// plclTmp = plcl;
+				// 	// putPion(p, _player);
+				// 	// _player = !_player;
+				// }
+			}
+		}
+	}
 	return (true);
 }
 
+
+
+bool					GameState::putPion(Player &p, bool player)
+{
+	int					x;
+	int					y;
+
+	//averagePosition(p, &x, &y);
+	if (player)
+	{
+		// p.sprite = *_sprite["blanc"];
+		// p.sprite.setPosition(x - _sprite["blanc"]->getLocalBounds().width / 2, y - _sprite["blanc"]->getLocalBounds().height / 2);
+		// if (checkPosition(p) != false) {
+		// 	_player1.push_back(p);
+		// 	return (true);
+		// }
+		// else
+		// 	return (false);
+		std::cout << "white" << std::endl;
+	}
+	else
+	{
+		std::cout << "black" << std::endl;
+		// p.sprite = *_sprite["noir"];
+		// p.sprite.setPosition(x - _sprite["noir"]->getLocalBounds().width / 2, y - _sprite["noir"]->getLocalBounds().height / 2);
+		// if (checkPosition(p) != false) {
+		// 	_player2.push_back(p);
+		// 	return (true);
+		// }
+		// else
+		// 	return (false);
+	}
+}
+
+bool					GameState::checkPosition(const Player &player) {
+	bool	x = false;
+	bool	y = false;
+
+	for (std::vector<Player>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
+		if (it->posX == player.posX) {
+			x = true;
+			if (it->posY == player.posY)
+				y = true;
+			if (x == true && y == true)
+				return (false);
+		}
+	}
+	for (std::vector<Player>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+		if (it->posX == player.posX) {
+			x = true;
+			if (it->posY == player.posY)
+				y = true;
+			if (x == true && y == true)
+				return (false);
+		}
+	}
+	return (true);
+}
 bool						GameState::handleKeyState()
 {
+
 	// sf::Vector2f			direction = sf::Vector2f(0.0f, 0.0f);
 	// sf::Vector2f			size = _world.transformComponents[_idPlayer[Gomoku::Player::SHIP]]->size;
 	// sf::Vector2f			scale = _world.transformComponents[_idPlayer[Gomoku::Player::SHIP]]->scale;

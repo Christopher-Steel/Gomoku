@@ -40,7 +40,6 @@ MODULES		=	$(addsuffix /make_module.mk, $(addprefix $(MODDIR), $(MODULE_DIRS)))
 # Sources
 
 SRC		=	$(LOCAL)BitMask.cpp	\
-			$(LOCAL)Graphic.cpp	\
 			$(LOCAL)main.cpp \
 			$(LOCAL)AState.cpp \
 			$(LOCAL)ComponentFactory.cpp \

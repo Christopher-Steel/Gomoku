@@ -28,7 +28,6 @@ bool						GUIEndState::handleKeyEvent(const sf::Event &event)
 {
 	_state = Gomoku::EndMenu::EXIT;
 	_world.textComponents[_id[_state]]->highlighted = true;
-
 	if (event.type == sf::Event::KeyPressed)
 	{
 		//unsigned int		prev = _state;
