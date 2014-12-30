@@ -41,7 +41,21 @@ MODULES		=	$(addsuffix /make_module.mk, $(addprefix $(MODDIR), $(MODULE_DIRS)))
 
 SRC		=	$(LOCAL)BitMask.cpp	\
 			$(LOCAL)Graphic.cpp	\
-			$(LOCAL)main.cpp
+			$(LOCAL)main.cpp \
+			$(LOCAL)AState.cpp \
+			$(LOCAL)ComponentFactory.cpp \
+			$(LOCAL)Game.cpp \
+			$(LOCAL)GameSpecificFactory.cpp \
+			$(LOCAL)GameState.cpp \
+			$(LOCAL)RenderSystem.cpp \
+			$(LOCAL)ResourceManager.cpp \
+			$(LOCAL)TextSystem.cpp \
+			$(LOCAL)TimerSystem.cpp \
+			$(LOCAL)TransformSystem.cpp \
+			$(LOCAL)World.cpp \
+			$(LOCAL)GUIPauseState.cpp \
+			$(LOCAL)GUIEndState.cpp \
+			$(LOCAL)GUIState.cpp
 
 include $(MODULES)
 
