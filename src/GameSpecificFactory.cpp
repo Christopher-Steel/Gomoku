@@ -71,16 +71,12 @@ void								GameSpecificFactory::createPauseMenu(unsigned int *id, World &world,
 void								GameSpecificFactory::createEndMenu(unsigned int *id, World &world, const sf::Vector2u &screenSize, const std::string &result)
 {
 	id[Gomoku::EndMenu::FILTER] = world.createEmptyEntity();
-	world.addRenderComponent(id[Gomoku::EndMenu::FILTER], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(0, 0, 0, 150)));
+	world.addRenderComponent(id[Gomoku::EndMenu::FILTER], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(0, 0, 0, 150)));
 	world.addTransformComponent(id[Gomoku::EndMenu::FILTER], ComponentFactory::createTransformComponent(sf::Vector2f(screenSize), sf::Vector2f(0.0f, 0.0f)));
 
 	id[Gomoku::EndMenu::RESULT] = world.createEmptyEntity();
 	world.addTextComponent(id[Gomoku::EndMenu::RESULT], ComponentFactory::createTextComponent(result, _resourceManager.getFont("fonts/go3v2.ttf"), true, false, 80, sf::Color::White));
-	world.addTransformComponent(id[Gomoku::EndMenu::RESULT], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 100.0f)));
-
-	id[Gomoku::EndMenu::SCORE] = world.createEmptyEntity();
-	world.addTextComponent(id[Gomoku::EndMenu::SCORE], ComponentFactory::createTextComponent("Score :", _resourceManager.getFont("fonts/go3v2.ttf"), true, false, 38, sf::Color::White));
-	world.addTransformComponent(id[Gomoku::EndMenu::SCORE], ComponentFactory::createTransformComponent(sf::Vector2f(), sf::Vector2f(0.0f, screenSize.y - screenSize.y / 2.0f)));
+	world.addTransformComponent(id[Gomoku::EndMenu::RESULT], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 350.0f)));
 
 	id[Gomoku::EndMenu::EXIT] = world.createEmptyEntity();
 	world.addTextComponent(id[Gomoku::EndMenu::EXIT], ComponentFactory::createTextComponent("Press Enter To Quit", _resourceManager.getFont("fonts/go3v2.ttf"), true, true, 18, sf::Color::White));

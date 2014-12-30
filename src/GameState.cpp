@@ -36,10 +36,10 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	}
 
 	// simuler une fin de partie
-	// if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
-	// 	_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
-	// 	return (true);
-	// }
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
+		_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
+		return (true);
+	}
 	return (true);
 }
 
