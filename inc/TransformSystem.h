@@ -19,5 +19,5 @@ private:
 	// static void					updateChildren(const unsigned int id, World &world, const sf::Vector2f &movement);
 	// static void					updateChildren(const unsigned int id, World &world, const float spinValue);
 
-	// static void					computeTransform(const unsigned int id, World &world);
+	static void					computeTransform(const unsigned int id, World &world);
 };

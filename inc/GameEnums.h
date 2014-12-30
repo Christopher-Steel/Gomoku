@@ -39,7 +39,8 @@ namespace	Gomoku
 	{
 		enum
 		{
-			CONNECT,
+			PLAYERPLAYER,
+			PLAYERIA,
 			EXIT,
 			BACKGROUND,
 			TITLE,

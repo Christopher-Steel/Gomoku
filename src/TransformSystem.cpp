@@ -4,15 +4,10 @@ void							TransformSystem::update(World &world, const sf::Vector2u &screenSize)
 {
 	for (unsigned int i = 0; i < world.entityCount; ++i)
 	{
-		// if (world.transformComponents[i])
-		// {
-		// 	applyScroll(i, world, elapsed);
-		// 	if (!applyMovement(i, world, elapsed, screenSize))
-		// 		continue;
-		// 	applySpin(i, world, elapsed);
-		// 	applyGrow(i, world, elapsed);
-		// 	computeTransform(i, world);
-		// }
+		if (world.transformComponents[i])
+		{
+			computeTransform(i, world);
+		}
 	}
 }
 
@@ -122,12 +117,12 @@ void							TransformSystem::update(World &world, const sf::Vector2u &screenSize)
 // 	}
 // }
 
-// void							TransformSystem::computeTransform(const unsigned int id, World &world)
-// {
-// 	TransformComponent			*xform = world.transformComponents[id];
+void							TransformSystem::computeTransform(const unsigned int id, World &world)
+{
+	TransformComponent			*xform = world.transformComponents[id];
 
-// 	xform->transform = sf::Transform::Identity;
-// 	xform->transform.translate(xform->position);
-// 	xform->transform.scale(xform->scale);
-// 	xform->transform.rotate(xform->rotation, sf::Vector2f(xform->size.x / 2, xform->size.y / 2));
-// }
+	xform->transform = sf::Transform::Identity;
+	xform->transform.translate(xform->position);
+	xform->transform.scale(xform->scale);
+	xform->transform.rotate(xform->rotation, sf::Vector2f(xform->size.x / 2, xform->size.y / 2));
+}

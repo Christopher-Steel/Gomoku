@@ -4,7 +4,7 @@
 #include "GameState.h"
 #include "GUIState.h"
 
-Game::Game() : _window(NULL), factory(_resourceManager)
+Game::Game() : factory(_resourceManager),  _window(NULL)
 {
 }
 
@@ -14,7 +14,7 @@ Game::~Game()
 
 bool										Game::initialize(const sf::Vector2u &size, const std::string &title)
 {
-	_window = new sf::RenderWindow(sf::VideoMode(size.x, size.y), title, sf::Style::Default);
+	_window = new sf::RenderWindow(sf::VideoMode(1280, 720), title, sf::Style::Default);
 
 	if (!_window->isOpen())
 		return (false);
@@ -95,30 +95,17 @@ sf::Vector2u								Game::getScreenSize() const
 
 bool										Game::loadTextures()
 {
-	std::string								textures[19] =
+	std::string								textures[6] =
 	{
-		"textures/menu_background.png",
-		"textures/unicolor.png",
-		"textures/missile_icon.png",
-		"textures/mine_icon.png",
-		"textures/laser_icon.png",
-		"textures/load_icon.png",
-		"textures/hero.png",
-		"textures/background.png",
-		"textures/fireMotor.png",
-		"textures/background_reversed.png",
-		"textures/missile.png",
-		"textures/greenLaserRay.png",
-		"textures/explosion0.png",
-		"textures/explosion1.png",
-		"textures/explosion2.png",
-		"textures/explosion3.png",
-		"textures/explosion4.png",
-		"textures/explosion5.png",
-		"textures/intercepter.png"
+		"ressources/background.png",
+		"ressources/white.png",
+		"ressources/black.png",
+		"ressources/jvsia.png",
+		"ressources/jvsj.png",
+		"ressources/plateau.png",
 	};
 
-	for (unsigned int i = 0; i != 19; ++i)
+	for (unsigned int i = 0; i != 6; ++i)
 	{
 		if (!_resourceManager.loadTexture(textures[i]))
 			return (false);
@@ -129,13 +116,13 @@ bool										Game::loadTextures()
 
 bool										Game::loadFonts()
 {
-	std::string								fonts[2] =
+	std::string								fonts[1] =
 	{
-		"fonts/SPACEBAR.ttf",
-		"fonts/BMSPA.ttf",
+		"fonts/go3v2.ttf",
+		// "fonts/BMSPA.ttf",
 	};
 
-	for (unsigned int i = 0; i != 2; ++i)
+	for (unsigned int i = 0; i != 1; ++i)
 	{
 		if (!_resourceManager.loadFont(fonts[i]))
 			return (false);

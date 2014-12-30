@@ -6,6 +6,16 @@
 
 int						main()
 {
+		Game						game;
+
+	std::srand(static_cast<unsigned int>(std::time(NULL)));
+
+	if (!game.initialize(sf::Vector2u(1280, 720), "Gomoku")) {
+		return (EXIT_FAILURE);
+	}
+	game.run();
+	game.exit();
+	return (EXIT_SUCCESS);
 	//sf::RenderWindow	window(sf::VideoMode(1024, 768), "Gomoku");
 	// Graphic				*graphic = new Graphic(window);
 	// PlayerColor			pl;
