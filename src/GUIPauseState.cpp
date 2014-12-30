@@ -75,12 +75,12 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			int x = event.mouseButton.x;
 			int y = event.mouseButton.y;
-    		if (x > 430 && x < 850 && y > 270 && y < 350)
+    		if (x > 430 && x < 850 && y > 180 && y < 250)
     		{
     			_game->popState();
 				return (true);
     		}
-    		if (x > 560 && x < 720 && y > 420 && y < 470)
+    		if (x > 560 && x < 710 && y > 320 && y < 380)
     		{
     			_game->popState();
     			_game->popState();
@@ -95,7 +95,7 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 		int x = event.mouseMove.x;
 		int y = event.mouseMove.y;
 		unsigned int			prev = _state;
-		if (x > 430 && x < 850 && y > 270 && y < 350)
+		if (x > 430 && x < 850 && y > 180 && y < 250)
 		{
 			if (_state != Gomoku::PauseMenu::CONTINUE) {
 				_state = Gomoku::PauseMenu::CONTINUE;
@@ -103,7 +103,7 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 				_world.textComponents[_id[prev]]->highlighted = false;
 			}
 		}
-		if (x > 560 && x < 720 && y > 420 && y < 470)
+		if (x > 560 && x < 720 && y > 320 && y < 380)
 		{
 			if (_state != Gomoku::PauseMenu::EXIT) {
 				_state = Gomoku::PauseMenu::EXIT;

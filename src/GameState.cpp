@@ -17,7 +17,7 @@ void						GameState::initialize()
 
 	// _client = Network::Client::connect<Network::udp::ip4>(Network::Client::Config("127.0.0.1", 6325), ::hpl::bind(&GameState::onConnectEvent, this, ::hpl::Placeholder::_1));
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
-	//_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
+	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
 	//_game->factory.createPlayer(_idPlayer, _world);
 	//_game->factory.createTestEnemy(id, _world);
 }

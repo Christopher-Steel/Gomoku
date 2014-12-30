@@ -3,6 +3,14 @@
 namespace	Gomoku
 {
 
+	namespace GAME
+	{
+		enum Game
+		{
+			GOBAN,
+			TITLE
+		};
+	}
 	namespace	HUD
 	{
 		enum

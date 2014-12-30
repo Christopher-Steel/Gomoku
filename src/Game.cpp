@@ -14,7 +14,7 @@ Game::~Game()
 
 bool										Game::initialize(const sf::Vector2u &size, const std::string &title)
 {
-	_window = new sf::RenderWindow(sf::VideoMode(1280, 720), title, sf::Style::Default);
+	_window = new sf::RenderWindow(sf::VideoMode(1280, 920), title, sf::Style::Default);
 
 	if (!_window->isOpen())
 		return (false);
@@ -102,7 +102,7 @@ bool										Game::loadTextures()
 		"ressources/black.png",
 		"ressources/jvsia.png",
 		"ressources/jvsj.png",
-		"ressources/plateau.png",
+		"ressources/goban.png",
 		"ressources/unicolor.png"
 	};
 

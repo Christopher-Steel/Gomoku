@@ -59,11 +59,11 @@ void								GameSpecificFactory::createPauseMenu(unsigned int *id, World &world,
 
 	id[Gomoku::PauseMenu::CONTINUE] = world.createEmptyEntity();
 	world.addTextComponent(id[Gomoku::PauseMenu::CONTINUE], ComponentFactory::createTextComponent("Continue", _resourceManager.getFont("fonts/go3v2.ttf"), true, true, 80, sf::Color(255, 255, 255, 150)));
-	world.addTransformComponent(id[Gomoku::PauseMenu::CONTINUE], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, screenSize.y / 3.0f)));
+	world.addTransformComponent(id[Gomoku::PauseMenu::CONTINUE], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 150.0f)));
 
 	id[Gomoku::PauseMenu::EXIT] = world.createEmptyEntity();
 	world.addTextComponent(id[Gomoku::PauseMenu::EXIT], ComponentFactory::createTextComponent("Quit", _resourceManager.getFont("fonts/go3v2.ttf"), true, false, 80, sf::Color(255, 255, 255, 150)));
-	world.addTransformComponent(id[Gomoku::PauseMenu::EXIT], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, screenSize.y / 3.0f + 150.0f)));
+	world.addTransformComponent(id[Gomoku::PauseMenu::EXIT], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 300.0f)));
 }
 
 // END MENU
@@ -106,9 +106,9 @@ void								GameSpecificFactory::createGameBackground(unsigned int *id, World &w
 
 void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const sf::Vector2u &screenSize)
 {
-	// id[Gomoku::HUD::SHIELD_TEXT] = world.createEmptyEntity();
-	// world.addTextComponent(id[Gomoku::HUD::SHIELD_TEXT], ComponentFactory::createTextComponent("Shield", _resourceManager.getFont("fonts/BMSPA.ttf"), false, false, 18, sf::Color(255, 255, 255, 255)));
-	// world.addTransformComponent(id[Gomoku::HUD::SHIELD_TEXT], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(25.0f, screenSize.y - 38.0f)));
+	id[Gomoku::GAME::TITLE] = world.createEmptyEntity();
+	world.addTextComponent(id[Gomoku::GAME::TITLE], ComponentFactory::createTextComponent("Gomoku", _resourceManager.getFont("fonts/go3v2.ttf"), true, false, 120, sf::Color::Black));
+	world.addTransformComponent(id[Gomoku::GAME::TITLE], ComponentFactory::createTransformComponent(sf::Vector2f(), sf::Vector2f(0.0f, 0.0f)));
 
 	// id[Gomoku::HUD::SHIELDBAR] = world.createEmptyEntity();
 	// world.addRenderComponent(id[Gomoku::HUD::SHIELDBAR], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(13, 205, 248)));
@@ -138,9 +138,9 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 	// world.addRenderComponent(id[Gomoku::HUD::WEAPON_3], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/missile_icon.png"), RenderComponent::Plane::HUD, sf::Color::Green));
 	// world.addTransformComponent(id[Gomoku::HUD::WEAPON_3], ComponentFactory::createTransformComponent(sf::Vector2f(50, 50), sf::Vector2f(screenSize.x - screenSize.x / 7.0f - 70, screenSize.y - 70.0f)));
 
-	// id[Gomoku::HUD::SCORE] = world.createEmptyEntity();
-	// world.addTextComponent(id[Gomoku::HUD::SCORE], ComponentFactory::createTextComponent("Score : 0", _resourceManager.getFont("fonts/"), true, false, 18, sf::Color(255, 255, 255, 255)));
-	// world.addTransformComponent(id[Gomoku::HUD::SCORE], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0, 15.0f)));
+	id[Gomoku::GAME::GOBAN] = world.createEmptyEntity();
+	world.addRenderComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/goban.png"), RenderComponent::Plane::HUD));
+	world.addTransformComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createTransformComponent(sf::Vector2f(1024, 768), sf::Vector2f(150,100)));
 }
 
 // PLAYER
