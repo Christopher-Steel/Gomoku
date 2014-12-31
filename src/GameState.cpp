@@ -62,6 +62,7 @@ void						GameState::initialize()
 {
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
 	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
+	_player = false;
 }
 
 void						GameState::stop(void)
@@ -103,7 +104,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				}
 			}
 			else {
-				_player = _player;
+				// _player = _player;
 			}
 		}
 	}
