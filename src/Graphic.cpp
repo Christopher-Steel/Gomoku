@@ -32,7 +32,7 @@ PlayerColor					Graphic::run()
 	PlayerColor			plclTmp = PlayerColor::NONE;
 	int 				tmpX;
 	int 				tmpY;
-	ModuleGame 				*_game = new ModuleGame();
+	ModuleGame 			*_game = new ModuleGame();
 
 	loadTexture();
 	while (_window.isOpen())
@@ -93,9 +93,9 @@ PlayerColor					Graphic::run()
 
 void					Graphic::draw()
 {
-	_window.draw(*_sprite["background"]);
-	_window.draw(*_sprite["title"]);
-	_window.draw(*_sprite["plateau"]);
+	// _window.draw(*_sprite["background"]);
+	// _window.draw(*_sprite["title"]);
+	// _window.draw(*_sprite["plateau"]);
 	for (std::vector<Player>::iterator it = _player1.begin(); it != _player1.end(); ++it)
 		_window.draw(it->sprite);
 	for (std::vector<Player>::iterator it = _player2.begin(); it != _player2.end(); ++it)

@@ -4,10 +4,17 @@
 #include "PlayerInfo.hpp"
 #include <iostream>
 
-GameState::GameState(Game *game) : AState(game)
+GameState::GameState(Game *game, Gomoku::MainMenu::MODE mode) : AState(game)
 {
 	_isBlocking = true;
 	_player = false;
+	_moduleGame = new ModuleGame();
+	_mode = mode;
+	if (_mode == Gomoku::MainMenu::PLAYERPLAYER)
+		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
+	else
+		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
+
 }
 
 GameState::~GameState() {}
@@ -55,7 +62,6 @@ void						GameState::initialize()
 {
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
 	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
-	_moduleGame = new ModuleGame();
 }
 
 void						GameState::stop(void)
@@ -82,22 +88,22 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			Player				p;
 			int 				tmpX;
 			int 				tmpY;
-			PlayerColor			plcl = PlayerColor::NONE;
-			PlayerColor			plclTmp = PlayerColor::NONE;
 
 			p.posX = event.mouseButton.x;
 			p.posY = event.mouseButton.y;
-			// std::cout << p.posX << " " << p.posY << std::endl;
 			averagePosition(p, &tmpX, &tmpY);
 			if (checkPosition(p) == true) {
-				if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END)
+				if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END) {
 					return plclTmp;
-				// } else if (plcl == PlayerColor::ERROR) {
-				// } else {
-				// 	// plclTmp = plcl;
-				// 	// putPion(p, _player);
-				// 	// _player = !_player;
-				// }
+				} else if (plcl == PlayerColor::ERROR) {
+				} else {
+					plclTmp = plcl;
+					putPion(p, _player);
+					_player = !_player;
+				}
+			}
+			else {
+				_player = _player;
 			}
 		}
 	}
@@ -108,8 +114,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 
 bool					GameState::putPion(Player &p, bool player)
 {
-	int					x;
-	int					y;
+	// int					x;
+	// int					y;
 
 	//averagePosition(p, &x, &y);
 	if (player)
@@ -122,11 +128,10 @@ bool					GameState::putPion(Player &p, bool player)
 		// }
 		// else
 		// 	return (false);
-		std::cout << "white" << std::endl;
+		// std::cout << "white" << std::endl;
 	}
 	else
 	{
-		std::cout << "black" << std::endl;
 		// p.sprite = *_sprite["noir"];
 		// p.sprite.setPosition(x - _sprite["noir"]->getLocalBounds().width / 2, y - _sprite["noir"]->getLocalBounds().height / 2);
 		// if (checkPosition(p) != false) {
@@ -136,6 +141,7 @@ bool					GameState::putPion(Player &p, bool player)
 		// else
 		// 	return (false);
 	}
+	return (true);
 }
 
 bool					GameState::checkPosition(const Player &player) {

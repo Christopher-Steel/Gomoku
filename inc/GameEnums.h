@@ -45,7 +45,7 @@ namespace	Gomoku
 
 	namespace	MainMenu
 	{
-		enum
+		enum MODE
 		{
 			PLAYERPLAYER,
 			PLAYERIA,

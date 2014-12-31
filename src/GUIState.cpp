@@ -52,12 +52,12 @@ bool						GUIState::handleKeyEvent(const sf::Event &event)
 		case sf::Keyboard::Return:
 			if (_state == Gomoku::MainMenu::PLAYERPLAYER)
 			{
-				_game->pushState(new GameState(_game));
+				_game->pushState(new GameState(_game, Gomoku::MainMenu::PLAYERPLAYER));
 				return (true);
 			}
 			else if (_state == Gomoku::MainMenu::PLAYERIA)
 			{
-				_game->pushState(new GameState(_game));
+				_game->pushState(new GameState(_game, Gomoku::MainMenu::PLAYERIA));
 				return (true);
 			}
 			else
@@ -78,12 +78,12 @@ bool						GUIState::handleKeyEvent(const sf::Event &event)
 			int y = event.mouseButton.y;
     		if (x > 230 && x < 1040 && y > 180 && y < 250)
     		{
-    			_game->pushState(new GameState(_game));
+    			_game->pushState(new GameState(_game, Gomoku::MainMenu::PLAYERPLAYER));
 				return (true);
     		}
     		if (x > 400 && x < 1000 && y > 330 && y < 390)
     		{
-    			_game->pushState(new GameState(_game));
+    			_game->pushState(new GameState(_game, Gomoku::MainMenu::PLAYERIA));
 				return (true);
     		}
 			if (x > 550 && x < 860 && y > 480 && y < 530)

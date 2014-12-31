@@ -22,6 +22,7 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
   bool		rc = false;
 
   if (index >= Goban::SIZE * Goban::SIZE) {
+    std::cout <<  "index > Goban::SIZE..." << std::endl;
     return false;
   }
   if (_referee.isLegalMove(player, index)) {
@@ -33,13 +34,14 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     _startPropagation(index, player);
     if (_referee.isCapture(index, player, captured)) {
       for (auto capture : captured) {
-	target = _points[capture].isTaken();
-	_points[capture].free();
-	_reversePropagation(capture, target);
+      	target = _points[capture].isTaken();
+      	_points[capture].free();
+      	_reversePropagation(capture, target);
       }
     }
   }
   _referee.consult();
+  std::cout << "rc = " << rc << " || TRUE = " << true << std::endl;
   return rc;
 }
 
