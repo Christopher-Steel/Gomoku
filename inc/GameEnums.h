@@ -8,14 +8,16 @@ namespace	Gomoku
 		enum Game
 		{
 			GOBAN,
-			TITLE
+			TITLE,
+			GAME,
+			SCOREWHITE,
+			SCOREBLACK
 		};
 	}
 	namespace	HUD
 	{
 		enum
 		{
-			SCORE,
 			MAX
 		};
 	};

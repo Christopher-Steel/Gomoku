@@ -48,7 +48,7 @@ private:
 	sf::FloatRect							_jvsj;
 	sf::FloatRect							_jvsia;
 	Gomoku::MainMenu::MODE					_mode;
-	PlayerColor			plcl = PlayerColor::NONE;
-	PlayerColor			plclTmp = PlayerColor::NONE;
+	PlayerColor								plcl = PlayerColor::NONE;
+	PlayerColor								plclTmp = PlayerColor::NONE;
 
 };

@@ -239,7 +239,7 @@ void						GameState::updateHUD()
 	// sf::Vector2f			size = sf::Vector2f(200, 10);
 	// float					ratio;
 	
-	// _world.textComponents[_idHud[RType::HUD::SCORE]]->string = "Score : " + std::to_string(info->score);
+	// _world.textComponents[_idHud[Gomoku::GAME::SCORE]]->string = "Stone : ";
 
 	// ratio = (static_cast<float>(info->life) / static_cast<float>(info->maxLife));
 	// _world.transformComponents[_idHud[RType::HUD::LIFEBAR]]->size = size * ratio;

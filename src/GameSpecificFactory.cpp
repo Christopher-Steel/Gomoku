@@ -106,6 +106,15 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 	world.addTextComponent(id[Gomoku::GAME::TITLE], ComponentFactory::createTextComponent("Gomoku", _resourceManager.getFont("fonts/go3v2.ttf"), true, false, 120, sf::Color::Black));
 	world.addTransformComponent(id[Gomoku::GAME::TITLE], ComponentFactory::createTransformComponent(sf::Vector2f(), sf::Vector2f(0.0f, 0.0f)));
 
+
+	id[Gomoku::GAME::SCOREWHITE] = world.createEmptyEntity();
+	world.addTextComponent(id[Gomoku::GAME::SCOREWHITE], ComponentFactory::createTextComponent("Stone White : ", _resourceManager.getFont("fonts/go3v2.ttf"), false, false, 28, sf::Color::Black));
+	world.addTransformComponent(id[Gomoku::GAME::SCOREWHITE], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 50.0f)));
+
+	id[Gomoku::GAME::SCOREBLACK] = world.createEmptyEntity();
+	world.addTextComponent(id[Gomoku::GAME::SCOREBLACK], ComponentFactory::createTextComponent("Stone Black : ", _resourceManager.getFont("fonts/go3v2.ttf"), false, false, 28, sf::Color::Black));
+	world.addTransformComponent(id[Gomoku::GAME::SCOREBLACK], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(0.0f, 100.0f)));
+
 	// id[Gomoku::HUD::SHIELDBAR] = world.createEmptyEntity();
 	// world.addRenderComponent(id[Gomoku::HUD::SHIELDBAR], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(13, 205, 248)));
 	// world.addTransformComponent(id[Gomoku::HUD::SHIELDBAR], ComponentFactory::createTransformComponent(sf::Vector2f(200, 10), sf::Vector2f(120.0f, screenSize.y - 30.0f)));
