@@ -8,13 +8,7 @@ GameState::GameState(Game *game, Gomoku::MainMenu::MODE mode) : AState(game)
 {
 	_isBlocking = true;
 	_player = false;
-	_moduleGame = new ModuleGame();
 	_mode = mode;
-	if (_mode == Gomoku::MainMenu::PLAYERPLAYER)
-		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
-	else
-		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
-
 }
 
 GameState::~GameState() {}
@@ -63,6 +57,11 @@ void						GameState::initialize()
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
 	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
 	_player = false;
+	_moduleGame = new ModuleGame();
+	if (_mode == Gomoku::MainMenu::PLAYERPLAYER)
+		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
+	else
+		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
 }
 
 void						GameState::stop(void)
