@@ -98,6 +98,21 @@ void								GameSpecificFactory::createGameBackground(unsigned int *id, World &w
 	//world.addScrollComponent(id[Gomoku::GameBackground::REVERSED], ComponentFactory::createScrollComponent(20.0f));
 }
 
+unsigned int								GameSpecificFactory::createGameBlackStone(World &world, const sf::Vector2f &pos)
+{
+	unsigned int tmp = world.createEmptyEntity();
+	world.addRenderComponent(tmp, ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/black.png"), RenderComponent::Plane::HUD));
+	world.addTransformComponent(tmp, ComponentFactory::createTransformComponent(sf::Vector2f(42,42), sf::Vector2f(pos)));
+	return (tmp);
+}
+unsigned int								GameSpecificFactory::createGameWhiteStone(World &world, const sf::Vector2f &pos)
+{
+	unsigned int tmp = world.createEmptyEntity();
+	world.addRenderComponent(tmp, ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/white.png"), RenderComponent::Plane::HUD));
+	world.addTransformComponent(tmp, ComponentFactory::createTransformComponent(sf::Vector2f(42,42), sf::Vector2f(pos)));
+	return (tmp);
+}
+
 // HUD
 
 void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const sf::Vector2u &screenSize)
@@ -144,7 +159,7 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 	// world.addTransformComponent(id[Gomoku::HUD::WEAPON_3], ComponentFactory::createTransformComponent(sf::Vector2f(50, 50), sf::Vector2f(screenSize.x - screenSize.x / 7.0f - 70, screenSize.y - 70.0f)));
 
 	id[Gomoku::GAME::GOBAN] = world.createEmptyEntity();
-	world.addRenderComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/goban.png"), RenderComponent::Plane::HUD));
+	world.addRenderComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/goban.png"), RenderComponent::Plane::DEFAULT));
 	world.addTransformComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createTransformComponent(sf::Vector2f(1024, 768), sf::Vector2f(150,100)));
 }
 

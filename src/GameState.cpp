@@ -13,22 +13,22 @@ GameState::GameState(Game *game, Gomoku::MainMenu::MODE mode) : AState(game)
 
 GameState::~GameState() {}
 
-void					GameState::averagePosition(Player &p, int *x2, int *y2) {
+void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 	int					x;
 	int					y;
 
-	y = (p.posY - 195) % 35;
-	x = (p.posX - 215) % 50;
+	y = (p.y - 195) % 35;
+	x = (p.x - 215) % 50;
 	if (y <= (35 / 2))
-		*y2 = p.posY - (y % 35);
+		*y2 = p.y - (y % 35);
 	else
-		*y2 = p.posY - (y % 35) + 35;
+		*y2 = p.y - (y % 35) + 35;
 	if (x < (50 / 2))
-		*x2 = p.posX - (x % 50);
+		*x2 = p.x - (x % 50);
 	else
-		*x2 = p.posX - (x % 50) + 50;
-	p.posX = *x2;
-	p.posY = *y2;
+		*x2 = p.x - (x % 50) + 50;
+	p.x = *x2;
+	p.y = *y2;
 }
 
 unsigned int 	GameState::findX(unsigned int pos) {
@@ -51,22 +51,24 @@ unsigned int 	GameState::findY(unsigned int pos) {
 	return (ret);
 }
 
-
 void						GameState::initialize()
 {
 	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
 	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
+	// _game->factory.createGameBlackStone(_world, sf::Vector2f(10,10));
 	_player = false;
 	_moduleGame = new ModuleGame();
 	if (_mode == Gomoku::MainMenu::PLAYERPLAYER)
 		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
 	else
 		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
-}
 
-void						GameState::stop(void)
-{
-	// _client->socket.close();
+
+	// sf::Texture tata;
+	// unsigned int tmp = _world.createEmptyEntity();
+	// 	_world.addRenderComponent(tmp, ComponentFactory::createRenderComponent(_game->_resourceManager.getTexture("ressources/black.png"), RenderComponent::Plane::DEFAULT));
+	// 	_world.addTransformComponent(tmp, ComponentFactory::createTransformComponent(sf::Vector2f(120,150), sf::Vector2f(120, 120)));
+
 }
 
 bool						GameState::handleKeyEvent(const sf::Event &event)
@@ -85,15 +87,15 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			Player				p;
+			Stone				p;
 			int 				tmpX;
 			int 				tmpY;
 
-			p.posX = event.mouseButton.x;
-			p.posY = event.mouseButton.y;
+			p.x = event.mouseButton.x;
+			p.y = event.mouseButton.y;
 			averagePosition(p, &tmpX, &tmpY);
 			if (checkPosition(p) == true) {
-				if ((plcl = _moduleGame->run(findX(p.posX - 215), findY(p.posY - 195), _player)) == PlayerColor::END) {
+				if ((plcl = _moduleGame->run(findX(p.x - 215), findY(p.y - 195), _player)) == PlayerColor::END) {
 					return plclTmp;
 				} else if (plcl == PlayerColor::ERROR) {
 				} else {
@@ -111,56 +113,62 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 }
 
 
-
-bool					GameState::putPion(Player &p, bool player)
+void						GameState::stop()
 {
-	// int					x;
-	// int					y;
 
-	//averagePosition(p, &x, &y);
+}
+
+bool					GameState::putPion(Stone &p, bool player)
+{
+	int					x;
+	int					y;
+
+	Stone stone;
+	stone.x = p.x;
+	stone.y = p.y;
+	averagePosition(p, &x, &y);
 	if (player)
 	{
-		// p.sprite = *_sprite["blanc"];
-		// p.sprite.setPosition(x - _sprite["blanc"]->getLocalBounds().width / 2, y - _sprite["blanc"]->getLocalBounds().height / 2);
-		// if (checkPosition(p) != false) {
-		// 	_player1.push_back(p);
-		// 	return (true);
-		// }
-		// else
-		// 	return (false);
-		// std::cout << "white" << std::endl;
+		 std::cout << "white" << std::endl;
+		 if (checkPosition(stone) != false) {
+			stone.color = true;
+			stone.id = _game->factory.createGameWhiteStone(_world, sf::Vector2f(x - 21,y - 21));
+		 	_player1.push_back(stone);
+		 	return (true);
+		 }
+		return (false);
 	}
 	else
 	{
-		// p.sprite = *_sprite["noir"];
-		// p.sprite.setPosition(x - _sprite["noir"]->getLocalBounds().width / 2, y - _sprite["noir"]->getLocalBounds().height / 2);
-		// if (checkPosition(p) != false) {
-		// 	_player2.push_back(p);
-		// 	return (true);
-		// }
-		// else
-		// 	return (false);
+		 std::cout << "black" << std::endl;
+		 if (checkPosition(stone) != false) {
+			stone.color = false;
+			stone.id = _game->factory.createGameBlackStone(_world, sf::Vector2f(x - 21,y - 21));
+		 	_player2.push_back(stone);
+		 	return (true);
+		 }
+		return (false);
 	}
 	return (true);
 }
 
-bool					GameState::checkPosition(const Player &player) {
+bool					GameState::checkPosition(const Stone &stone) {
 	bool	x = false;
 	bool	y = false;
 
-	for (std::vector<Player>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
-		if (it->posX == player.posX) {
+	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
+		if (it->x == stone.x) {
 			x = true;
-			if (it->posY == player.posY)
+			if (it->y == stone.y)
 				y = true;
 			if (x == true && y == true)
 				return (false);
 		}
 	}
-	for (std::vector<Player>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
-		if (it->posX == player.posX) {
+	for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+		if (it->x == stone.x) {
 			x = true;
-			if (it->posY == player.posY)
+			if (it->y == stone.y)
 				y = true;
 			if (x == true && y == true)
 				return (false);
@@ -216,8 +224,8 @@ void						GameState::update()
 	// HealthSystem::update(_world, elapsed, _game->factory);
 	// AnimationSystem::update(_world, elapsed);
 	// DeathSystem::update(_world);
-	this->updateBackground();
-	this->updateHUD();
+	// this->updateBackground();
+	// this->updateHUD();
 
 	// Si vous voulez savoir ce que ça fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingame
 	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = sf::Vector2f(0.0f, 0.0f);

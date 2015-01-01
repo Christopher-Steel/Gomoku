@@ -17,6 +17,9 @@ public:
 	void									createLoadMenu(unsigned int *id, World &world, const sf::Vector2u &screenSize);
 	void									createPauseMenu(unsigned int *id, World &world, const sf::Vector2u &screenSize);
 	void									createEndMenu(unsigned int *id, World &world, const sf::Vector2u &screenSize, const std::string &result);
+	unsigned int							createGameBlackStone(World &world, const sf::Vector2f &pos);
+	unsigned int							createGameWhiteStone(World &world, const sf::Vector2f &pos);
+
 
 	// GAME
 

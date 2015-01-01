@@ -26,7 +26,6 @@ void      ModuleGame::initPlayer(PlayerType black, PlayerType white) {
 
 PlayerColor	ModuleGame::run(unsigned int x, unsigned int y, bool player)
 {
-  std::cout << "x = " << x << " y = " << y << "bool player = " << player << std::endl;
   APlayer *currentPlayer = nullptr;
   if (player == false) {
     //std::cout << "black" << std::endl;
