@@ -82,20 +82,30 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	// simuler une fin de partie
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
 		_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
-	return (true);
+		return (true);
+	}
+	
+	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
+		Stone test = findStone(0);
+		deleteStone(0);
+		std::cout << "player1 size = "<<_player1.size()<<std::endl;
+		std::cout << "player2 size = "<<_player2.size()<<std::endl;
+		if (test.id != 0)
+			_world.renderComponents[test.id] = NULL;
+		return (true);
 	}
 
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			Stone				p;
+			Stone				stone;
 			int 				tmpX;
 			int 				tmpY;
 
-			p.x = event.mouseButton.x;
-			p.y = event.mouseButton.y;
-			averagePosition(p, &tmpX, &tmpY);
-			if (checkPosition(p) == true) {
-				if ((plcl = _moduleGame->run(findX(p.x - 215), findY(p.y - 195), _player)) == PlayerColor::END) {
+			stone.x = event.mouseButton.x;
+			stone.y = event.mouseButton.y;
+			averagePosition(stone, &tmpX, &tmpY);
+			if (checkPosition(stone) == true) {
+				if ((plcl = _moduleGame->run(findX(stone.x - 215), findY(stone.y - 195), _player)) == PlayerColor::END) {
 					if (plclTmp == PlayerColor::WHITE)
 						_game->pushState(new GUIEndState(_game, GUIEndState::WHITE));
 					else if (plclTmp == PlayerColor::BLACK)
@@ -105,7 +115,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				} else if (plcl == PlayerColor::ERROR) {
 				} else {
 					plclTmp = plcl;
-					putPion(p, _player);
+					putStone(stone, _player);
 					_player = !_player;
 				}
 			}
@@ -123,14 +133,14 @@ void						GameState::stop()
 
 }
 
-bool					GameState::putPion(Stone &p, bool player)
+bool					GameState::putStone(Stone &p, bool player)
 {
 	int					x;
 	int					y;
 
 	Stone stone;
-	stone.x = p.x;
-	stone.y = p.y;
+	stone.x = findX(p.x - 215);
+	stone.y = findY(p.y - 195);
 	averagePosition(p, &x, &y);
 	if (player)
 	{
@@ -138,6 +148,7 @@ bool					GameState::putPion(Stone &p, bool player)
 		 if (checkPosition(stone) != false) {
 			stone.color = true;
 			stone.id = _game->factory.createGameWhiteStone(_world, sf::Vector2f(x - 21,y - 21));
+			std::cout << stone.id << std::endl;
 		 	_player1.push_back(stone);
 		 	return (true);
 		 }
@@ -155,6 +166,94 @@ bool					GameState::putPion(Stone &p, bool player)
 		return (false);
 	}
 	return (true);
+}
+
+GameState::Stone 					&GameState::findStone(unsigned int rank) {
+	unsigned int tmp = rank;
+	unsigned int y = 0;
+	unsigned int x = rank % 18;
+
+	bool	findx = false;
+	bool	findy = false;
+	Stone s;
+
+	while (tmp > 0) {
+		y++;
+		tmp /= 18;	
+	}
+
+	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
+		if (it->x == x) {
+			findx = true;
+			if (it->y == y)
+				findy = true;
+			if (findx == true && findy == true) {
+				return (*it);
+			}
+		}
+	}
+	for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+		if (it->x == x) {
+			findx = true;
+			if (it->y == y)
+				findy = true;
+			if (findx == true && findy == true) {
+				return (*it);
+			}
+		}
+	}
+	return (s);
+}
+
+
+
+void 					GameState::deleteStone(unsigned int rank) {
+	int tmp = rank;
+	unsigned int y = 0;
+	unsigned int x = rank % 18;
+
+	bool	findx = false;
+	bool	findy = false;
+	bool	find = false;
+	while (tmp > 0) {
+		y++;
+		tmp /= 18;	
+	}
+	tmp = -1;
+	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
+		++tmp;
+		if (it->x == x) {
+			findx = true;
+			if (it->y == y)
+				findy = true;
+			if (findx == true && findy == true) {
+				find = true;
+				break;
+			}
+		}
+	}
+	if (find == true) {
+		_player1.erase(_player1.begin() + tmp);
+		return;
+	}
+	find = false;
+	tmp = -1;
+	for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+		++tmp;
+		if (it->x == x) {
+			findx = true;
+			if (it->y == y)
+				findy = true;
+			if (findx == true && findy == true) {
+				find = true;
+			}
+		}
+	}
+	if (find == true) {
+		std::cout << "tmp = " << tmp << std::endl;
+		_player2.erase(_player2.begin() + tmp);
+	}
+
 }
 
 bool					GameState::checkPosition(const Stone &stone) {

@@ -21,8 +21,8 @@ private:
 	struct									Stone
 	{
 		bool								color = false; // false == noir true == black
-		int									x;
-		int									y;
+		unsigned int						x;
+		unsigned int						y;
 		unsigned int 						id;
 	};
 	void						updateBackground();
@@ -30,9 +30,12 @@ private:
 
 	unsigned int 				findX(unsigned int pos);
 	unsigned int 				findY(unsigned int pos);
+	Stone  						&findStone(unsigned rank);
+	void 						deleteStone(unsigned rank);
 	void						averagePosition(Stone &p, int *x2, int *y2);
 	bool						checkPosition(const Stone &p);
-	bool						putPion(Stone &, bool);
+	bool						putStone(Stone &, bool);
+	bool						eatStone(Stone &, bool);
 
 
 
@@ -45,12 +48,7 @@ private:
 	unsigned int				_idBackground[Gomoku::GameBackground::MAX];
 	ModuleGame 					*_moduleGame;
 	bool						_player;
-	// std::list<Stone>			_stone;
-	std::map<std::string, sf::Sprite*>		_sprite;
-	// std::map<std::string, sf::Texture*>		_texture;
-	// sf::FloatRect							_jvsj;
-	// sf::FloatRect							_jvsia;
-	// int 						*_allStone;
+
 	Gomoku::MainMenu::MODE					_mode;
 	PlayerColor								plcl = PlayerColor::NONE;
 	PlayerColor								plclTmp = PlayerColor::NONE;

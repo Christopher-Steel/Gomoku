@@ -61,9 +61,9 @@ void									World::destroyEntity(const unsigned int id)
 	// 		this->destroyEntity(*it);
 	// }
 
-	// this->removeRenderComponent(id);
-	// this->removeTextComponent(id);
-	// this->removeTransformComponent(id);
+	this->removeRenderComponent(id);
+	this->removeTextComponent(id);
+	this->removeTransformComponent(id);
 
 	// if (id == entityCount - 1)
 	// {
