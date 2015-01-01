@@ -3,7 +3,9 @@
 
 GUIEndState::GUIEndState(Game *game, const Result &result) : AState(game)
 {
-	(result == WIN) ? _result = "You Win" : _result = "You Lose";
+	(result == WHITE) ? _result = "White Player Win !": _result;
+	(result == BLACK) ? _result = "Black Player Win !": _result;
+	(result == AI) ? _result = "AI Player Win !": _result;
 	_isBlocking = false;
 	_state = Gomoku::EndMenu::EXIT;
 }

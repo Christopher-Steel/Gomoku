@@ -81,8 +81,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 
 	// simuler une fin de partie
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
-		_game->pushState(new GUIEndState(_game, GUIEndState::LOSE));
-		return (true);
+		_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
+	return (true);
 	}
 
 	if (event.type == sf::Event::MouseButtonReleased) {
@@ -96,7 +96,12 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			averagePosition(p, &tmpX, &tmpY);
 			if (checkPosition(p) == true) {
 				if ((plcl = _moduleGame->run(findX(p.x - 215), findY(p.y - 195), _player)) == PlayerColor::END) {
-					return plclTmp;
+					if (plclTmp == PlayerColor::WHITE)
+						_game->pushState(new GUIEndState(_game, GUIEndState::WHITE));
+					else if (plclTmp == PlayerColor::BLACK)
+						_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
+					else
+						_game->pushState(new GUIEndState(_game, GUIEndState::AI));
 				} else if (plcl == PlayerColor::ERROR) {
 				} else {
 					plclTmp = plcl;

@@ -8,8 +8,10 @@ public:
 
 	enum Result
 	{
-		WIN,
-		LOSE
+		WHITE,
+		BLACK,
+		AI,
+		MAX
 	};
 
 	GUIEndState(Game *game, const Result &result);
