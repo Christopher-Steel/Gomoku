@@ -29,6 +29,7 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     Point&			point = _points[index];
     std::vector<unsigned>	captured;
     PlayerColor			target;
+
     rc = true;
     point.take(player);
     _startPropagation(index, player);

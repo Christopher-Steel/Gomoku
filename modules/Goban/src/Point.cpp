@@ -4,6 +4,7 @@
 
 Point::Point(void)
 {
+  _center = PlayerColor::NONE;
   for (int i = 0; i < 8; ++i) {
     _directions[static_cast<unsigned>(i)].open = true;
   }
