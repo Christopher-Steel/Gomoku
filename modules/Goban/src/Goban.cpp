@@ -35,9 +35,9 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     _startPropagation(index, player);
     if (_referee.isCapture(index, player, captured)) {
       for (auto capture : captured) {
-	target = _points[capture].isTaken();
-	_points[capture].free();
-	_reversePropagation(capture, target);
+      	target = _points[capture].isTaken();
+      	_points[capture].free();
+      	_reversePropagation(capture, target);
       }
     }
   }

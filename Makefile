@@ -29,7 +29,7 @@ MODDIR		=	./modules/
 #
 ##
 
-MODULE_DIRS	=	Game		\
+MODULE_DIRS	=	Game	\
 			Goban		\
 			Graphic		\
 			Player		\
@@ -40,8 +40,20 @@ MODULES		=	$(addsuffix /make_module.mk, $(addprefix $(MODDIR), $(MODULE_DIRS)))
 # Sources
 
 SRC		=	$(LOCAL)BitMask.cpp	\
-			$(LOCAL)Graphic.cpp	\
-			$(LOCAL)main.cpp
+			$(LOCAL)main.cpp \
+			$(LOCAL)AState.cpp \
+			$(LOCAL)ComponentFactory.cpp \
+			$(LOCAL)Game.cpp \
+			$(LOCAL)GameSpecificFactory.cpp \
+			$(LOCAL)GameState.cpp \
+			$(LOCAL)RenderSystem.cpp \
+			$(LOCAL)ResourceManager.cpp \
+			$(LOCAL)TextSystem.cpp \
+			$(LOCAL)TransformSystem.cpp \
+			$(LOCAL)World.cpp \
+			$(LOCAL)GUIPauseState.cpp \
+			$(LOCAL)GUIEndState.cpp \
+			$(LOCAL)GUIState.cpp
 
 include $(MODULES)
 

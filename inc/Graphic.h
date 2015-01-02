@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "SFML/Graphics.hpp"
-#include "Game.hpp"
+#include "ModuleGame.hpp"
 
 class										Graphic
 {
@@ -34,14 +34,15 @@ private:
 	void									loadTexture();
 	bool									putPion(Player &, bool);
 	bool									checkPosition(const Player &);
-	void									averagePosition(Player &, int *, int *);
+	bool									averagePosition(Player &, int *, int *);
 
 	sf::RenderWindow						&_window;
 	std::map<std::string, sf::Sprite*>		_sprite;
 	std::map<std::string, sf::Texture*>		_texture;
-	std::vector<Player>						_player1;
-	std::vector<Player>						_player2;
 	sf::FloatRect							_jvsj;
 	sf::FloatRect							_jvsia;
-	Game									*_game;
+	std::vector<Player>						_player1;
+	std::vector<Player>						_player2;
+
+	ModuleGame								*_game;
 };
