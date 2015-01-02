@@ -6,8 +6,8 @@
 #include "GUIPauseState.h"
 #include "GUIEndState.h"
 #include "PlayerInfo.hpp"
+
 #include "Calcul.h"
-#include <list>
 
 
 class							GameState : public AState
@@ -42,6 +42,8 @@ private:
 	bool						checkPosition(const Stone &p);
 	bool						putStone(Stone &, bool);
 	bool						eatStone(Stone &, bool);
+	void						detectEnd();
+	void						runModuleGame(Stone &);
 
 
 
@@ -56,7 +58,7 @@ private:
 	bool						_player;
 
 	Gomoku::MainMenu::MODE					_mode;
-	PlayerColor								plcl = PlayerColor::NONE;
-	PlayerColor								plclTmp = PlayerColor::NONE;
+	PlayerColor								_plcl = PlayerColor::NONE;
+	PlayerColor								_plclTmp = PlayerColor::NONE;
 
 };

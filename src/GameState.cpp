@@ -58,8 +58,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
 		Stone test = findStone(0);
 		deleteStone(0);
-		std::cout << "player1 size = "<<_player1.size()<<std::endl;
-		std::cout << "player2 size = "<<_player2.size()<<std::endl;
 		if (test.id != 0)
 			_world.renderComponents[test.id] = NULL;
 		return (true);
@@ -67,30 +65,20 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 
 	if (event.type == sf::Event::MouseButtonReleased) {
 		if (event.mouseButton.button == sf::Mouse::Left) {
-			Stone				stone;
 			int 				tmpX;
 			int 				tmpY;
 
+			Stone					stone;
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
 			averagePosition(stone, &tmpX, &tmpY);
 			if (checkPosition(stone) == true) {
-				if ((plcl = _moduleGame->run(Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195), _player)) == PlayerColor::END) {
-					if (plclTmp == PlayerColor::WHITE)
-						_game->pushState(new GUIEndState(_game, GUIEndState::WHITE));
-					else if (plclTmp == PlayerColor::BLACK)
-						_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
-					else
-						_game->pushState(new GUIEndState(_game, GUIEndState::AI));
-				} else if (plcl == PlayerColor::ERROR) {
-				} else {
-					plclTmp = plcl;
-					putStone(stone, _player);
-					_player = !_player;
-				}
+				runModuleGame(stone);
 			}
-			else {
-				// _player = _player;
+			if (_mode == Gomoku::MainMenu::PLAYERIA) {
+				// ludo function's 
+				//runModuleGame(stone);
+				_player = !_player;
 			}
 		}
 	}
@@ -101,6 +89,27 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 void						GameState::stop()
 {
 
+}
+
+void					GameState::runModuleGame(Stone &stone) {
+	if ((_plcl = _moduleGame->run(Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195), _player)) == PlayerColor::END) {
+		detectEnd();
+	} else if (_plcl == PlayerColor::ERROR) {
+	} else {
+		_plclTmp = _plcl;
+		putStone(stone, _player);
+		_player = !_player;
+	}
+
+}
+
+void					GameState::detectEnd() {
+	if (_plclTmp == PlayerColor::WHITE)
+		_game->pushState(new GUIEndState(_game, GUIEndState::WHITE));
+	else if (_plclTmp == PlayerColor::BLACK)
+		_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
+	else
+		_game->pushState(new GUIEndState(_game, GUIEndState::AI));
 }
 
 bool					GameState::putStone(Stone &p, bool player)
@@ -218,7 +227,6 @@ void 					GameState::deleteStone(unsigned int rank) {
 		}
 	}
 	if (find == true) {
-		std::cout << "tmp = " << tmp << std::endl;
 		_player2.erase(_player2.begin() + tmp);
 	}
 
