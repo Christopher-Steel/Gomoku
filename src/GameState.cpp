@@ -1,4 +1,4 @@
-	
+
 #include <iostream>
 
 #include "GameState.h"
@@ -46,6 +46,9 @@ void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 	int					x;
 	int					y;
 
+	p.y < 195 ? p.y = 195 : p.y;
+	p.x < 215 ? p.x = 215 : p.x;
+	
 	y = (p.y - 195) % 35;
 	x = (p.x - 215) % 50;
 	if (y <= (35 / 2))
