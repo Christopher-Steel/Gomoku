@@ -22,7 +22,26 @@ void						GameState::initialize()
 		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
 	else
 		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
+	_valueWhite = 0;
+	_valueBlack = 0;
 }
+
+
+void						GameState::addBlackStoneToScore() {
+	_game->factory.createGameBlackStone(_world, sf::Vector2f(10,550 + _valueBlack));
+	_game->factory.createGameBlackStone(_world, sf::Vector2f(25,550 + _valueBlack));
+	_valueBlack += 25;
+}
+
+
+void						GameState::addWhiteStoneToScore() {
+	_game->factory.createGameWhiteStone(_world, sf::Vector2f(10,150 + _valueWhite));
+	_game->factory.createGameWhiteStone(_world, sf::Vector2f(25,150 + _valueWhite));
+	_valueWhite += 25;
+}
+
+
+
 void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 	int					x;
 	int					y;
@@ -71,7 +90,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			Stone					stone;
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
-			std::cout << stone.x << "|" << stone.y<< std::endl;
 			if (stone.x > 1130 || stone.x < 180 || stone.y > 840 || stone.y < 180)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);

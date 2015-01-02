@@ -44,7 +44,8 @@ private:
 	bool						eatStone(Stone &, bool);
 	void						detectEnd();
 	void						runModuleGame(Stone &);
-
+	void						addBlackStoneToScore();
+	void						addWhiteStoneToScore();
 
 
 	std::vector<Stone>			_player1;
@@ -58,6 +59,8 @@ private:
 	bool						_player;
 
 	Gomoku::MainMenu::MODE					_mode;
+	unsigned int 							_valueWhite;
+	unsigned int 							_valueBlack;
 	PlayerColor								_plcl = PlayerColor::NONE;
 	PlayerColor								_plclTmp = PlayerColor::NONE;
 
