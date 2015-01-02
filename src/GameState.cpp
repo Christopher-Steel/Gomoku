@@ -71,6 +71,9 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			Stone					stone;
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
+			std::cout << stone.x << "|" << stone.y<< std::endl;
+			if (stone.x > 1130 || stone.x < 180 || stone.y > 840 || stone.y < 180)
+				return true;
 			averagePosition(stone, &tmpX, &tmpY);
 			if (checkPosition(stone) == true) {
 				runModuleGame(stone);
