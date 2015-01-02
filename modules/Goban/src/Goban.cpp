@@ -23,8 +23,10 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
   bool		rc = false;
 
   if (index >= Goban::SIZE * Goban::SIZE) {
+    std::cout << "index = " << index << std::endl;
     return false;
   }
+  std::cout << "avant islegalMove" << std::endl;
   if (_referee.isLegalMove(player, index)) {
     Point&			point = _points[index];
     std::vector<unsigned>	captured;
@@ -41,6 +43,7 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
       }
     }
   }
+  std::cout << "setStone = " << rc << std::endl;
   _referee.consult();
   return rc;
 }

@@ -113,6 +113,7 @@ void						GameState::stop()
 }
 
 void					GameState::runModuleGame(Stone &stone) {
+  std::cout << "findx = " << Calcul::findX(stone.x - 215) << "findy = " << Calcul::findY(stone.y -195) << std::endl; 
 	if ((_plcl = _moduleGame->run(Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195), _player)) == PlayerColor::END) {
 		detectEnd();
 	} else if (_plcl == PlayerColor::ERROR) {

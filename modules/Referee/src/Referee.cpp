@@ -106,6 +106,7 @@ void	Referee::consult(void)
 bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
 			   unsigned index)
 {
+  std::cout << "_isVacant = " << _goban[index].isTaken() << std::endl;
   return not (_goban[index].isTaken());
 }
 
@@ -145,6 +146,7 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       }
     }
   }
+  std::cout << "isntdoubletriple = " << rc << std::endl;
   return rc;
 }
 
