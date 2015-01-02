@@ -33,7 +33,7 @@ bool	Referee::isLegalMove(PlayerColor player, unsigned index)
   return rc;
 }
 
-bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned> &captured)
+bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned> &captured, unsigned int *isCapture)
 {
   unsigned		player_color_id = static_cast<unsigned>(player) - 1;
   unsigned		captured_idx;
@@ -53,6 +53,7 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 	for (unsigned j = 0; j < 2; ++j) {
 	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
 	  captured.push_back(captured_idx);
+	  isCapture[j] = captured_idx;
 	  ++_captures[player_color_id];
 	}
       }
@@ -66,9 +67,9 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 
 bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 {
-  if (not _breakableFives) {
+  /*if (not _breakableFives) {
     return true;
-  }
+  }*/
   bool			out_of_bounds;
   Point::Direction	direction;
   unsigned		axisLength;
@@ -106,7 +107,6 @@ void	Referee::consult(void)
 bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
 			   unsigned index)
 {
-  std::cout << "_isVacant = " << _goban[index].isTaken() << std::endl;
   return not (_goban[index].isTaken());
 }
 
@@ -133,11 +133,12 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       while (rc and i <= seg.length and not out_of_bounds) {
 	std::vector<BoardSegment>	segments;
 
-      	if (_findOpenDoubles(player, cursor, segments,
-			     Point::oppositeDirection(dir)) > 0) {
-	  rc = false;
-	  break;
-	}
+      	// if (_findOpenDoubles(player, cursor, segments,
+	// 		     Point::oppositeDirection(dir)) > 0) {
+	//   std::cout << "find opendouble fail" << std::endl;
+	//   rc = false;
+	//   break;
+	// }
 	cursor = Traveller::travel(cursor, dir, out_of_bounds);
 	++i;
       }

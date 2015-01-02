@@ -20,7 +20,7 @@ public:
 
   bool		isLegalMove(PlayerColor player, unsigned index);
   bool		isCapture(unsigned index, PlayerColor player,
-			  std::vector<unsigned> &captured);
+			  std::vector<unsigned> &captured, unsigned int [2]);
 
   /*
   ** Checks if the index and direction given make up

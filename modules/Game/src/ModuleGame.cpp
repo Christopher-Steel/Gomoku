@@ -44,3 +44,8 @@ PlayerColor	ModuleGame::run(unsigned int x, unsigned int y, bool player)
     return (PlayerColor::END);
   return _goban.isGameOver();
 }
+
+unsigned int *ModuleGame::getIndex()
+{
+  return (_goban.getIdx());
+}

@@ -17,12 +17,11 @@ public:
 
   PlayerColor	run(unsigned int x, unsigned int y, bool player);
   void      	initPlayer(PlayerType black, PlayerType white);
+  unsigned int	*getIndex();
 
 private:
   Goban								_goban;
   GobanPrinter							_printer;
   std::unique_ptr<APlayer>	_black;
   std::unique_ptr<APlayer>	_white;
-
-
 };
