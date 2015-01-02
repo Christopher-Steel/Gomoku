@@ -78,10 +78,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	}
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::V) {
-		Stone test = findStone(0);
 		deleteStone(0);
-		if (test.id != 0)
-			_world.renderComponents[test.id] = NULL;
 		return (true);
 	}
 
@@ -102,7 +99,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			if (_mode == Gomoku::MainMenu::PLAYERIA) {
 				// ludo function's 
 				//runModuleGame(stone);
-				_player = !_player;
 			}
 		}
 	}
@@ -116,7 +112,6 @@ void						GameState::stop()
 }
 
 void					GameState::runModuleGame(Stone &stone) {
-  std::cout << "findx = " << Calcul::findX(stone.x - 215) << "findy = " << Calcul::findY(stone.y -195) << std::endl; 
 	if ((_plcl = _moduleGame->run(Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195), _player)) == PlayerColor::END) {
 		detectEnd();
 	} else if (_plcl == PlayerColor::ERROR) {
@@ -151,7 +146,6 @@ bool					GameState::putStone(Stone &p, bool player)
 		 if (checkPosition(stone) != false) {
 			stone.color = true;
 			stone.id = _game->factory.createGameWhiteStone(_world, sf::Vector2f(x - 21,y - 21));
-			std::cout << stone.id << std::endl;
 		 	_player1.push_back(stone);
 		 	return (true);
 		 }
@@ -217,6 +211,8 @@ void 					GameState::deleteStone(unsigned int rank) {
 	bool	findx = false;
 	bool	findy = false;
 	bool	find = false;
+	int 	rankId = 0;
+
 	while (tmp > 0) {
 		y++;
 		tmp /= 18;	
@@ -235,6 +231,8 @@ void 					GameState::deleteStone(unsigned int rank) {
 		}
 	}
 	if (find == true) {
+		if ((rankId = findStone(rank).id) != 0)
+			_world.renderComponents[rankId] = NULL;
 		_player1.erase(_player1.begin() + tmp);
 		return;
 	}
@@ -252,6 +250,8 @@ void 					GameState::deleteStone(unsigned int rank) {
 		}
 	}
 	if (find == true) {
+		if ((rankId = findStone(rank).id) != 0)
+			_world.renderComponents[rankId] = NULL;
 		_player2.erase(_player2.begin() + tmp);
 	}
 
