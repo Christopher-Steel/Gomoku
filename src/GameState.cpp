@@ -100,11 +100,16 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				// ludo function's 
 				//runModuleGame(stone);
 			}
+			supprIndex(_moduleGame->getIndex());
 		}
 	}
 	return (true);
 }
 
+void						GameState::supprIndex(const unsigned int *index) {
+deleteStone(index[0]);
+deleteStone(index[1]);
+}
 
 void						GameState::stop()
 {

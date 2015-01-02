@@ -46,6 +46,7 @@ private:
 	void						runModuleGame(Stone &);
 	void						addBlackStoneToScore();
 	void						addWhiteStoneToScore();
+	void						supprIndex(const unsigned int *);
 
 
 	std::vector<Stone>			_player1;
@@ -57,7 +58,6 @@ private:
 	unsigned int				_idBackground[Gomoku::GameBackground::MAX];
 	ModuleGame 					*_moduleGame;
 	bool						_player;
-
 	Gomoku::MainMenu::MODE					_mode;
 	unsigned int 							_valueWhite;
 	unsigned int 							_valueBlack;
