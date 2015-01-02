@@ -2,6 +2,11 @@
 
 #include "AState.h"
 #include "ModuleGame.hpp"
+#include "GameState.h"
+#include "GUIPauseState.h"
+#include "GUIEndState.h"
+#include "PlayerInfo.hpp"
+#include "Calcul.h"
 #include <list>
 
 
@@ -25,11 +30,12 @@ private:
 		unsigned int						y;
 		unsigned int 						id;
 	};
+
 	void						updateBackground();
 	void						updateHUD();
 
-	unsigned int 				findX(unsigned int pos);
-	unsigned int 				findY(unsigned int pos);
+	// unsigned int 				findX(unsigned int pos);
+	// unsigned int 				findY(unsigned int pos);
 	Stone  						&findStone(unsigned rank);
 	void 						deleteStone(unsigned rank);
 	void						averagePosition(Stone &p, int *x2, int *y2);

@@ -53,7 +53,8 @@ SRC		=	$(LOCAL)BitMask.cpp	\
 			$(LOCAL)World.cpp \
 			$(LOCAL)GUIPauseState.cpp \
 			$(LOCAL)GUIEndState.cpp \
-			$(LOCAL)GUIState.cpp
+			$(LOCAL)GUIState.cpp \
+			$(LOCAL)Calcul.cpp
 
 include $(MODULES)
 
