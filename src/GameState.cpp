@@ -171,7 +171,7 @@ bool					GameState::putStone(Stone &p, bool player)
 
 GameState::Stone 					&GameState::findStone(unsigned int rank) {
 	unsigned int tmp = rank;
-	unsigned int y = 0;
+        int y = -1;
 	unsigned int x = rank % 18;
 
 	bool	findx = false;
@@ -210,7 +210,7 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 
 void 					GameState::deleteStone(unsigned int rank) {
 	int tmp = rank;
-	unsigned int y = 0;
+        int y = -1;
 	unsigned int x = rank % 18;
 
 	bool	findx = false;
@@ -223,6 +223,7 @@ void 					GameState::deleteStone(unsigned int rank) {
 		tmp /= 18;	
 	}
 	tmp = -1;
+	std::cout << "x = " << x << "y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		++tmp;
 		if (it->x == x) {

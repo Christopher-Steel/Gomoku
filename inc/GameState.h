@@ -27,7 +27,7 @@ private:
 	{
 		bool								color = false; // false == noir true == black
 		unsigned int						x;
-		unsigned int						y;
+	        int						y;
 		unsigned int 						id;
 	};
 

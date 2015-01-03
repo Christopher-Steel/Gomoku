@@ -67,9 +67,9 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 
 bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 {
-  /*if (not _breakableFives) {
+  if (not _breakableFives) {
     return true;
-  }*/
+  }
   bool			out_of_bounds;
   Point::Direction	direction;
   unsigned		axisLength;
@@ -107,6 +107,7 @@ void	Referee::consult(void)
 bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
 			   unsigned index)
 {
+  std::cout << "_isVacant = " <<  not _goban[index].isTaken() << std::endl;
   return not (_goban[index].isTaken());
 }
 
@@ -122,7 +123,8 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
   bool				out_of_bounds = false;
   Point::Direction		dir;
 
-  doubles = _findOpenDoubles(player, index, found);
+  //doubles = _findOpenDoubles(player, index, found);
+  doubles = 0;
   if (doubles != 1) {
     rc = (doubles == 0);
   } else {
@@ -147,7 +149,7 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       }
     }
   }
-  std::cout << "isntdoubletriple = " << rc << std::endl;
+  std::cout << "_isntdoubletriple = " << rc << std::endl;
   return rc;
 }
 

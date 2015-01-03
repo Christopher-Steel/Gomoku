@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "GameSpecificFactory.h"
 
 GameSpecificFactory::GameSpecificFactory(ResourceManager &resourceManager) : _resourceManager(resourceManager)
