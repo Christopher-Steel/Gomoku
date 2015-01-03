@@ -147,6 +147,11 @@ void					GameState::runModuleGame(Stone &stone) {
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
 		putStone(stone, _currentPlayer->getColor());
 		_printer.print();
+		if (_goban.isGameOver())
+		{
+			_printer.printVictory(_goban.isGameOver());
+			detectEnd(_goban.isGameOver());			
+		}
 		return;
 	}
 
