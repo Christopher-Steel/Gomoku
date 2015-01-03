@@ -9,6 +9,7 @@
 
 GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
+	_mode = mode;
 	_isBlocking = true;
 }
 
@@ -124,6 +125,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			if (_mode == Gomoku::MainMenu::PLAYERIA) {
 				// ludo function's 
 				//runModuleGame(stone);
+				std::cout << "IA" << std::endl;
 			}
 			supprIndex(_goban.getCapture());
 		}
