@@ -47,8 +47,10 @@ void		GobanPrinter::printVictory(PlayerColor victor) const
       "Congratulations white player, you win !",
       "Congratulations black player, you win !"
     };
+  unsigned	index;
 
-  std::cout << "End of game : " << messages[static_cast<unsigned>(victor)] << std::endl;
+  index = (victor == PlayerColor::FULL ? 0 : static_cast<unsigned>(victor));
+  std::cout << "End of game : " << messages[index] << std::endl;
 }
 
 void		GobanPrinter::printIllegalMove(void) const
