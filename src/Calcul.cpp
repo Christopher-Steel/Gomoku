@@ -2,7 +2,7 @@
 
 unsigned int 	Calcul::findX(unsigned int pos) {
 	unsigned int tmp = pos;
-	unsigned int ret = 0;
+	int ret = 0;
 	while (tmp > 0) {
 		ret++;
 		tmp -= 40;	
@@ -12,7 +12,7 @@ unsigned int 	Calcul::findX(unsigned int pos) {
 
 unsigned int 	Calcul::findY(unsigned int pos) {
 	unsigned int tmp = pos;
-	unsigned int ret = 0;
+	int ret = 0;
 	while (tmp > 0) {
 		ret++;
 		tmp -= 40;

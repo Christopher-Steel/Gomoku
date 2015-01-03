@@ -64,7 +64,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
-    _captured.clear();
+    //_captured.clear();
   }
   _referee.consult();
   return rc;
@@ -89,7 +89,7 @@ PlayerColor		Goban::isGameOver(void) const
   return _winner;
 }
 
-std::list<unsigned>	Goban::getCapture()
+std::list<unsigned>	&Goban::getCapture()
 {
   return _captured;
 }

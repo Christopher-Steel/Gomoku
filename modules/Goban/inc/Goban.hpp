@@ -33,7 +33,7 @@ public:
   bool			setStone(PlayerColor player, unsigned x, unsigned y);
   void			setCapture(unsigned);
 
-  std::list<unsigned>	getCapture();
+  std::list<unsigned>	&getCapture();
   PlayerColor		isGameOver(void) const;
 
 private:

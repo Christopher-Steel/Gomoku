@@ -3,8 +3,8 @@
 #include "AState.h"
 
 #include <functional>
-# include <memory>
-
+#include <memory>
+#include <list>
 // #include "ModuleGame.hpp"
 #include "GameState.h"
 #include "GUIPauseState.h"
@@ -56,7 +56,7 @@ private:
 	void						runModuleGame(Stone &);
 	void						addBlackStoneToScore();
 	void						addWhiteStoneToScore();
-	void						supprIndex(const unsigned int *);
+	void						supprIndex(std::list<unsigned int> &);
 
 
 	std::vector<Stone>			_player1;

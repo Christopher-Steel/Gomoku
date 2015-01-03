@@ -125,15 +125,19 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				// ludo function's 
 				//runModuleGame(stone);
 			}
-			supprIndex(_goban.getIndex());
+			supprIndex(_goban.getCapture());
 		}
 	}
 	return (true);
 }
 
-void						GameState::supprIndex(const unsigned int *index) {
-	deleteStone(index[0]);
-	deleteStone(index[1]);
+void						GameState::supprIndex(std::list<unsigned int> &list) {
+	std::cout << "list = " << list.size() << std::endl;
+
+	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
+		deleteStone(*it);
+	}
+	list.clear();
 }
 
 void						GameState::stop()
@@ -150,8 +154,8 @@ void					GameState::runModuleGame(Stone &stone) {
 		  _printer.printIllegalMove();
 		  return;
 		}
-		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
 		putStone(stone, _currentPlayer->getColor());
+		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
 		_printer.print();
 		if (_goban.isGameOver())
 		{
@@ -184,7 +188,8 @@ bool					GameState::putStone(Stone &p, const PlayerColor &player)
 	{
 		 if (checkPosition(stone) != false) {
 			stone.color = true;
-			stone.id = _gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(p.x - 21, p.y - 21));
+			std::cout << "Black x = " << stone.x << " y = " << stone.y << std::endl;
+			stone.id = _gameAction->factory.createGameBlackStone(_world, sf::Vector2f(p.x - 21,p.y - 21));
 		 	_player1.push_back(stone);
 		 	return (true);
 		 }
@@ -194,7 +199,7 @@ bool					GameState::putStone(Stone &p, const PlayerColor &player)
 	{
 		 if (checkPosition(stone) != false) {
 			stone.color = false;
-			stone.id = _gameAction->factory.createGameBlackStone(_world, sf::Vector2f(p.x - 21,p.y - 21));
+			stone.id = _gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(p.x - 21, p.y - 21));
 		 	_player2.push_back(stone);
 		 	return (true);
 		 }
@@ -204,19 +209,18 @@ bool					GameState::putStone(Stone &p, const PlayerColor &player)
 }
 
 GameState::Stone 					&GameState::findStone(unsigned int rank) {
-	unsigned int tmp = rank;
-        int y = -1;
-	unsigned int x = rank % 18;
+	int tmp = rank;
+    int y = -1;
+	unsigned int x = rank % 19;
 
 	bool	findx = false;
 	bool	findy = false;
 	Stone s;
-
 	while (tmp > 0) {
 		y++;
-		tmp /= 18;	
+		tmp -= 18;	
 	}
-
+	std::cout << "FindStone rank = "<< rank << "x = " << x << " y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		if (it->x == x) {
 			findx = true;
@@ -243,58 +247,35 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 
 
 void 					GameState::deleteStone(unsigned int rank) {
-	int tmp = rank;
-        int y = -1;
-	unsigned int x = rank % 18;
-
-	bool	findx = false;
-	bool	findy = false;
 	bool	find = false;
-	int 	rankId = 0;
-
-	while (tmp > 0) {
-		y++;
-		tmp /= 18;	
-	}
-	tmp = -1;
-	std::cout << "x = " << x << "y = " << y << std::endl;
-	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
-		++tmp;
-		if (it->x == x) {
-			findx = true;
-			if (it->y == y)
-				findy = true;
-			if (findx == true && findy == true) {
+	int tmp = -1;
+	unsigned int 	rankId = 0;
+	if ((rankId = findStone(rank).id) != 0) {
+		_world.renderComponents[rankId] = NULL;
+		for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
+			++tmp;
+			if (it->id == rankId) {
 				find = true;
 				break;
 			}
 		}
-	}
-	if (find == true) {
-		if ((rankId = findStone(rank).id) != 0)
-			_world.renderComponents[rankId] = NULL;
-		_player1.erase(_player1.begin() + tmp);
-		return;
-	}
-	find = false;
-	tmp = -1;
-	for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
-		++tmp;
-		if (it->x == x) {
-			findx = true;
-			if (it->y == y)
-				findy = true;
-			if (findx == true && findy == true) {
-				find = true;
-			}
+		if (find == true) {
+			_player1.erase(_player1.begin() + tmp);
+			return;
 		}
+		tmp = -1;
+		for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+			++tmp;
+			if (it->id == rankId) {
+					find = true;
+					break;
+				}
+			}
+			if (find == true) {
+				_player2.erase(_player2.begin() + tmp);
+				return;
+			}
 	}
-	if (find == true) {
-		if ((rankId = findStone(rank).id) != 0)
-			_world.renderComponents[rankId] = NULL;
-		_player2.erase(_player2.begin() + tmp);
-	}
-
 }
 
 bool					GameState::checkPosition(const Stone &stone) {
