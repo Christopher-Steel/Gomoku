@@ -49,15 +49,15 @@ void						GameState::initialize()
 
 void						GameState::addBlackStoneToScore() {
 	_gameAction->factory.createGameBlackStone(_world, sf::Vector2f(10,550 + _valueBlack));
-	_gameAction->factory.createGameBlackStone(_world, sf::Vector2f(25,550 + _valueBlack));
-	_valueBlack += 25;
+	_gameAction->factory.createGameBlackStone(_world, sf::Vector2f(40,550 + _valueBlack));
+	_valueBlack += 50;
 }
 
 
 void						GameState::addWhiteStoneToScore() {
 	_gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(10,150 + _valueWhite));
-	_gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(25,150 + _valueWhite));
-	_valueWhite += 25;
+	_gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(40,150 + _valueWhite));
+	_valueWhite += 50;
 }
 
 
