@@ -133,10 +133,15 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 
 void						GameState::supprIndex(std::list<unsigned int> &list) {
 	std::cout << "list = " << list.size() << std::endl;
-
+	PlayerColor tmp = PlayerColor::NONE;
 	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
-		deleteStone(*it);
+		tmp = deleteStone(*it);
 	}
+	if (tmp == PlayerColor::WHITE)
+		addWhiteStoneToScore();
+	else if (tmp == PlayerColor::BLACK)
+		addBlackStoneToScore();
+
 	list.clear();
 }
 
@@ -188,7 +193,6 @@ bool					GameState::putStone(Stone &p, const PlayerColor &player)
 	{
 		 if (checkPosition(stone) != false) {
 			stone.color = true;
-			std::cout << "Black x = " << stone.x << " y = " << stone.y << std::endl;
 			stone.id = _gameAction->factory.createGameBlackStone(_world, sf::Vector2f(p.x - 21,p.y - 21));
 		 	_player1.push_back(stone);
 		 	return (true);
@@ -246,7 +250,7 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 
 
 
-void 					GameState::deleteStone(unsigned int rank) {
+PlayerColor 					GameState::deleteStone(unsigned int rank) {
 	bool	find = false;
 	int tmp = -1;
 	unsigned int 	rankId = 0;
@@ -261,7 +265,7 @@ void 					GameState::deleteStone(unsigned int rank) {
 		}
 		if (find == true) {
 			_player1.erase(_player1.begin() + tmp);
-			return;
+			return PlayerColor::BLACK;
 		}
 		tmp = -1;
 		for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
@@ -269,13 +273,14 @@ void 					GameState::deleteStone(unsigned int rank) {
 			if (it->id == rankId) {
 					find = true;
 					break;
-				}
 			}
-			if (find == true) {
-				_player2.erase(_player2.begin() + tmp);
-				return;
-			}
+		}
+		if (find == true) {
+			_player2.erase(_player2.begin() + tmp);
+			return PlayerColor::WHITE;
+		}
 	}
+	return PlayerColor::NONE;
 }
 
 bool					GameState::checkPosition(const Stone &stone) {

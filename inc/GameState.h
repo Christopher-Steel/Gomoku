@@ -47,7 +47,7 @@ private:
 	// unsigned int 				findX(unsigned int pos);
 	// unsigned int 				findY(unsigned int pos);
 	Stone  						&findStone(unsigned rank);
-	void 						deleteStone(unsigned rank);
+	PlayerColor					deleteStone(unsigned rank);
 	void						averagePosition(Stone &p, int *x2, int *y2);
 	bool						checkPosition(const Stone &p);
 	bool						putStone(Stone &, const PlayerColor &);
