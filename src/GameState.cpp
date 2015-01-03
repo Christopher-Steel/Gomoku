@@ -221,12 +221,10 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 
 	bool	findx = false;
 	bool	findy = false;
-	Stone s;
 	while (tmp > 0) {
-		y++;
+		++y;
 		tmp -= 18;	
 	}
-	std::cout << "FindStone rank = "<< rank << "x = " << x << " y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		if (it->x == x) {
 			findx = true;
@@ -237,7 +235,8 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 			}
 		}
 	}
-	for (std::vector<Stone>::iterator it = _player2.begin(); it != _player2.end(); ++it) {
+	std::vector<Stone>::iterator it;
+	for (it = _player2.begin(); it != _player2.end(); ++it) {
 		if (it->x == x) {
 			findx = true;
 			if (it->y == y)
@@ -247,7 +246,7 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 			}
 		}
 	}
-	return (s);
+	return (*it);
 }
 
 

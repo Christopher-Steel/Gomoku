@@ -5,7 +5,7 @@ GUIEndState::GUIEndState(GameAction *gameAction, const Result &result) : AState(
 {
 	(result == WHITE) ? _result = "White Player Win !": _result;
 	(result == BLACK) ? _result = "Black Player Win !": _result;
-	(result == AI) ? _result = "AI Player Win !": _result;
+	(result == AI) ? _result = "No One Win !": _result;
 	_isBlocking = false;
 	_state = Gomoku::EndMenu::EXIT;
 }
