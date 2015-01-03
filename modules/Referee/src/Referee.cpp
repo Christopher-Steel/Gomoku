@@ -41,9 +41,7 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
   bool			out_of_bounds;
   bool			is_capture = false;
   Radar			r;
-  unsigned		k;
-  
-  k = 1;
+
   for (unsigned i = 0; i < 8; ++i) {
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
@@ -58,8 +56,6 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 	for (unsigned j = 0; j < 2; ++j) {
 	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
 	  captured.push_back(captured_idx);
-	  //isCapture[k] = captured_idx;
-	  //--k;
 	  ++_captures[player_color_id];
 	}
       }

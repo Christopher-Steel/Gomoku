@@ -6,6 +6,7 @@
 
 Goban::Goban(void) :
   _points(Goban::SIZE * Goban::SIZE),
+  _freePoints(Goban::SIZE * Goban::SIZE),
   _winner(PlayerColor::NONE),
   _referee(*this, true, true)
 {
@@ -35,11 +36,13 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     rc = true;
     point.take(player);
     _startPropagation(index, player);
+    --_freePoints;
     if (_referee.isCapture(index, player, captured, _captured)) {
       for (auto capture : captured) {
       	target = _points[capture].isTaken();
       	_points[capture].free();
       	_reversePropagation(capture, target);
+	++_freePoints;
       }
     }
   }
@@ -54,6 +57,9 @@ bool		Goban::setStone(PlayerColor player, unsigned x, unsigned y)
 
 PlayerColor	Goban::isGameOver(void) const
 {
+  if (_freePoints == 0) {
+    return PlayerColor::FULL;
+  }
   return _winner;
 }
 
