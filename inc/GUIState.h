@@ -5,7 +5,7 @@
 class							GUIState : public AState
 {
 public:
-	GUIState(Game *game);
+	GUIState(GameAction *_gameAction);
 	~GUIState();
 
 	void						initialize();

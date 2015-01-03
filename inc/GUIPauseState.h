@@ -5,7 +5,7 @@
 class							GUIPauseState : public AState
 {
 public:
-	GUIPauseState(Game *game);
+	GUIPauseState(GameAction *_gameAction);
 	~GUIPauseState();
 
 	void						initialize();

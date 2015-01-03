@@ -10,8 +10,7 @@ Goban::Goban(void) :
   _winner(PlayerColor::NONE),
   _referee(*this, true, true)
 {
-  for (int i = 0 ; i < 2; ++i)
-    _captured[i] = 0;
+
 }
 
 const Point&	Goban::operator[](unsigned index) const
@@ -26,8 +25,6 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
   if (index >= Goban::SIZE * Goban::SIZE) {
     return false;
   }
-  for (int i = 0; i < 2; ++i)
-    _captured[i] = 0;
   if (_referee.isLegalMove(player, index)) {
     Point&			point = _points[index];
     std::vector<unsigned>	captured;
@@ -37,7 +34,7 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
     point.take(player);
     _startPropagation(index, player);
     --_freePoints;
-    if (_referee.isCapture(index, player, captured, _captured)) {
+    if (_referee.isCapture(index, player, captured)) {
       for (auto capture : captured) {
       	target = _points[capture].isTaken();
       	_points[capture].free();
@@ -107,7 +104,6 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
     next = Traveller::travel(index, dir, out_of_bounds);
     if (not out_of_bounds and point.isTaken() == color) {
       isOpen = not _propagateInfo(next, dir, color, diff);
-      //std::cout << isOpen << std::endl;
       point.direction(oppositeDir).open = isOpen;
       if (point.direction(dir).color == color) {
 	point.direction(dir).open = isOpen;
@@ -156,9 +152,4 @@ void		Goban::_propagateDestruction(unsigned index, Point::Direction dir,
   if (not out_of_bounds and _points[index].isTaken() == color) {
     _propagateDestruction(next, dir, color, diff);
   }
-}
-
-unsigned int *Goban::getIdx()
-{
-  return (_captured);
 }

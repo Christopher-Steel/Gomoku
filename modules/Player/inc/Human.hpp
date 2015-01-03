@@ -8,7 +8,7 @@ class Human : public APlayer
 public:
 
   Human(PlayerColor color);
-  virtual ~Human(void) noexcept = default;
+  virtual ~Human(void) = default;
   Human(const Human& other) = delete;
   Human&	operator=(const Human& other) = delete;
 

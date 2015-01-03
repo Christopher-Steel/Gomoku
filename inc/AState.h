@@ -1,17 +1,16 @@
 #pragma once
 
-#include <SFML/System/Time.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 
 #include "World.h"
 #include "Systems.h"
-#include "Game.h"
+#include "GameAction.h"
 #include "GameEnums.h"
 
 class							AState
 {
 public:
-	AState(Game *);
+	AState(GameAction *gameAction);
 	~AState();
 
 	virtual void				initialize() = 0;
@@ -24,5 +23,5 @@ public:
 protected:
 	bool						_isBlocking;
 	World						_world;
-	Game						*_game;
+	GameAction					*_gameAction;
 };

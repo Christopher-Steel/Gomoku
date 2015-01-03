@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-GUIPauseState::GUIPauseState(Game *game) : AState(game)
+GUIPauseState::GUIPauseState(GameAction *gameAction) : AState(gameAction)
 {
 	_isBlocking = false;
 	_state = Gomoku::PauseMenu::CONTINUE;
@@ -15,7 +15,7 @@ GUIPauseState::~GUIPauseState()
 
 void						GUIPauseState::initialize()
 {
-	_game->factory.createPauseMenu(_id, _world, _game->getScreenSize());
+	_gameAction->factory.createPauseMenu(_id, _world, _gameAction->getScreenSize());
 }
 
 void						GUIPauseState::stop(void) {}
@@ -49,19 +49,19 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 			return(true);
 
 		case sf::Keyboard::Escape:
-			_game->popState();
+			_gameAction->popState();
 			return (false);
 
 		case sf::Keyboard::Return:
 			if (_state == Gomoku::PauseMenu::CONTINUE)
 			{
-				_game->popState();
+				_gameAction->popState();
 				return (false);
 			}
 			else
 			{
-				_game->popState();
-				_game->popState();
+				_gameAction->popState();
+				_gameAction->popState();
 				return (false);
 			}
 		default:
@@ -77,13 +77,13 @@ bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 			int y = event.mouseButton.y;
     		if (x > 430 && x < 850 && y > 180 && y < 250)
     		{
-    			_game->popState();
+    			_gameAction->popState();
 				return (true);
     		}
     		if (x > 560 && x < 710 && y > 320 && y < 380)
     		{
-    			_game->popState();
-    			_game->popState();
+    			_gameAction->popState();
+    			_gameAction->popState();
 				return (true);
     		}
 		}

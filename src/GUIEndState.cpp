@@ -1,7 +1,7 @@
 #include "GUIEndState.h"
 #include "GameState.h"
 
-GUIEndState::GUIEndState(Game *game, const Result &result) : AState(game)
+GUIEndState::GUIEndState(GameAction *gameAction, const Result &result) : AState(gameAction)
 {
 	(result == WHITE) ? _result = "White Player Win !": _result;
 	(result == BLACK) ? _result = "Black Player Win !": _result;
@@ -16,7 +16,7 @@ GUIEndState::~GUIEndState()
 
 void						GUIEndState::initialize()
 {
-	_game->factory.createEndMenu(_id, _world, _game->getScreenSize(), _result);
+	_gameAction->factory.createEndMenu(_id, _world, _gameAction->getScreenSize(), _result);
 }
 
 void						GUIEndState::stop(void) {}
@@ -39,8 +39,8 @@ bool						GUIEndState::handleKeyEvent(const sf::Event &event)
 		case sf::Keyboard::Return:
 			if (_state == Gomoku::EndMenu::EXIT)
 			{
-				_game->popState();
-				_game->popState();
+				_gameAction->popState();
+				_gameAction->popState();
 				return (false);
 			}
 		default:
