@@ -2,6 +2,7 @@
 # define APLAYER_H
 
 # include "PlayerInfo.hpp"
+# include "Goban.hpp"
 
 class APlayer
 {
@@ -27,6 +28,8 @@ public:
   virtual Move	getMove(void) const = 0;
   PlayerColor	getColor(void) const;
   PlayerType	getType(void) const;
+
+  virtual void    go(Goban const &go) = 0;
 
 protected:
 

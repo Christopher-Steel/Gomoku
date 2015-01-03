@@ -33,7 +33,7 @@ void						GameState::initialize()
 		std::function<APlayer *(PlayerColor)>	playerFactory[] =
 		{
 		  [](PlayerColor c){ return new Human(c); },
-		  [](PlayerColor c){ return new Human(c); } // replace with AI
+		  [](PlayerColor c){ return new AI(c); } // replace with AI
 		};
 		_black.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::BLACK));
 		_white.reset(playerFactory[static_cast<unsigned>(PlayerType::AI) - 1](PlayerColor::WHITE));

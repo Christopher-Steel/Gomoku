@@ -13,7 +13,29 @@ Goban::Goban(void) :
 
 }
 
+Goban::Goban(const Goban &other) : _points(other._points), _referee(other._referee)
+{
+  _captured = other._captured;
+  _freePoints = other._freePoints;
+  _winner = other._winner;
+}
+
+Goban     &Goban::operator=(const Goban &other)
+{
+  _points = other._points;
+  _referee = other._referee;
+  _captured = other._captured;
+  _freePoints = other._freePoints;
+  _winner = other._winner;
+  return (*this);
+}
+
 const Point&		Goban::operator[](unsigned index) const
+{
+  return _points[index];
+}
+
+Point&  Goban::operator[](unsigned index)
 {
   return _points[index];
 }

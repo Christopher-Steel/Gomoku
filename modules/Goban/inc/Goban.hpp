@@ -17,10 +17,11 @@ public:
 
   Goban(void);
   virtual ~Goban(void) = default;
-  Goban(const Goban &other) = delete;
-  Goban			&operator=(const Goban &other) = delete;
+  Goban(const Goban &other);
+  Goban			&operator=(const Goban &other);
 
   const Point&		operator[](unsigned index) const;
+  Point&    operator[](unsigned index);
 
   /*
   ** The two following functions can fail and return false

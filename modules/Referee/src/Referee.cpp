@@ -15,6 +15,24 @@ Referee::Referee(Goban &goban, bool rule1, bool rule2) :
   _captures[1] = 0;
 }
 
+Referee::Referee(const Referee &other) : _goban(other._goban)
+{
+  _watchlist = other._watchlist;
+  _breakableFives = other._breakableFives;
+  _doubleTriples = other._doubleTriples;
+  _captures = other._captures;
+}
+
+Referee &Referee::operator=(const Referee &other)
+{
+  _goban = other._goban;
+  _watchlist = other._watchlist;
+  _breakableFives = other._breakableFives;
+  _doubleTriples = other._doubleTriples;
+  _captures = other._captures;
+  return (*this); 
+}
+
 bool	Referee::isLegalMove(PlayerColor player, unsigned index)
 {
   bool	(Referee::*checks[])(PlayerColor, unsigned) =

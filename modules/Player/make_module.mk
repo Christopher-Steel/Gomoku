@@ -3,7 +3,8 @@ PLAYER_DIR	:=	$(dir $(lastword $(MAKEFILE_LIST)))
 ############################################################
 
 PLAYER		=	APlayer.cpp	\
-			Human.cpp
+			Human.cpp \
+			AI.cpp
 
 ############################################################
 

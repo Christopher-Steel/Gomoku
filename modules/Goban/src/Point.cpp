@@ -13,6 +13,19 @@ Point::Point(void)
   }
 }
 
+Point::Point(const Point &other)
+{
+  _center = other._center;
+  _directions = other._directions;  
+}
+
+Point   &Point::operator=(const Point& other)
+{
+  _center = other._center;
+  _directions = other._directions;
+  return (*this);
+}
+
 void		Point::take(PlayerColor player)
 {
   _center = player;
