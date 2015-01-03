@@ -53,6 +53,7 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
 	for (unsigned j = 0; j < 2; ++j) {
 	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
 	  captured.push_back(captured_idx);
+	  _goban.setCapture(captured_idx);
 	  ++_captures[player_color_id];
 	}
       }

@@ -2,6 +2,7 @@
 # define GOBAN_H
 
 # include <vector>
+# include <list>
 
 # include "PlayerInfo.hpp"
 # include "Point.hpp"
@@ -29,7 +30,9 @@ public:
   */
   bool			setStone(PlayerColor player, unsigned index);
   bool			setStone(PlayerColor player, unsigned x, unsigned y);
+  void			setCapture(unsigned);
 
+  std::list<unsigned>	getCapture();
   PlayerColor		isGameOver(void) const;
 
 private:
@@ -61,6 +64,7 @@ private:
   */
   friend class		Referee;
 
+  std::list<unsigned>	_captured;
   std::vector<Point>	_points;
   PlayerColor		_winner;
   Referee		_referee;
