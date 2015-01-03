@@ -64,7 +64,7 @@ unsigned Traveller::_travelBottomRight(unsigned index, bool &out_of_bounds)
 
 unsigned Traveller::_travelBottom(unsigned index, bool &out_of_bounds)
 {
-  if (index > Goban::SIZE * (Goban::SIZE - 1)) {
+  if (index > (Goban::SIZE - 1) * (Goban::SIZE - 1)) {
     out_of_bounds = true;
   }
   return index + Goban::SIZE;
