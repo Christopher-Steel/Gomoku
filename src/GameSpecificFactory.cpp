@@ -162,7 +162,7 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 
 	id[Gomoku::GAME::GOBAN] = world.createEmptyEntity();
 	world.addRenderComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/goban.png"), RenderComponent::Plane::DEFAULT));
-	world.addTransformComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createTransformComponent(sf::Vector2f(1024, 768), sf::Vector2f(150,100)));
+	world.addTransformComponent(id[Gomoku::GAME::GOBAN], ComponentFactory::createTransformComponent(sf::Vector2f(800, 800), sf::Vector2f(242,125)));
 }
 
 // PLAYER

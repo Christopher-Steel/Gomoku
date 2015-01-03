@@ -3,6 +3,9 @@
 
 #include "GameState.h"
 
+#define AXEX 300
+#define AXEY 190
+#define SPACE 40
 
 GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
@@ -63,21 +66,23 @@ void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 	int					x;
 	int					y;
 
-	p.y < 195 ? p.y = 195 : p.y;
-	p.x < 215 ? p.x = 215 : p.x;
+	p.y < AXEY ? p.y = AXEY : p.y;
+	p.x < AXEX ? p.x = AXEX : p.x;
 	
-	y = (p.y - 195) % 35;
-	x = (p.x - 215) % 50;
-	if (y <= (35 / 2))
-		*y2 = p.y - (y % 35);
+	y = (p.y - AXEY) % SPACE;
+	x = (p.x - AXEX) % SPACE;
+	if (y <= (SPACE / 2))
+		*y2 = p.y - (y % SPACE);
 	else
-		*y2 = p.y - (y % 35) + 35;
-	if (x < (50 / 2))
-		*x2 = p.x - (x % 50);
+		*y2 = p.y - (y % SPACE) + SPACE;
+	if (x < (SPACE / 2))
+		*x2 = p.x - (x % SPACE);
 	else
-		*x2 = p.x - (x % 50) + 50;
+		*x2 = p.x - (x % SPACE) + SPACE;
 	p.x = *x2;
 	p.y = *y2;
+	std::cout << "x = " << p.x << " y = " << p.y << std::endl;
+	std::cout << "x2 = " << *x2 << " y2 = " << *y2 << std::endl;
 }
 
 bool						GameState::handleKeyEvent(const sf::Event &event)
@@ -107,7 +112,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			Stone					stone;
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
-			if (stone.x > 1130 || stone.x < 180 || stone.y > 840 || stone.y < 180)
+			std::cout << stone.x << "||" << stone.y << std::endl;
+			if (stone.x > 1000 || stone.x < 290 || stone.y > 890 || stone.y < 180)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
 			stone.x = tmpX;
@@ -119,7 +125,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				// ludo function's 
 				//runModuleGame(stone);
 			}
-			//supprIndex(_moduleGame->getIndex());
+			supprIndex(_goban.getIndex());
 		}
 	}
 	return (true);
@@ -140,7 +146,7 @@ void					GameState::runModuleGame(Stone &stone) {
 	if (not _goban.isGameOver()) {
 		// _move = _currentPlayer->getMove();
 		// std::cout << "x = " << stone.x << " y = " << stone.y << std::endl;
-		if (not _goban.setStone(_currentPlayer->getColor(), Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195))) {
+		if (not _goban.setStone(_currentPlayer->getColor(), Calcul::findX(stone.x - AXEX), Calcul::findY(stone.y - AXEY))) {
 		  _printer.printIllegalMove();
 		  return;
 		}
@@ -172,8 +178,8 @@ bool					GameState::putStone(Stone &p, const PlayerColor &player)
 {
 	Stone stone;
 	
-	stone.x = Calcul::findX(p.x - 215);
-	stone.y = Calcul::findY(p.y - 195);
+	stone.x = Calcul::findX(p.x - AXEX);
+	stone.y = Calcul::findY(p.y - AXEY);
 	if (player == PlayerColor::BLACK)
 	{
 		 if (checkPosition(stone) != false) {
