@@ -2,6 +2,7 @@
 # define GOBAN_H
 
 # include <vector>
+# include <list>
 
 # include "PlayerInfo.hpp"
 # include "Point.hpp"
@@ -16,10 +17,11 @@ public:
 
   Goban(void);
   virtual ~Goban(void) = default;
-  Goban(const Goban &other) = delete;
-  Goban			&operator=(const Goban &other) = delete;
+  Goban(const Goban &other);
+  Goban			&operator=(const Goban &other);
 
   const Point&		operator[](unsigned index) const;
+  Point&    operator[](unsigned index);
 
   /*
   ** The two following functions can fail and return false
@@ -29,7 +31,9 @@ public:
   */
   bool			setStone(PlayerColor player, unsigned index);
   bool			setStone(PlayerColor player, unsigned x, unsigned y);
+  void			setCapture(unsigned);
 
+  std::list<unsigned>	getCapture();
   PlayerColor		isGameOver(void) const;
 
 private:
@@ -61,6 +65,7 @@ private:
   */
   friend class		Referee;
 
+  std::list<unsigned>	_captured;
   std::vector<Point>	_points;
   unsigned		_freePoints;
   PlayerColor		_winner;

@@ -13,12 +13,34 @@ Goban::Goban(void) :
 
 }
 
-const Point&	Goban::operator[](unsigned index) const
+Goban::Goban(const Goban &other) : _points(other._points), _referee(other._referee)
+{
+  _captured = other._captured;
+  _freePoints = other._freePoints;
+  _winner = other._winner;
+}
+
+Goban     &Goban::operator=(const Goban &other)
+{
+  _points = other._points;
+  _referee = other._referee;
+  _captured = other._captured;
+  _freePoints = other._freePoints;
+  _winner = other._winner;
+  return (*this);
+}
+
+const Point&		Goban::operator[](unsigned index) const
 {
   return _points[index];
 }
 
-bool		Goban::setStone(PlayerColor player, unsigned index)
+Point&  Goban::operator[](unsigned index)
+{
+  return _points[index];
+}
+
+bool			Goban::setStone(PlayerColor player, unsigned index)
 {
   bool		rc = false;
 
@@ -42,22 +64,34 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
+    _captured.clear();
   }
   _referee.consult();
   return rc;
 }
 
-bool		Goban::setStone(PlayerColor player, unsigned x, unsigned y)
+bool			Goban::setStone(PlayerColor player, unsigned x, unsigned y)
 {
   return this->setStone(player, y * Goban::SIZE + x);
 }
 
-PlayerColor	Goban::isGameOver(void) const
+void			Goban::setCapture(unsigned pionToCapture)
+{
+  std::cout << "pion to capture = " << pionToCapture << std::endl;
+  _captured.push_back(pionToCapture);
+}
+
+PlayerColor		Goban::isGameOver(void) const
 {
   if (_freePoints == 0) {
     return PlayerColor::FULL;
   }
   return _winner;
+}
+
+std::list<unsigned>	Goban::getCapture()
+{
+  return _captured;
 }
 
 void		Goban::_startPropagation(unsigned index, PlayerColor color)

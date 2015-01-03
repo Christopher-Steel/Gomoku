@@ -18,6 +18,7 @@
 #include "GobanPrinter.hpp"
 #include "APlayer.hpp"
 #include "Human.hpp"
+#include "AI.hpp"
 
 class							GameState : public AState
 {

@@ -24,3 +24,5 @@ auto		Human::getMove(void) const -> Move
   ss >> move.y;
   return move;
 }
+
+void    Human::go(Goban const &go) {}

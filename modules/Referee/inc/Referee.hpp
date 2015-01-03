@@ -15,8 +15,8 @@ class Referee
 public:
   Referee(Goban &goban, bool rule1 = false, bool rule2 = false);
   virtual ~Referee(void) = default;
-  Referee(const Referee &other) = delete;
-  Referee	&operator=(const Referee &other) = delete;
+  Referee(const Referee &other);
+  Referee	&operator=(const Referee &other);
 
   bool		isLegalMove(PlayerColor player, unsigned index);
   bool		isCapture(unsigned index, PlayerColor player,

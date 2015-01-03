@@ -23,8 +23,8 @@ public:
 
   Point(void);
   virtual ~Point(void) = default;
-  Point(const Point& other) = delete;
-  Point		&operator=(const Point& other) = delete;
+  Point(const Point& other);
+  Point		&operator=(const Point& other);
 
   void			take(PlayerColor player);
   void			free(void);
