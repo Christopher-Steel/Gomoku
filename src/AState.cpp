@@ -1,6 +1,6 @@
 #include "AState.h"
 
-AState::AState(Game *game) : _game(game)
+AState::AState(GameAction *gameAction) : _gameAction(gameAction)
 {
 }
 
@@ -11,7 +11,7 @@ AState::~AState()
 void							AState::update()
 {
 	//TimerSystem::update(_world, elapsed);
-	TransformSystem::update(_world, _game->getScreenSize());
+	TransformSystem::update(_world, _gameAction->getScreenSize());
 }
 
 void							AState::draw(sf::RenderWindow *window)

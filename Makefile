@@ -43,7 +43,7 @@ SRC		=	$(LOCAL)BitMask.cpp	\
 			$(LOCAL)main.cpp \
 			$(LOCAL)AState.cpp \
 			$(LOCAL)ComponentFactory.cpp \
-			$(LOCAL)Game.cpp \
+			$(LOCAL)GameAction.cpp \
 			$(LOCAL)GameSpecificFactory.cpp \
 			$(LOCAL)GameState.cpp \
 			$(LOCAL)RenderSystem.cpp \
@@ -90,9 +90,9 @@ PRINTF		?=	/usr/bin/printf
 
 # Flags
 
-CXXFLAGS	+=	-std=gnu++11 \
+CXXFLAGS	+=	-std=gnu++11		\
+			-Wall			\
 			-L./lib/ -lGLEW -Wl,-rpath=./lib \
-			-Wall \
 			-lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio \
 			$(addprefix -I, $(INCPATH))
 

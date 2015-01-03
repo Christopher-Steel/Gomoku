@@ -1,5 +1,4 @@
 #include <cassert>
-#include <iostream>
 
 #include "Point.hpp"
 
@@ -10,6 +9,7 @@ Point::Point(void)
     _directions[static_cast<unsigned>(i)].open = true;
     _directions[static_cast<unsigned>(i)].color = PlayerColor::NONE;
     _directions[static_cast<unsigned>(i)].length = 0;
+
   }
 }
 

@@ -33,7 +33,7 @@ bool	Referee::isLegalMove(PlayerColor player, unsigned index)
   return rc;
 }
 
-bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned> &captured, unsigned int *isCapture)
+bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned> &captured)
 {
   unsigned		player_color_id = static_cast<unsigned>(player) - 1;
   unsigned		captured_idx;
@@ -41,25 +41,18 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
   bool			out_of_bounds;
   bool			is_capture = false;
   Radar			r;
-  unsigned		k;
-  
-  k = 1;
+
   for (unsigned i = 0; i < 8; ++i) {
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
-    if ((int)r.length == 2 and (int)r.color != player and (int)r.color != PlayerColor::NONE) {
+    if (r.length == 2 and r.color != player and r.color != PlayerColor::NONE) {
       unsigned	other_side(Traveller::travel(index, dir, out_of_bounds, 3));
-      std::cout << "other_side = " << other_side << "out_of_bounds = "
-		<< out_of_bounds << std::endl;
       if (not out_of_bounds and _goban[other_side].isTaken() == player) {
-	std::cout << "isCapture function ok" << std::endl;
 	captured_idx = index;
 	is_capture = true;
 	for (unsigned j = 0; j < 2; ++j) {
 	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
 	  captured.push_back(captured_idx);
-	  //isCapture[k] = captured_idx;
-	  //--k;
 	  ++_captures[player_color_id];
 	}
       }
@@ -113,7 +106,6 @@ void	Referee::consult(void)
 bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
 			   unsigned index)
 {
-  std::cout << "_isVacant = " <<  not _goban[index].isTaken() << std::endl;
   return not (_goban[index].isTaken());
 }
 
@@ -140,11 +132,11 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       while (rc and i <= seg.length and not out_of_bounds) {
 	std::vector<BoardSegment>	segments;
 
-      	  if (_findOpenDoubles(player, cursor, segments,
-	  		     Point::oppositeDirection(dir)) > 0) {
-	   rc = false;
-	   break;
-	 }
+      	if (_findOpenDoubles(player, cursor, segments,
+			     Point::oppositeDirection(dir)) > 0) {
+	  rc = false;
+	  break;
+	}
 	cursor = Traveller::travel(cursor, dir, out_of_bounds);
 	++i;
       }
@@ -153,7 +145,6 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       }
     }
   }
-  std::cout << "_isntdoubletriple = " << rc << std::endl;
   return rc;
 }
 

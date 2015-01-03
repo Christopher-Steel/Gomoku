@@ -31,7 +31,6 @@ public:
   bool			setStone(PlayerColor player, unsigned x, unsigned y);
 
   PlayerColor		isGameOver(void) const;
-  unsigned int		*getIdx();
 
 private:
   void			_startPropagation(unsigned index, PlayerColor color);
@@ -65,7 +64,6 @@ private:
   std::vector<Point>	_points;
   PlayerColor		_winner;
   Referee		_referee;
-  unsigned int		_captured[2];
 };
 
 #endif /* GOBAN_H */

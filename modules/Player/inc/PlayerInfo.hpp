@@ -10,9 +10,7 @@ enum PlayerColor
   {
     NONE	= 0,
     WHITE	= 1,
-    BLACK = 2,
-    ERROR = 3,
-    END = 4
+    BLACK	= 2
   };
 
 enum class PlayerType : char

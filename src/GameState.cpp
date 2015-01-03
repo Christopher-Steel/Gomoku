@@ -3,40 +3,57 @@
 
 #include "GameState.h"
 
-GameState::GameState(Game *game, Gomoku::MainMenu::MODE mode) : AState(game)
+
+GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
 	_isBlocking = true;
-	_player = false;
-	_mode = mode;
 }
 
 GameState::~GameState() {}
 
 void						GameState::initialize()
 {
-	_game->factory.createGameBackground(_idBackground, _world, _game->getScreenSize());
-	_game->factory.createHUD(_idHud, _world, _game->getScreenSize());
-	_player = false;
-	_moduleGame = new ModuleGame();
-	if (_mode == Gomoku::MainMenu::PLAYERPLAYER)
-		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::HUMAN);
-	else
-		_moduleGame->initPlayer(PlayerType::HUMAN,PlayerType::AI);
+	_gameAction->factory.createGameBackground(_idBackground, _world, _gameAction->getScreenSize());
+	_gameAction->factory.createHUD(_idHud, _world, _gameAction->getScreenSize());
+	// _player = false;
+	// _moduleGame = new ModuleGame();
+	if (_mode == Gomoku::MainMenu::PLAYERPLAYER) {
+		std::function<APlayer *(PlayerColor)>	playerFactory[] =
+		{
+		  [](PlayerColor c){ return new Human(c); },
+		  [](PlayerColor c){ return new Human(c); }
+		};
+		// APlayer::Move	move;
+		// APlayer	*currentPlayer = nullptr;
+
+		_black.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::BLACK));
+		_white.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::WHITE));
+	}
+	else {
+		std::function<APlayer *(PlayerColor)>	playerFactory[] =
+		{
+		  [](PlayerColor c){ return new Human(c); },
+		  [](PlayerColor c){ return new Human(c); } // replace with AI
+		};
+		_black.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::BLACK));
+		_white.reset(playerFactory[static_cast<unsigned>(PlayerType::AI) - 1](PlayerColor::WHITE));
+	}
 	_valueWhite = 0;
 	_valueBlack = 0;
+  	_currentPlayer = _black.get();
 }
 
 
 void						GameState::addBlackStoneToScore() {
-	_game->factory.createGameBlackStone(_world, sf::Vector2f(10,550 + _valueBlack));
-	_game->factory.createGameBlackStone(_world, sf::Vector2f(25,550 + _valueBlack));
+	_gameAction->factory.createGameBlackStone(_world, sf::Vector2f(10,550 + _valueBlack));
+	_gameAction->factory.createGameBlackStone(_world, sf::Vector2f(25,550 + _valueBlack));
 	_valueBlack += 25;
 }
 
 
 void						GameState::addWhiteStoneToScore() {
-	_game->factory.createGameWhiteStone(_world, sf::Vector2f(10,150 + _valueWhite));
-	_game->factory.createGameWhiteStone(_world, sf::Vector2f(25,150 + _valueWhite));
+	_gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(10,150 + _valueWhite));
+	_gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(25,150 + _valueWhite));
 	_valueWhite += 25;
 }
 
@@ -67,13 +84,13 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 {
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 	{
-		_game->pushState(new GUIPauseState(_game));
+		_gameAction->pushState(new GUIPauseState(_gameAction));
 		return (true);
 	}
 
 	// simuler une fin de partie
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R) {
-		_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
+		_gameAction->pushState(new GUIEndState(_gameAction, GUIEndState::BLACK));
 		return (true);
 	}
 	
@@ -93,6 +110,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			if (stone.x > 1130 || stone.x < 180 || stone.y > 840 || stone.y < 180)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
+			stone.x = tmpX;
+			stone.y = tmpY;
 			if (checkPosition(stone) == true) {
 				runModuleGame(stone);
 			}
@@ -100,15 +119,15 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				// ludo function's 
 				//runModuleGame(stone);
 			}
-			supprIndex(_moduleGame->getIndex());
+			//supprIndex(_moduleGame->getIndex());
 		}
 	}
 	return (true);
 }
 
 void						GameState::supprIndex(const unsigned int *index) {
-deleteStone(index[0]);
-deleteStone(index[1]);
+	deleteStone(index[0]);
+	deleteStone(index[1]);
 }
 
 void						GameState::stop()
@@ -117,50 +136,54 @@ void						GameState::stop()
 }
 
 void					GameState::runModuleGame(Stone &stone) {
-	if ((_plcl = _moduleGame->run(Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195), _player)) == PlayerColor::END) {
-		detectEnd();
-	} else if (_plcl == PlayerColor::ERROR) {
-	} else {
-		_plclTmp = _plcl;
-		putStone(stone, _player);
-		_player = !_player;
+  // _printer.print();
+	if (not _goban.isGameOver()) {
+		// _move = _currentPlayer->getMove();
+		// std::cout << "x = " << stone.x << " y = " << stone.y << std::endl;
+		if (not _goban.setStone(_currentPlayer->getColor(), Calcul::findX(stone.x - 215), Calcul::findY(stone.y - 195))) {
+		  _printer.printIllegalMove();
+		  return;
+		}
+		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
+		putStone(stone, _currentPlayer->getColor());
+		_printer.print();
+		return;
 	}
 
+	_printer.printVictory(_goban.isGameOver());
+	detectEnd(_goban.isGameOver());
 }
 
-void					GameState::detectEnd() {
-	if (_plclTmp == PlayerColor::WHITE)
-		_game->pushState(new GUIEndState(_game, GUIEndState::WHITE));
-	else if (_plclTmp == PlayerColor::BLACK)
-		_game->pushState(new GUIEndState(_game, GUIEndState::BLACK));
-	else
-		_game->pushState(new GUIEndState(_game, GUIEndState::AI));
+void					GameState::detectEnd(const PlayerColor &player) {
+	if (player == 0)
+		_gameAction->pushState(new GUIEndState(_gameAction, GUIEndState::AI));
+	else if (player == 1)
+		_gameAction->pushState(new GUIEndState(_gameAction, GUIEndState::WHITE));
+	else if (player == 2)
+		_gameAction->pushState(new GUIEndState(_gameAction, GUIEndState::BLACK));
 }
 
-bool					GameState::putStone(Stone &p, bool player)
+bool					GameState::putStone(Stone &p, const PlayerColor &player)
 {
-	int					x;
-	int					y;
-
 	Stone stone;
+	
 	stone.x = Calcul::findX(p.x - 215);
 	stone.y = Calcul::findY(p.y - 195);
-	averagePosition(p, &x, &y);
-	if (player)
+	if (player == PlayerColor::BLACK)
 	{
 		 if (checkPosition(stone) != false) {
 			stone.color = true;
-			stone.id = _game->factory.createGameWhiteStone(_world, sf::Vector2f(x - 21,y - 21));
+			stone.id = _gameAction->factory.createGameWhiteStone(_world, sf::Vector2f(p.x - 21, p.y - 21));
 		 	_player1.push_back(stone);
 		 	return (true);
 		 }
 		return (false);
 	}
-	else
+	else if (player == PlayerColor::WHITE)
 	{
 		 if (checkPosition(stone) != false) {
 			stone.color = false;
-			stone.id = _game->factory.createGameBlackStone(_world, sf::Vector2f(x - 21,y - 21));
+			stone.id = _gameAction->factory.createGameBlackStone(_world, sf::Vector2f(p.x - 21,p.y - 21));
 		 	_player2.push_back(stone);
 		 	return (true);
 		 }
@@ -178,7 +201,6 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 	bool	findy = false;
 	Stone s;
 
-	//std::cout << "tmp = " << tmp << std::endl;
 	while (tmp > 0) {
 		y++;
 		tmp /= 18;	
@@ -224,11 +246,9 @@ void 					GameState::deleteStone(unsigned int rank) {
 		tmp /= 18;	
 	}
 	tmp = -1;
-	//std::cout << "-------------------------------------" << std::endl;
-	//std::cout << "x = " << x << "y = " << y << std::endl;
+	std::cout << "x = " << x << "y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		++tmp;
-		//std::cout << "it->x = " << it->x << " it->y = " << std::endl;
 		if (it->x == x) {
 			findx = true;
 			if (it->y == y)
@@ -239,7 +259,6 @@ void 					GameState::deleteStone(unsigned int rank) {
 			}
 		}
 	}
-	//std::cout << "_______________________________________________" << std::endl;
 	if (find == true) {
 		if ((rankId = findStone(rank).id) != 0)
 			_world.renderComponents[rankId] = NULL;
@@ -302,13 +321,13 @@ bool						GameState::handleKeyState()
 	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && pos.y > 0)
 	// 	direction += sf::Vector2f(0, -1);
 
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && pos.y < _game->getScreenSize().y - (size.y * scale.y))
+	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && pos.y < _gameAction->getScreenSize().y - (size.y * scale.y))
 	// 	direction += sf::Vector2f(0, 1);
 
 	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && pos.x > 0)
 	// 	direction += sf::Vector2f(-1, 0);
 
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && pos.x < _game->getScreenSize().x - (size.x * scale.x))
+	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && pos.x < _gameAction->getScreenSize().x - (size.x * scale.x))
 	// 	direction += sf::Vector2f(1, 0);
 
 	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = direction;
@@ -332,17 +351,17 @@ bool						GameState::handleKeyState()
 void						GameState::update()
 {
 	// TimerSystem::update(_world, elapsed);
-	// WeaponSystem::update(_world, elapsed, _game->factory, _game->getScreenSize());
+	// WeaponSystem::update(_world, elapsed, _gameAction->factory, _gameAction->getScreenSize());
 	// ParticleSystem::update(_world, elapsed);
-	TransformSystem::update(_world, _game->getScreenSize());
-	// CollisionSystem::update(_world, sf::Vector2u(10, 10), _game->getScreenSize());
-	// HealthSystem::update(_world, elapsed, _game->factory);
+	TransformSystem::update(_world, _gameAction->getScreenSize());
+	// CollisionSystem::update(_world, sf::Vector2u(10, 10), _gameAction->getScreenSize());
+	// HealthSystem::update(_world, elapsed, _gameAction->factory);
 	// AnimationSystem::update(_world, elapsed);
 	// DeathSystem::update(_world);
 	// this->updateBackground();
 	// this->updateHUD();
 
-	// Si vous voulez savoir ce que ça fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingame
+	// Si vous voulez savoir ce que ça fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingameAction
 	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = sf::Vector2f(0.0f, 0.0f);
 }
 

@@ -1,7 +1,11 @@
 #pragma once
 
 #include "AState.h"
-#include "ModuleGame.hpp"
+
+#include <functional>
+# include <memory>
+
+// #include "ModuleGame.hpp"
 #include "GameState.h"
 #include "GUIPauseState.h"
 #include "GUIEndState.h"
@@ -9,11 +13,16 @@
 
 #include "Calcul.h"
 
+#include "GameEnums.h"
+#include "Goban.hpp"
+#include "GobanPrinter.hpp"
+#include "APlayer.hpp"
+#include "Human.hpp"
 
 class							GameState : public AState
 {
 public:
-	GameState(Game *game, Gomoku::MainMenu::MODE);
+	GameState(GameAction *_gameAction, Gomoku::MainMenu::MODE);
 	~GameState();
 
 	void						initialize();
@@ -40,9 +49,9 @@ private:
 	void 						deleteStone(unsigned rank);
 	void						averagePosition(Stone &p, int *x2, int *y2);
 	bool						checkPosition(const Stone &p);
-	bool						putStone(Stone &, bool);
+	bool						putStone(Stone &, const PlayerColor &);
 	bool						eatStone(Stone &, bool);
-	void						detectEnd();
+	void						detectEnd(const PlayerColor &);
 	void						runModuleGame(Stone &);
 	void						addBlackStoneToScore();
 	void						addWhiteStoneToScore();
@@ -56,12 +65,21 @@ private:
 	unsigned int				_idPlayer[Gomoku::Player::MAX];
 	unsigned int				_idHud[Gomoku::HUD::MAX];
 	unsigned int				_idBackground[Gomoku::GameBackground::MAX];
-	ModuleGame 					*_moduleGame;
+	// ModuleGame 					*_moduleGame;
 	bool						_player;
 	Gomoku::MainMenu::MODE					_mode;
 	unsigned int 							_valueWhite;
 	unsigned int 							_valueBlack;
 	PlayerColor								_plcl = PlayerColor::NONE;
 	PlayerColor								_plclTmp = PlayerColor::NONE;
+
+	Goban 						_goban;
+	GobanPrinter				_printer;
+	std::unique_ptr<APlayer>	_black;
+  	std::unique_ptr<APlayer>	_white;
+
+		APlayer::Move	_move;
+		APlayer	*_currentPlayer = nullptr;
+
 
 };

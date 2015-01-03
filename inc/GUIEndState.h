@@ -14,7 +14,7 @@ public:
 		MAX
 	};
 
-	GUIEndState(Game *game, const Result &result);
+	GUIEndState(GameAction *_gameAction, const Result &result);
 	~GUIEndState();
 
 	void						initialize();
