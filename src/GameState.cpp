@@ -125,7 +125,8 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			if (_mode == Gomoku::MainMenu::PLAYERIA) {
 				// ludo function's 
 				//runModuleGame(stone);
-				std::cout << "IA" << std::endl;
+			  _currentPlayer->go(_goban);
+			  std::cout << "IA" << std::endl;
 			}
 			supprIndex(_goban.getCapture());
 		}

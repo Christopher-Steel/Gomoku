@@ -93,7 +93,9 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
   unsigned		axisLength;
   unsigned		cursor;
 
-  assert(_goban[index].isTaken() != PlayerColor::NONE);
+  //  assert(_goban[index].isTaken() != PlayerColor::NONE);
+  if (_goban[index].isTaken() != PlayerColor::NONE)
+    return false;
   cursor = index;
   for (unsigned i = 0; i < 5; ++i) {
     for (unsigned j = 0; j < 4; ++j) {
@@ -107,7 +109,9 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
       }
     }
     cursor = Traveller::travel(cursor, dir, out_of_bounds);
-    assert(out_of_bounds == false);
+    //assert(out_of_bounds == false);
+    if (out_of_bounds == false)
+      return false;
   }
   return true;
 }
