@@ -178,6 +178,7 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 	bool	findy = false;
 	Stone s;
 
+	//std::cout << "tmp = " << tmp << std::endl;
 	while (tmp > 0) {
 		y++;
 		tmp /= 18;	
@@ -223,9 +224,11 @@ void 					GameState::deleteStone(unsigned int rank) {
 		tmp /= 18;	
 	}
 	tmp = -1;
-	std::cout << "x = " << x << "y = " << y << std::endl;
+	//std::cout << "-------------------------------------" << std::endl;
+	//std::cout << "x = " << x << "y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		++tmp;
+		//std::cout << "it->x = " << it->x << " it->y = " << std::endl;
 		if (it->x == x) {
 			findx = true;
 			if (it->y == y)
@@ -236,6 +239,7 @@ void 					GameState::deleteStone(unsigned int rank) {
 			}
 		}
 	}
+	//std::cout << "_______________________________________________" << std::endl;
 	if (find == true) {
 		if ((rankId = findStone(rank).id) != 0)
 			_world.renderComponents[rankId] = NULL;

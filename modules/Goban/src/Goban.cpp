@@ -43,7 +43,6 @@ bool		Goban::setStone(PlayerColor player, unsigned index)
       }
     }
   }
-  std::cout << "index captured[0] = " << _captured[0] << std::endl;
   _referee.consult();
   return rc;
 }

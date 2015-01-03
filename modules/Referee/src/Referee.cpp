@@ -41,19 +41,25 @@ bool	Referee::isCapture(unsigned index, PlayerColor player, std::vector<unsigned
   bool			out_of_bounds;
   bool			is_capture = false;
   Radar			r;
-
+  unsigned		k;
+  
+  k = 1;
   for (unsigned i = 0; i < 8; ++i) {
     dir = static_cast<Point::Direction>(i);
     r = _goban[index].cdirection(dir);
-    if (r.length == 2 and r.color != player and r.color != PlayerColor::NONE) {
+    if ((int)r.length == 2 and (int)r.color != player and (int)r.color != PlayerColor::NONE) {
       unsigned	other_side(Traveller::travel(index, dir, out_of_bounds, 3));
+      std::cout << "other_side = " << other_side << "out_of_bounds = "
+		<< out_of_bounds << std::endl;
       if (not out_of_bounds and _goban[other_side].isTaken() == player) {
+	std::cout << "isCapture function ok" << std::endl;
 	captured_idx = index;
 	is_capture = true;
 	for (unsigned j = 0; j < 2; ++j) {
 	  captured_idx = Traveller::travel(captured_idx, dir, out_of_bounds);
 	  captured.push_back(captured_idx);
-	  isCapture[j] = captured_idx;
+	  //isCapture[k] = captured_idx;
+	  //--k;
 	  ++_captures[player_color_id];
 	}
       }
@@ -123,8 +129,7 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
   bool				out_of_bounds = false;
   Point::Direction		dir;
 
-  //doubles = _findOpenDoubles(player, index, found);
-  doubles = 0;
+  doubles = _findOpenDoubles(player, index, found);
   if (doubles != 1) {
     rc = (doubles == 0);
   } else {
@@ -135,12 +140,11 @@ bool	Referee::_isntDoubleTriple(PlayerColor player, unsigned index)
       while (rc and i <= seg.length and not out_of_bounds) {
 	std::vector<BoardSegment>	segments;
 
-      	// if (_findOpenDoubles(player, cursor, segments,
-	// 		     Point::oppositeDirection(dir)) > 0) {
-	//   std::cout << "find opendouble fail" << std::endl;
-	//   rc = false;
-	//   break;
-	// }
+      	  if (_findOpenDoubles(player, cursor, segments,
+	  		     Point::oppositeDirection(dir)) > 0) {
+	   rc = false;
+	   break;
+	 }
 	cursor = Traveller::travel(cursor, dir, out_of_bounds);
 	++i;
       }
