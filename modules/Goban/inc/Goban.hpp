@@ -66,6 +66,7 @@ private:
 
   std::list<unsigned>	_captured;
   std::vector<Point>	_points;
+  unsigned		_freePoints;
   PlayerColor		_winner;
   Referee		_referee;
 };
