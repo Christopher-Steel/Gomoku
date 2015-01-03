@@ -62,6 +62,7 @@ private:
   friend class		Referee;
 
   std::vector<Point>	_points;
+  unsigned		_freePoints;
   PlayerColor		_winner;
   Referee		_referee;
 };
