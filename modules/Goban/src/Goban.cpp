@@ -10,7 +10,25 @@ Goban::Goban(void) :
   _winner(PlayerColor::NONE),
   _referee(*this, true, true)
 {
+  bool			out_of_bounds;
+  Point::Direction	dir;
 
+  for (unsigned y = 0; y < Goban::SIZE; ++y)
+    {
+      for (unsigned x = 0; x < Goban::SIZE; ++x)
+	{
+	  if (y == 0 || x == 0 || y == Goban::SIZE - 1 || x == Goban::SIZE - 1)
+	    {
+	      for (int i = 0; i < 8; ++i)
+		{
+		  dir = static_cast<Point::Direction>(i);
+		  Traveller::travel(y * Goban::SIZE + x, dir, out_of_bounds, 1);
+		  if (out_of_bounds)
+		    _points[y * Goban::SIZE + x].direction(dir).open = false;
+		}
+	    }
+	}
+    }
 }
 
 Goban::Goban(const Goban &other) : _points(other._points), _referee(other._referee)
