@@ -12,17 +12,11 @@ Human::Human(PlayerColor color) :
 
 auto		Human::getMove(void) const -> Move
 {
-  std::string		line;
-  std::stringstream	ss;
-  Move			move;
-  char			ignored;
+  APlayer::Move move;
 
-  std::cin >> line;
-  ss << line;
-  ss >> move.x;
-  ss >> ignored;
-  ss >> move.y;
-  return move;
+  move.x = 100;
+  move.y = 100;
+  return (move);
 }
 
 void    Human::go(Goban const &go) {}
