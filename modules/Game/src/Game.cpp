@@ -14,7 +14,7 @@ Game::Game(void)
 PlayerColor	Game::run()
 {
   GameAction gameAction;
-  if (!gameAction.initialize(sf::Vector2u(1280, 720), "Gomoku")) {
+  if (!gameAction.initialize(sf::Vector2u(1280, 1080), "Gomoku")) {
     return PlayerColor::BLACK;
   }
 

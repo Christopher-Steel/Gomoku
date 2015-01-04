@@ -3,9 +3,9 @@
 
 #include "GameState.h"
 
-#define AXEX 300
-#define AXEY 190
-#define SPACE 40
+#define AXEX 250
+#define AXEY 125
+#define SPACE 47
 
 GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
@@ -82,8 +82,6 @@ void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 		*x2 = p.x - (x % SPACE) + SPACE;
 	p.x = *x2;
 	p.y = *y2;
-	std::cout << "x = " << p.x << " y = " << p.y << std::endl;
-	std::cout << "x2 = " << *x2 << " y2 = " << *y2 << std::endl;
 }
 
 bool						GameState::handleKeyEvent(const sf::Event &event)
@@ -114,7 +112,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
 			std::cout << stone.x << "||" << stone.y << std::endl;
-			if (stone.x > 1000 || stone.x < 290 || stone.y > 890 || stone.y < 180)
+			if (stone.x > 1120 || stone.x < 240 || stone.y > 980 || stone.y < 110)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
 			stone.x = tmpX;

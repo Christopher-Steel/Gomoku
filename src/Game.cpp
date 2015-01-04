@@ -14,7 +14,7 @@ Game::~Game()
 
 bool										Game::initialize(const sf::Vector2u &size, const std::string &title)
 {
-	_window = new sf::RenderWindow(sf::VideoMode(1280, 920), title, sf::Style::Default);
+	_window = new sf::RenderWindow(sf::VideoMode(1920, 1280), title, sf::Style::Fullscreen);
 
 	if (!_window->isOpen())
 		return (false);
