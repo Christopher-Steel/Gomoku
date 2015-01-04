@@ -131,11 +131,9 @@ void 		AI::go(Goban const &go)
     i = 0;
     Goban goban(go);
         if (!check(goban, posX, posY))
-        {
           continue;
-        }
     std::cout << posX << " | " << posY << std::endl;
-    while (i < 300)
+    while (i < 1000)
     {
 	 	  Goban goban(go);
     	player = PlayerColor::WHITE;
@@ -174,7 +172,9 @@ void 		AI::go(Goban const &go)
       {
 	for (int j = 0; j < 19; ++j)
 	  {
-	    if (tmp[j][i] >= score && goban.setStone(player, i, j))
+      if (not goban.setStone(player, i, j))
+        continue;
+	    if (tmp[j][i] >= score)
 	      {
 		      score = tmp[j][i];
 		      posX = i;
@@ -183,7 +183,7 @@ void 		AI::go(Goban const &go)
 	  }
 	++i;
       }
-    _x = posX;
-    _y = posY;
+    _x = posY;
+    _y = posX;
     std::cout << _x << " " << _y << " score = " << score << std::endl;
 }

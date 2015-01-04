@@ -177,11 +177,11 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
     next = Traveller::travel(index, dir, out_of_bounds);
     if (not out_of_bounds and point.isTaken() == color) {
       isOpen = not _propagateInfo(next, dir, color, diff);
-      std::cout << "is Open = " << isOpen << std::endl;
+      //std::cout << "is Open = " << isOpen << std::endl;
       point.direction(oppositeDir).open = isOpen;
       if (point.direction(dir).color == color
 	  || point.direction(dir).color == PlayerColor::NONE) {
-	std::cout << "is Open = " << isOpen << std::endl;
+	//std::cout << "is Open = " << isOpen << std::endl;
 	point.direction(dir).open = isOpen;
       }
     }
