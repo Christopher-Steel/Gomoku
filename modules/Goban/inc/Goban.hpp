@@ -35,7 +35,9 @@ public:
 
   std::list<unsigned>	&getCapture();
   PlayerColor		isGameOver(void) const;
-  void print();
+
+  static bool		isBorderPoint(unsigned index);
+
 private:
   void			_startPropagation(unsigned index, PlayerColor color);
   bool			_propagateInfo(unsigned index, Point::Direction dir,
@@ -50,9 +52,9 @@ private:
   ** because I believe that the Referee needing to be able
   ** to access _winner to set its value doesn't justify
   ** adding a public method to set the winner as it would
-  ** permit future developers to manually set the winner
+  ** allow future developers to manually set the winner
   ** from outside the game logic (for example they could
-  ** create a cheat code to automatically win the game, and
+  ** create a cheat code to automatically win the game), and
   ** this is not something I want.
   **
   ** If you have any problems with the use of the friend

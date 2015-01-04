@@ -10,36 +10,25 @@ Goban::Goban(void) :
   _winner(PlayerColor::NONE),
   _referee(*this, true, true)
 {
+  bool			out_of_bounds;
+  Point::Direction	dir;
 
-}
-
-void    Goban::print()
-{
-  unsigned  x;
-
-  for (x = 0; x < Goban::SIZE + 2; ++x) {
-    std::cout << "*";
-  }
-  std::cout << std::endl;
-  for (unsigned y = 0; y < Goban::SIZE; ++y) {
-    std::cout << "*";
-    for (x = 0; x < Goban::SIZE; ++x) {
-      if (_points[y * Goban::SIZE + x].isTaken()) {
-  if (_points[y * Goban::SIZE + x].isTaken() == PlayerColor::WHITE) {
-    std::cout << "O";
-  } else {
-    std::cout << "X";
-  }
-      } else {
-  std::cout << " ";
-      }
+  for (unsigned y = 0; y < Goban::SIZE; ++y)
+    {
+      for (unsigned x = 0; x < Goban::SIZE; ++x)
+	{
+	  if (y == 0 || x == 0 || y == Goban::SIZE - 1 || x == Goban::SIZE - 1)
+	    {
+	      for (int i = 0; i < 8; ++i)
+		{
+		  dir = static_cast<Point::Direction>(i);
+		  Traveller::travel(y * Goban::SIZE + x, dir, out_of_bounds, 1);
+		  if (out_of_bounds)
+		    _points[y * Goban::SIZE + x].direction(dir).open = false;
+		}
+	    }
+	}
     }
-    std::cout << "*" << std::endl;
-  }
-  for (x = 0; x < Goban::SIZE + 2; ++x) {
-    std::cout << "*";
-  }
-  std::cout << std::endl;
 }
 
 Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), other._referee.doubleTriples())
@@ -95,7 +84,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
-    //_captured.clear();
+    _referee.consult();
   }
   _referee.consult();
   return rc;
@@ -108,7 +97,6 @@ bool			Goban::setStone(PlayerColor player, unsigned x, unsigned y)
 
 void			Goban::setCapture(unsigned pionToCapture)
 {
-  std::cout << "pion to capture = " << pionToCapture << std::endl;
   _captured.push_back(pionToCapture);
 }
 
@@ -123,6 +111,27 @@ PlayerColor		Goban::isGameOver(void) const
 std::list<unsigned>	&Goban::getCapture()
 {
   return _captured;
+}
+
+bool			Goban::isBorderPoint(unsigned index)
+{
+  Point::Direction	directions[] =
+    {
+      Point::Direction::LEFT,
+      Point::Direction::TOP,
+      Point::Direction::RIGHT,
+      Point::Direction::BOTTOM
+    };
+  unsigned	nbDirs = sizeof(directions) / sizeof(*directions);
+  bool		out_of_bounds;
+
+  for (unsigned dir = 0; dir < nbDirs; ++dir) {
+    Traveller::travel(index, directions[dir], out_of_bounds, 1);
+    if (out_of_bounds) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void		Goban::_startPropagation(unsigned index, PlayerColor color)

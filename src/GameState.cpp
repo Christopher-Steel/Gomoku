@@ -3,9 +3,9 @@
 
 #include "GameState.h"
 
-#define AXEX 300
-#define AXEY 190
-#define SPACE 40
+#define AXEX 250
+#define AXEY 125
+#define SPACE 47
 
 GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
@@ -45,6 +45,7 @@ void						GameState::initialize()
 	_valueWhite = 0;
 	_valueBlack = 0;
   	_currentPlayer = _black.get();
+	while (_gameAction->factory.changeCurrentPlayer(_world) != false);
 }
 
 
@@ -82,8 +83,6 @@ void					GameState::averagePosition(Stone &p, int *x2, int *y2) {
 		*x2 = p.x - (x % SPACE) + SPACE;
 	p.x = *x2;
 	p.y = *y2;
-	std::cout << "x = " << p.x << " y = " << p.y << std::endl;
-	std::cout << "x2 = " << *x2 << " y2 = " << *y2 << std::endl;
 }
 
 bool						GameState::handleKeyEvent(const sf::Event &event)
@@ -106,15 +105,15 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	}
 
 	if (event.type == sf::Event::MouseButtonReleased) {
-		if (event.mouseButton.button == sf::Mouse::Left) {
 			int 				tmpX;
 			int 				tmpY;
 
 			Stone					stone;
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
 			std::cout << stone.x << "||" << stone.y << std::endl;
-			if (stone.x > 1000 || stone.x < 290 || stone.y > 890 || stone.y < 180)
+			if (stone.x > 1100 || stone.x < 240 || stone.y > 980 || stone.y < 110)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
 			stone.x = tmpX;
@@ -136,21 +135,43 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			}
 			supprIndex(_goban.getCapture());
 		}
+		if (event.mouseButton.button == sf::Mouse::Right) {
+			stone.x = event.mouseButton.x;
+			stone.y = event.mouseButton.y;
+			// std::cout << "x = " << x << " y = " << y << std::endl;
+			averagePosition(stone, &tmpX, &tmpY);
+			std::cout << (stone.x = Calcul::findX(tmpX - AXEX)) << "||" << (stone.y = Calcul::findY(tmpY - AXEY))<< std::endl;
+			unsigned int res = stone.y * 19 + stone.x;
+			for (unsigned int i = 0; i < 8; ++i) {
+				std::cout <<  "Direction " << i << std::endl;
+				std::cout <<  "_goban[" << res << "]" << " open = " << (int)(_goban[res].direction((Point::Direction)i).open) << std::endl;
+				std::cout <<  "_goban[" << res << "]" << " color = " << (int)(_goban[res].direction((Point::Direction)i).color) << std::endl;
+				std::cout <<  "_goban[" << res << "]" << " length = " << (int)(_goban[res].direction((Point::Direction)i).length) << std::endl;
+			}
+			std::cout << "----------------------------------------------" << std::endl;
+		}
 	}
 	return (true);
 }
 
 void						GameState::supprIndex(std::list<unsigned int> &list) {
-	std::cout << "list = " << list.size() << std::endl;
-	PlayerColor tmp = PlayerColor::NONE;
+	unsigned	i = 0;
+	PlayerColor	tmp = PlayerColor::NONE;
+
 	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
 		tmp = deleteStone(*it);
+		++i;
 	}
-	if (tmp == PlayerColor::WHITE)
-		addWhiteStoneToScore();
-	else if (tmp == PlayerColor::BLACK)
-		addBlackStoneToScore();
-
+	i /= 2;
+	std::cout << "i =" << i << std::endl;
+	while (i > 0)
+	  {
+	    if (tmp == PlayerColor::WHITE)
+	      addWhiteStoneToScore();
+	    else if (tmp == PlayerColor::BLACK)
+	      addBlackStoneToScore();
+	    --i;
+	  }
 	list.clear();
 }
 
@@ -170,6 +191,7 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		putStone(stone, _currentPlayer->getColor());
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
+		_gameAction->factory.changeCurrentPlayer(_world);
 		_printer.print();
 		if (_goban.isGameOver())
 		{
@@ -178,7 +200,6 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		return;
 	}
-
 	_printer.printVictory(_goban.isGameOver());
 	detectEnd(_goban.isGameOver());
 }
@@ -230,8 +251,9 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 	bool	findy = false;
 	while (tmp > 0) {
 		++y;
-		tmp -= 18;	
+		tmp -= 19;	
 	}
+	std::cout << "tmp Y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		if (it->x == x) {
 			findx = true;

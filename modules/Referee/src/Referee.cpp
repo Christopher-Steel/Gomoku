@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <utility>
@@ -30,7 +31,7 @@ Referee &Referee::operator=(const Referee &other)
   _breakableFives = other._breakableFives;
   _doubleTriples = other._doubleTriples;
   _captures = other._captures;
-  return (*this); 
+  return (*this);
 }
 
 bool	Referee::isLegalMove(PlayerColor player, unsigned index)
@@ -100,10 +101,17 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
       direction = static_cast<Point::Direction>(j);
       axisLength = _goban[cursor].axis(direction);
       if (axisLength == 2) {
-	if (not watched) {
-	  _watchlist.push_back(std::make_pair(index, dir));
+	if (not Goban::isBorderPoint(cursor)
+	    and not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
+	  if (not watched
+	      and /*((_goban[cursor].cdirection(direction).open == true)
+		   xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/ true) {
+	    _watchlist.push_back(std::make_tuple(index, dir, true));
+	    return false;
+	  } else {
+	    return true;
+	  }
 	}
-	return false;
       }
     }
     cursor = Traveller::travel(cursor, dir, out_of_bounds);
@@ -114,15 +122,39 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 
 void	Referee::consult(void)
 {
+  unsigned		cursor;
+  Point::Direction	direction;
+  bool			firstTurn;
+
+  std::remove_if(_watchlist.begin(), _watchlist.end(),
+		 [this](t_fiver &fiver) {
+    unsigned		cursor;
+    Point::Direction	direction;
+    bool		firstTurn;
+    unsigned		i;
+    bool		out_of_bounds;
+
+    std::tie(cursor, direction, firstTurn) = fiver;
+    for (i = 0; i < 5; ++i) {
+      if (not _goban[cursor].isTaken()) {
+	return true;
+      }
+      cursor = Traveller::travel(cursor, direction, out_of_bounds, 1);
+      assert(out_of_bounds == false);
+    }
+    return false;
+  });
   for (auto &fiver : _watchlist) {
-    if (isWinningFive(fiver.first, fiver.second, true)) {
-      _goban._winner = _goban[fiver.first].isTaken();
+    std::tie(cursor, direction, firstTurn) = fiver;
+    if (!firstTurn && isWinningFive(cursor, direction, true)) {
+      _goban._winner = _goban[cursor].isTaken();
       break;
     }
+    firstTurn = false;
   }
 }
 
-bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
+bool	Referee::_isVacant(__attribute__ ((unused))PlayerColor player,
 			   unsigned index)
 {
   return not (_goban[index].isTaken());
