@@ -132,6 +132,10 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 	world.addTextComponent(id[Gomoku::GAME::SCOREBLACK], ComponentFactory::createTextComponent("Stone White", _resourceManager.getFont("fonts/go3v2.ttf"), false, false, 28, sf::Color::Black));
 	world.addTransformComponent(id[Gomoku::GAME::SCOREBLACK], ComponentFactory::createTransformComponent(sf::Vector2f(0.0f, 0.0f), sf::Vector2f(10.0f, 500.0f)));
 
+
+	_idCurrentPlayer = world.createEmptyEntity();
+	world.addRenderComponent(_idCurrentPlayer, ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/black.png"), RenderComponent::Plane::HUD));
+	world.addTransformComponent(_idCurrentPlayer, ComponentFactory::createTransformComponent(sf::Vector2f(42,42), sf::Vector2f(1000,40)));
 	// id[Gomoku::HUD::SHIELDBAR] = world.createEmptyEntity();
 	// world.addRenderComponent(id[Gomoku::HUD::SHIELDBAR], ComponentFactory::createRenderComponent(_resourceManager.getTexture("textures/unicolor.png"), RenderComponent::Plane::HUD, sf::Color(13, 205, 248)));
 	// world.addTransformComponent(id[Gomoku::HUD::SHIELDBAR], ComponentFactory::createTransformComponent(sf::Vector2f(200, 10), sf::Vector2f(120.0f, screenSize.y - 30.0f)));
@@ -166,6 +170,13 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 }
 
 // PLAYER
+void								GameSpecificFactory::changeCurrentPlayer(World &world) {
+	if (_first == true)
+		world.renderComponents[_idCurrentPlayer] = ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/white.png"));	
+	else
+		world.renderComponents[_idCurrentPlayer] = ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/black.png"));	
+	_first = !_first;
+}
 
 void								GameSpecificFactory::createPlayer(unsigned int *id, World &world)
 {

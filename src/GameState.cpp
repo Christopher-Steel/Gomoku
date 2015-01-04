@@ -45,6 +45,7 @@ void						GameState::initialize()
 	_valueWhite = 0;
 	_valueBlack = 0;
   	_currentPlayer = _black.get();
+	_gameAction->factory.changeCurrentPlayer(_world);
 }
 
 
@@ -133,6 +134,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			  std::cout << "IA" << std::endl;
 			}
 			supprIndex(_goban.getCapture());
+			_gameAction->factory.changeCurrentPlayer(_world);
 		}
 	}
 	return (true);
