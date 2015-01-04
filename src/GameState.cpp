@@ -112,7 +112,7 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
 			std::cout << stone.x << "||" << stone.y << std::endl;
-			if (stone.x > 1120 || stone.x < 240 || stone.y > 980 || stone.y < 110)
+			if (stone.x > 1100 || stone.x < 240 || stone.y > 980 || stone.y < 110)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
 			stone.x = tmpX;
