@@ -13,7 +13,7 @@ public:
   Human&	operator=(const Human& other) = delete;
 
   Move		getMove(void) const;
-  void 		go(Goban const &go);
+  void 		chooseMove(Goban const &go);
 };
 
 #endif /* HUMAN_H */

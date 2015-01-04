@@ -29,7 +29,7 @@ public:
   PlayerColor	getColor(void) const;
   PlayerType	getType(void) const;
 
-  virtual void    go(Goban const &go) = 0;
+  virtual void    chooseMove(Goban const &go) = 0;
 
 protected:
 

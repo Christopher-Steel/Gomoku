@@ -14,7 +14,7 @@ public:
   	AI&	operator=(const AI& other) = delete;
   	void 		print(Goban const &);
   	Move		getMove(void) const;
-  	void 		go(Goban const &go);
+  	void 		chooseMove(Goban const &go);
  private:
  	unsigned 	_x;
  	unsigned 	_y;

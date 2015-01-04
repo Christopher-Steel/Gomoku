@@ -109,83 +109,83 @@ bool    check(Goban const &go, int x, int y)
 // goban[index].direction(DIRECTION).color -> donne la couleur dans la direction.
 // goban[index].direction(DIRECTION).open -> if true alignement ouvert, false alignement fermer donc on peux bouffer
 
-void 		AI::go(Goban const &go)
+void 		AI::chooseMove(Goban const &go)
 {
-	int 	 i = -1;
-	PlayerColor player = PlayerColor::WHITE;
-	PlayerColor win = PlayerColor::NONE;
-	unsigned x;
-  unsigned tmpx;
-  unsigned tmpy;
-	unsigned posX;
-	unsigned posY;
-	int score;
-	int tmp[19][19];
+// 	int 	 i = -1;
+// 	PlayerColor player = PlayerColor::WHITE;
+// 	PlayerColor win = PlayerColor::NONE;
+// 	unsigned x;
+//   unsigned tmpx;
+//   unsigned tmpy;
+// 	unsigned posX;
+// 	unsigned posY;
+// 	int score;
+// 	int tmp[19][19];
 
-  srand(getpid() * time(NULL));
-	for (unsigned y = 0; y < Goban::SIZE; ++y) {
-    for (x = 0; x < Goban::SIZE; ++x) {
-      tmp[y][x] = 0;
-    }
-  }
-  for (unsigned y = 0; y < Goban::SIZE; ++y) {
-   for (x = 0; x < Goban::SIZE; ++x) {
-    posX = y;
-    posY = x;
-    i = 0;
-    Goban goban(go);
-        if (!check(goban, posX, posY))
-          continue;
-    //std::cout << posX << " | " << posY << std::endl;
-    while (i < 100)
-    {
-	 	  Goban goban(go);
-    	player = PlayerColor::WHITE;
-    	if (not goban.setStone(player, posX, posY))
-	       continue;
-      //std::cout << posX << " | " << posY << std::endl;
-      player = PlayerColor::BLACK;
-    	while (not goban.isGameOver())
-    	{
-    		tmpx = rand() % 19;
-    		tmpy = rand() % 19;
-        //std::cout << tmpx << " [] " << tmpy << std::endl;
-    		if (goban.setStone(player, tmpx, tmpy))
-		  {
-        //std::cout << "Illegal move" << std::endl;
-        player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
-		  }
+//   srand(getpid() * time(NULL));
+// 	for (unsigned y = 0; y < Goban::SIZE; ++y) {
+//     for (x = 0; x < Goban::SIZE; ++x) {
+//       tmp[y][x] = 0;
+//     }
+//   }
+//   for (unsigned y = 0; y < Goban::SIZE; ++y) {
+//    for (x = 0; x < Goban::SIZE; ++x) {
+//     posX = y;
+//     posY = x;
+//     i = 0;
+//     Goban goban(go);
+//         if (!check(goban, posX, posY))
+//           continue;
+//     //std::cout << posX << " | " << posY << std::endl;
+//     while (i < 100)
+//     {
+// 	 	  Goban goban(go);
+//     	player = PlayerColor::WHITE;
+//     	if (not goban.setStone(player, posX, posY))
+// 	       continue;
+//       //std::cout << posX << " | " << posY << std::endl;
+//       player = PlayerColor::BLACK;
+//     	while (not goban.isGameOver())
+//     	{
+//     		tmpx = rand() % 19;
+//     		tmpy = rand() % 19;
+//         //std::cout << tmpx << " [] " << tmpy << std::endl;
+//     		if (goban.setStone(player, tmpx, tmpy))
+// 		  {
+//         //std::cout << "Illegal move" << std::endl;
+//         player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
+// 		  }
     		
-    	}
-	win = goban.isGameOver();
-	if (win == PlayerColor::WHITE)
-	  ++tmp[posY][posX];
-  ++i;
-    }
-    //std::cout << tmp[posY][posX] << std::endl;
-  }
-}
-    i = 0;
-    score = 0;
-    Goban 	goban(go);
-    //std::cout << "TEST" << std::endl;
-   // print(goban);
-    while (i < 19)
-      {
-	for (int j = 0; j < 19; ++j)
-	  {
-      if (not goban.setStone(player, i, j))
-        continue;
-	    if (tmp[j][i] > score)
-	      {
-		      score = tmp[j][i];
-		      posX = i;
-		      posY = j;
-	      }
-	  }
-	++i;
-      }
-    _x = posY;
-    _y = posX;
-    std::cout << _x << " " << _y << " score = " << score << std::endl;
+//     	}
+// 	win = goban.isGameOver();
+// 	if (win == PlayerColor::WHITE)
+// 	  ++tmp[posY][posX];
+//   ++i;
+//     }
+//     //std::cout << tmp[posY][posX] << std::endl;
+//   }
+// }
+//     i = 0;
+//     score = 0;
+//     Goban 	goban(go);
+//     //std::cout << "TEST" << std::endl;
+//    // print(goban);
+//     while (i < 19)
+//       {
+// 	for (int j = 0; j < 19; ++j)
+// 	  {
+//       if (not goban.setStone(player, i, j))
+//         continue;
+// 	    if (tmp[j][i] > score)
+// 	      {
+// 		      score = tmp[j][i];
+// 		      posX = i;
+// 		      posY = j;
+// 	      }
+// 	  }
+// 	++i;
+//       }
+//     _x = posY;
+//     _y = posX;
+//     std::cout << _x << " " << _y << " score = " << score << std::endl;
 }

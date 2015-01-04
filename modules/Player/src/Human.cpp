@@ -19,4 +19,4 @@ auto		Human::getMove(void) const -> Move
   return (move);
 }
 
-void    Human::go(Goban const &go) {}
+void    Human::chooseMove(Goban const &go) {}

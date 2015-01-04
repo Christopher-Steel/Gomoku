@@ -125,11 +125,10 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				// ludo function's 
 				//runModuleGame(stone);
 			  APlayer::Move			move;
-			  _currentPlayer->go(_goban);
+			  _currentPlayer->chooseMove(_goban);
 			  move = _currentPlayer->getMove();
 			  stone.x = move.x * SPACE + AXEX;
 			  stone.y = move.y * SPACE + AXEY;
-			  std::cout << move.x << "  " << move.y << std::endl;
 			  runModuleGame(stone);
 			  std::cout << "IA" << std::endl;
 			}
