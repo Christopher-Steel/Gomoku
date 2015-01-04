@@ -3,6 +3,7 @@
 
 # include <array>
 # include <cstdint>
+# include <tuple>
 # include <vector>
 
 # include "PlayerInfo.hpp"
@@ -49,7 +50,8 @@ public:
   void		setDoubleTriples(bool on);
 
 private:
-  typedef std::vector<std::pair<unsigned, Point::Direction>>	t_fives;
+  typedef std::tuple<unsigned, Point::Direction, bool>	t_fiver;
+  typedef std::vector<t_fiver>				t_fivers;
 
   struct BoardSegment
   {
@@ -68,7 +70,7 @@ private:
 				     Point::Direction dir, bool &extended) const;
 
   Goban		&_goban;
-  t_fives	_watchlist;
+  t_fivers	_watchlist;
   bool		_breakableFives;
   bool		_doubleTriples;
   std::array<uint8_t, 2>	_captures;

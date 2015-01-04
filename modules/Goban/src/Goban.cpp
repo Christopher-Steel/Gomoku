@@ -64,6 +64,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
+    _referee.consult();
   }
   _referee.consult();
   return rc;
