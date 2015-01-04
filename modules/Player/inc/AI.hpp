@@ -16,6 +16,7 @@ public:
   	void 		print(Goban const &);
   	Move		getMove(void) const;
   	void 		chooseMove(Goban const &go);
+
  private:
  	unsigned 	_x;
  	unsigned 	_y;

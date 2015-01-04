@@ -70,31 +70,31 @@ bool    check(Goban const &go, int y, int x)
   }
   if (y + 1 < 19)
   {
-    isOk = go[(y + 1) * Goban::SIZE + x].isTaken() != PlayerColor::BLACK ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + x].isTaken() == PlayerColor::NONE ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y << std::endl;
   }
   if (y - 1 >= 0 && x - 1 >= 0)
   {
-    isOk = go[(y - 1) * Goban::SIZE + (x - 1)].isTaken() != PlayerColor::BLACK ? false : true;
+    isOk = go[(y - 1) * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::NONE ? false : true;
     if (isOk) return (isOk);
     //std::cout << x-1 << " " << y-1 << std::endl;
   }
   if (y + 1 < 19 && x - 1 >= 0)
   {
-    isOk = go[(y + 1) * Goban::SIZE + (x - 1)].isTaken() != PlayerColor::BLACK ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::NONE ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y-1 << std::endl;
   }
   if (y - 1 >= 0 && x + 1 < 19)
   {
-    isOk = go[(y - 1) * Goban::SIZE + (x + 1)].isTaken() != PlayerColor::BLACK ? false : true;
+    isOk = go[(y - 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::NONE ? false : true;
     if (isOk) return (isOk);
     //std::cout << x-1 << " " << y+1 << std::endl;
   }
   if (y + 1 < 19 && x + 1 < 19)
   {
-    isOk = go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() != PlayerColor::BLACK ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::NONE ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y+1 << std::endl;
   }
@@ -105,9 +105,9 @@ bool    check(Goban const &go, int y, int x)
    return isOk;
 }
 
-// goban[index].direction(DIRECTION).length -> donne la longueur d'alignement dans la direction.
-// goban[index].direction(DIRECTION).color -> donne la couleur dans la direction.
-// goban[index].direction(DIRECTION).open -> if true alignement ouvert, false alignement fermer donc on peux bouffer
+// goban[index].direction(Direction).length -> donne la longueur d'alignement dans la direction.
+// goban[index].direction(Direction).color -> donne la couleur dans la direction.
+// goban[index].direction(Direction).open -> if true alignement ouvert, false alignement fermer donc on peux bouffer
 
 void 		AI::chooseMove(Goban const &go)
 {
@@ -115,6 +115,7 @@ void 		AI::chooseMove(Goban const &go)
   int   **score;
   std::vector<Move> pos;
   Goban goban(go);
+  bool  nothing;
 
   score = new int*[19];
   for (int y = 0; y < 19; ++y)
@@ -134,6 +135,7 @@ void 		AI::chooseMove(Goban const &go)
   {
     for (int x = 0; x < 19; ++x)
     {
+      nothing = false;
       if (!check(goban, y, x) || goban[y * Goban::SIZE + x].isTaken() != PlayerColor::NONE)
         continue;
       if (_first)
@@ -143,31 +145,65 @@ void 		AI::chooseMove(Goban const &go)
         _first = false;
         return ; 
       }
-      if (goban[y * Goban::SIZE + x].direction(Point::LEFT).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOPLEFT).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOP).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOPRIGHT).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::RIGHT).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOMRIGHT).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOM).length == 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOMLEFT).length == 2)
+      if ((goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).color == PlayerColor::BLACK))
       {
         tmp.x = x;
         tmp.y = y;
         pos.push_back(tmp);
+        nothing = true;
       }
-      if (goban[y * Goban::SIZE + x].direction(Point::LEFT).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOPLEFT).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOP).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::TOPRIGHT).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::RIGHT).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOMRIGHT).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOM).length > 2 ||
-          goban[y * Goban::SIZE + x].direction(Point::BOTTOMLEFT).length > 2)
+      if ((goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).color == PlayerColor::BLACK) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).color == PlayerColor::BLACK))
       {
         _x = x;
         _y = y;
         return;
+      }
+      if ((goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).color == PlayerColor::WHITE) ||
+          (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).color == PlayerColor::WHITE))
+     {
+        tmp.x = x;
+        tmp.y = y;
+        pos.push_back(tmp);
+        nothing = true; 
+      }
+      if (goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 4)
+      {
+        _x = x;
+        _y = y;
+        return; 
+      }
+      if (!nothing)
+      {
+          tmp.x = x;
+          tmp.y = y;
+          pos.push_back(tmp);
       }
     }
   }
