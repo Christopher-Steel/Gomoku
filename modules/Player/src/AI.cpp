@@ -29,21 +29,26 @@ void 		AI::go(Goban const &go)
 	while (++i < 19)
 	  memset(tmp[i], 0, 19);
     i = 0;
-    while (i < 5000)
+    while (i < 100)
     {
 	Goban 	goban(go);
     	posX = rand() % 19;
     	posY = rand() % 19;
     	player = PlayerColor::WHITE;
+	std::cout << "AI : " << posX << " " << posY << std::endl;
     	if (not goban.setStone(player, posX, posY))
 	  continue;
     	while (not goban.isGameOver())
     	{
     		x = rand() % 19;
     		y = rand() % 19;
-    		player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
+		std::cout << "AI TEST : " << x << " " << y << std::endl;
     		if (not goban.setStone(player, x, y))
+		  {
+		    std::cout << "Invalid Move" << std::endl;
     			continue;
+		  }
+    		player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
     	}
 	win = goban.isGameOver();
 	if (win == PlayerColor::WHITE)
@@ -68,7 +73,7 @@ void 		AI::go(Goban const &go)
 	  }
 	++i;
       }
-    std::cout << _x << " " << _y << std::endl;
     _x = posX;
     _y = posY;
+    std::cout << _x << " " << _y << std::endl;
 }
