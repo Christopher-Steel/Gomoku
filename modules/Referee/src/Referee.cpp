@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <utility>
@@ -101,11 +102,11 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
       axisLength = _goban[cursor].axis(direction);
       if (axisLength == 2) {
 	if (not Goban::isBorderPoint(cursor)
-	    && not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
+	    and not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
 	  if (not watched
-	      && ((_goban[cursor].cdirection(direction).open == true)
-		  ^ (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))) {
-	    _watchlist.push_back(std::make_pair(index, dir));
+	      and /*((_goban[cursor].cdirection(direction).open == true)
+		   xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/ true) {
+	    _watchlist.push_back(std::make_tuple(index, dir, true));
 	    return false;
 	  } else {
 	    return true;
@@ -121,11 +122,35 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 
 void	Referee::consult(void)
 {
+  unsigned		cursor;
+  Point::Direction	direction;
+  bool			firstTurn;
+
+  std::remove_if(_watchlist.begin(), _watchlist.end(),
+		 [this](t_fiver &fiver) {
+    unsigned		cursor;
+    Point::Direction	direction;
+    bool		firstTurn;
+    unsigned		i;
+    bool		out_of_bounds;
+
+    std::tie(cursor, direction, firstTurn) = fiver;
+    for (i = 0; i < 5; ++i) {
+      if (not _goban[cursor].isTaken()) {
+	return true;
+      }
+      cursor = Traveller::travel(cursor, direction, out_of_bounds, 1);
+      assert(out_of_bounds == false);
+    }
+    return false;
+  });
   for (auto &fiver : _watchlist) {
-    if (isWinningFive(fiver.first, fiver.second, true)) {
-      _goban._winner = _goban[fiver.first].isTaken();
+    std::tie(cursor, direction, firstTurn) = fiver;
+    if (!firstTurn && isWinningFive(cursor, direction, true)) {
+      _goban._winner = _goban[cursor].isTaken();
       break;
     }
+    firstTurn = false;
   }
 }
 

@@ -52,7 +52,6 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
     std::vector<unsigned>	captured;
     PlayerColor			target;
 
-    _referee.consult();
     rc = true;
     point.take(player);
     _startPropagation(index, player);
@@ -65,6 +64,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
+    _referee.consult();
   }
   return rc;
 }
