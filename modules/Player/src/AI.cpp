@@ -105,6 +105,10 @@ bool    check(Goban const &go, int x, int y)
    return isOk;
 }
 
+// goban[index].direction(DIRECTION).length -> donne la longueur d'alignement dans la direction.
+// goban[index].direction(DIRECTION).color -> donne la couleur dans la direction.
+// goban[index].direction(DIRECTION).open -> if true alignement ouvert, false alignement fermer donc on peux bouffer
+
 void 		AI::go(Goban const &go)
 {
 	int 	 i = -1;
@@ -132,8 +136,8 @@ void 		AI::go(Goban const &go)
     Goban goban(go);
         if (!check(goban, posX, posY))
           continue;
-    std::cout << posX << " | " << posY << std::endl;
-    while (i < 1000)
+    //std::cout << posX << " | " << posY << std::endl;
+    while (i < 100)
     {
 	 	  Goban goban(go);
     	player = PlayerColor::WHITE;
@@ -156,25 +160,23 @@ void 		AI::go(Goban const &go)
 	win = goban.isGameOver();
 	if (win == PlayerColor::WHITE)
 	  ++tmp[posY][posX];
-	else
-	  --tmp[posY][posX];
-    	++i;
+  ++i;
     }
-    std::cout << tmp[posY][posX] << std::endl;
+    //std::cout << tmp[posY][posX] << std::endl;
   }
 }
     i = 0;
-    score = -10000;
+    score = 0;
     Goban 	goban(go);
-    std::cout << "TEST" << std::endl;
-    print(goban);
+    //std::cout << "TEST" << std::endl;
+   // print(goban);
     while (i < 19)
       {
 	for (int j = 0; j < 19; ++j)
 	  {
       if (not goban.setStone(player, i, j))
         continue;
-	    if (tmp[j][i] >= score)
+	    if (tmp[j][i] > score)
 	      {
 		      score = tmp[j][i];
 		      posX = i;
