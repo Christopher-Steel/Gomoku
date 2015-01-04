@@ -84,7 +84,6 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
     }
     _referee.consult();
   }
-  _referee.consult();
   return rc;
 }
 
