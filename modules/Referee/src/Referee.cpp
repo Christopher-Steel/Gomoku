@@ -103,8 +103,8 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
 	if (not Goban::isBorderPoint(cursor)
 	    && not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
 	  if (not watched
-	      && ((_goban[cursor].cdirection(direction).open == true)
-		  ^ (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))) {
+	      && true/*((_goban[cursor].cdirection(direction).open == true)
+		       ^ (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/) {
 	    _watchlist.push_back(std::make_pair(index, dir));
 	    return false;
 	  } else {

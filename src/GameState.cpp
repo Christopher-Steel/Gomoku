@@ -140,16 +140,23 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 }
 
 void						GameState::supprIndex(std::list<unsigned int> &list) {
-	std::cout << "list = " << list.size() << std::endl;
-	PlayerColor tmp = PlayerColor::NONE;
+	unsigned	i = 0;
+	PlayerColor	tmp = PlayerColor::NONE;
+
 	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
 		tmp = deleteStone(*it);
+		++i;
 	}
-	if (tmp == PlayerColor::WHITE)
-		addWhiteStoneToScore();
-	else if (tmp == PlayerColor::BLACK)
-		addBlackStoneToScore();
-
+	i /= 2;
+	std::cout << "i =" << i << std::endl;
+	while (i > 0)
+	  {
+	    if (tmp == PlayerColor::WHITE)
+	      addWhiteStoneToScore();
+	    else if (tmp == PlayerColor::BLACK)
+	      addBlackStoneToScore();
+	    --i;
+	  }
 	list.clear();
 }
 
