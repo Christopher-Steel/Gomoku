@@ -170,12 +170,17 @@ void								GameSpecificFactory::createHUD(unsigned int *id, World &world, const
 }
 
 // PLAYER
-void								GameSpecificFactory::changeCurrentPlayer(World &world) {
-	if (_first == true)
-		world.renderComponents[_idCurrentPlayer] = ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/white.png"));	
-	else
+bool								GameSpecificFactory::changeCurrentPlayer(World &world) {
+	if (_first == true) {
+		world.renderComponents[_idCurrentPlayer] = ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/white.png"));
+		_first = !_first;
+		return (true);
+	}
+	else {
 		world.renderComponents[_idCurrentPlayer] = ComponentFactory::createRenderComponent(_resourceManager.getTexture("ressources/black.png"));	
-	_first = !_first;
+		_first = !_first;
+		return (false);	
+	}
 }
 
 void								GameSpecificFactory::createPlayer(unsigned int *id, World &world)

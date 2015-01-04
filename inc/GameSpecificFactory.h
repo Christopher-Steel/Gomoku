@@ -26,7 +26,7 @@ public:
 	void									createGameBackground(unsigned int *id, World &world, const sf::Vector2u &screenSize);
 	void									createHUD(unsigned int *id, World &world, const sf::Vector2u &screenSize);
 	void									createPlayer(unsigned int *id, World &world);
-	void									changeCurrentPlayer(World &world);
+	bool									changeCurrentPlayer(World &world);
 
 private:
 	GameSpecificFactory();

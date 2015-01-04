@@ -45,7 +45,7 @@ void						GameState::initialize()
 	_valueWhite = 0;
 	_valueBlack = 0;
   	_currentPlayer = _black.get();
-	_gameAction->factory.changeCurrentPlayer(_world);
+	while (_gameAction->factory.changeCurrentPlayer(_world) != false);
 }
 
 
