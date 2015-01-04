@@ -13,8 +13,38 @@ Goban::Goban(void) :
 
 }
 
-Goban::Goban(const Goban &other) : _points(other._points), _referee(other._referee)
+void    Goban::print()
 {
+  unsigned  x;
+
+  for (x = 0; x < Goban::SIZE + 2; ++x) {
+    std::cout << "*";
+  }
+  std::cout << std::endl;
+  for (unsigned y = 0; y < Goban::SIZE; ++y) {
+    std::cout << "*";
+    for (x = 0; x < Goban::SIZE; ++x) {
+      if (_points[y * Goban::SIZE + x].isTaken()) {
+  if (_points[y * Goban::SIZE + x].isTaken() == PlayerColor::WHITE) {
+    std::cout << "O";
+  } else {
+    std::cout << "X";
+  }
+      } else {
+  std::cout << " ";
+      }
+    }
+    std::cout << "*" << std::endl;
+  }
+  for (x = 0; x < Goban::SIZE + 2; ++x) {
+    std::cout << "*";
+  }
+  std::cout << std::endl;
+}
+
+Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), other._referee.doubleTriples())
+{
+  _points = other._points;
   _captured = other._captured;
   _freePoints = other._freePoints;
   _winner = other._winner;
@@ -22,8 +52,9 @@ Goban::Goban(const Goban &other) : _points(other._points), _referee(other._refer
 
 Goban     &Goban::operator=(const Goban &other)
 {
+  Referee tmp(*this, other._referee.breakableFives(), other._referee.doubleTriples());
   _points = other._points;
-  _referee = other._referee;
+  _referee = tmp;
   _captured = other._captured;
   _freePoints = other._freePoints;
   _winner = other._winner;

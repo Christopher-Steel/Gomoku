@@ -35,7 +35,7 @@ public:
 
   std::list<unsigned>	&getCapture();
   PlayerColor		isGameOver(void) const;
-
+  void print();
 private:
   void			_startPropagation(unsigned index, PlayerColor color);
   bool			_propagateInfo(unsigned index, Point::Direction dir,
