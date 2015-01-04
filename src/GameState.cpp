@@ -196,7 +196,7 @@ void					GameState::runModuleGame(Stone &stone) {
 		if (_goban.isGameOver())
 		{
 			_printer.printVictory(_goban.isGameOver());
-			detectEnd(_goban.isGameOver());			
+			detectEnd(_goban.isGameOver());		
 		}
 		return;
 	}
