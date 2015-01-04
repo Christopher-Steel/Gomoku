@@ -140,23 +140,25 @@ void		Goban::_startPropagation(unsigned index, PlayerColor color)
   unsigned		startPoint;
   bool			out_of_bounds;
   Radar			r;
+  bool			oldOpen = false;
 
   for (unsigned dir = 0; dir < 8; ++dir) {
     direction = static_cast<Point::Direction>(dir);
     r = _points[index].direction(Point::oppositeDirection(direction));
     added = 1;
     if (r.color == color) {
+      oldOpen = r.open;
       added += r.length;
     }
     startPoint = Traveller::travel(index, direction, out_of_bounds);
     if (not out_of_bounds) {
-      _propagateInfo(startPoint, direction, color, added);
+      _propagateInfo(startPoint, direction, color, added, oldOpen);
     }
   }
 }
 
 bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
-				      PlayerColor color, int diff)
+				      PlayerColor color, int diff, bool oldOpen)
 {
   assert(index < Goban::SIZE * Goban::SIZE);
   Point			&point = _points[index];
@@ -175,15 +177,13 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
 
   if (_winner == PlayerColor::NONE) {
     next = Traveller::travel(index, dir, out_of_bounds);
+    point.direction(oppositeDir).open = oldOpen;
     if (not out_of_bounds and point.isTaken() == color) {
-      isOpen = not _propagateInfo(next, dir, color, diff);
-      std::cout << "is Open = " << isOpen << std::endl;
-      point.direction(oppositeDir).open = isOpen;
-      if (point.direction(dir).color == color
-	  || point.direction(dir).color == PlayerColor::NONE) {
-	std::cout << "is Open = " << isOpen << std::endl;
-	point.direction(dir).open = isOpen;
-      }
+      isOpen = _propagateInfo(next, dir, color, diff, oldOpen);
+      // if (point.direction(dir).color == color
+      // 	  /*|| point.direction(dir).color == PlayerColor::NONE*/) {
+      // 	point.direction(dir).open = isOpen;
+      // }
     }
   }
   return (point.isTaken() != color and point.isTaken() != PlayerColor::NONE);

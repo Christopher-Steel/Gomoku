@@ -41,7 +41,7 @@ public:
 private:
   void			_startPropagation(unsigned index, PlayerColor color);
   bool			_propagateInfo(unsigned index, Point::Direction dir,
-				       PlayerColor color, int diff);
+				       PlayerColor color, int diff, bool);
 
   void			_reversePropagation(unsigned index, PlayerColor color);
   void			_propagateDestruction(unsigned index, Point::Direction dir,
