@@ -134,7 +134,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			  std::cout << "IA" << std::endl;
 			}
 			supprIndex(_goban.getCapture());
-			_gameAction->factory.changeCurrentPlayer(_world);
 		}
 		if (event.mouseButton.button == sf::Mouse::Right) {
 			stone.x = event.mouseButton.x;
@@ -155,16 +154,23 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 }
 
 void						GameState::supprIndex(std::list<unsigned int> &list) {
-	std::cout << "list = " << list.size() << std::endl;
-	PlayerColor tmp = PlayerColor::NONE;
+	unsigned	i = 0;
+	PlayerColor	tmp = PlayerColor::NONE;
+
 	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
 		tmp = deleteStone(*it);
+		++i;
 	}
-	if (tmp == PlayerColor::WHITE)
-		addWhiteStoneToScore();
-	else if (tmp == PlayerColor::BLACK)
-		addBlackStoneToScore();
-
+	i /= 2;
+	std::cout << "i =" << i << std::endl;
+	while (i > 0)
+	  {
+	    if (tmp == PlayerColor::WHITE)
+	      addWhiteStoneToScore();
+	    else if (tmp == PlayerColor::BLACK)
+	      addBlackStoneToScore();
+	    --i;
+	  }
 	list.clear();
 }
 
@@ -184,6 +190,7 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		putStone(stone, _currentPlayer->getColor());
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
+		_gameAction->factory.changeCurrentPlayer(_world);
 		_printer.print();
 		if (_goban.isGameOver())
 		{
@@ -192,7 +199,6 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		return;
 	}
-
 	_printer.printVictory(_goban.isGameOver());
 	detectEnd(_goban.isGameOver());
 }
