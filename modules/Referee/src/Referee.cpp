@@ -90,26 +90,30 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
     return true;
   }
   bool			out_of_bounds;
+  Point::Direction	oppositeDir = Point::oppositeDirection(dir);
   Point::Direction	direction;
-  unsigned		axisLength;
+  unsigned		length;
   unsigned		cursor;
 
   assert(_goban[index].isTaken() != PlayerColor::NONE);
   cursor = index;
   for (unsigned i = 0; i < 5; ++i) {
-    for (unsigned j = 0; j < 4; ++j) {
-      direction = static_cast<Point::Direction>(j);
-      axisLength = _goban[cursor].axis(direction);
-      if (axisLength == 2) {
-	if (not Goban::isBorderPoint(cursor)
-	    and not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
-	  if (not watched
-	      and /*((_goban[cursor].cdirection(direction).open == true)
-		   xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/ true) {
-	    _watchlist.push_back(std::make_tuple(index, dir, true));
-	    return false;
-	  } else {
-	    return true;
+    for (unsigned j = 0; j < 8; ++j) {
+      if (direction == dir or direction == oppositeDir) {
+	direction = static_cast<Point::Direction>(j);
+	length = _goban[cursor].direction(direction).length;
+	if (length == 2) {
+	  if (not Goban::isBorderPoint(cursor)
+	      and not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
+	    std::cout << "DIRECTION " << direction << " POS " << cursor % 19 << "/" << cursor / 19 << " oob " << out_of_bounds << std::endl;
+	    if (not watched
+		and /*((_goban[cursor].cdirection(direction).open == true)
+		      xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/ true) {
+	      _watchlist.push_back(std::make_tuple(index, dir, true));
+	      return false;
+	    } else {
+	      return true;
+	    }
 	  }
 	}
       }
