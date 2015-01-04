@@ -66,6 +66,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
     }
     _referee.consult();
   }
+  _referee.consult();
   return rc;
 }
 
@@ -76,7 +77,6 @@ bool			Goban::setStone(PlayerColor player, unsigned x, unsigned y)
 
 void			Goban::setCapture(unsigned pionToCapture)
 {
-  std::cout << "pion to capture = " << pionToCapture << std::endl;
   _captured.push_back(pionToCapture);
 }
 

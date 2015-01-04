@@ -45,6 +45,7 @@ void						GameState::initialize()
 	_valueWhite = 0;
 	_valueBlack = 0;
   	_currentPlayer = _black.get();
+	_gameAction->factory.changeCurrentPlayer(_world);
 }
 
 
@@ -104,11 +105,11 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 	}
 
 	if (event.type == sf::Event::MouseButtonReleased) {
-		if (event.mouseButton.button == sf::Mouse::Left) {
 			int 				tmpX;
 			int 				tmpY;
 
 			Stone					stone;
+		if (event.mouseButton.button == sf::Mouse::Left) {
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
 			std::cout << stone.x << "||" << stone.y << std::endl;
@@ -134,21 +135,42 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			}
 			supprIndex(_goban.getCapture());
 		}
+		if (event.mouseButton.button == sf::Mouse::Right) {
+			stone.x = event.mouseButton.x;
+			stone.y = event.mouseButton.y;
+			// std::cout << "x = " << x << " y = " << y << std::endl;
+			averagePosition(stone, &tmpX, &tmpY);
+			std::cout << (stone.x = Calcul::findX(tmpX - AXEX)) << "||" << (stone.y = Calcul::findY(tmpY - AXEY))<< std::endl;
+			unsigned int res = stone.y * 19 + stone.x;
+			for (unsigned int i = 0; i < 8; ++i) {
+				std::cout <<  "_goban[" << res << "]" << " open = " << (int)(_goban[res].direction((Point::Direction)i).open) << std::endl;
+				std::cout <<  "_goban[" << res << "]" << " color = " << (int)(_goban[res].direction((Point::Direction)i).color) << std::endl;
+				std::cout <<  "_goban[" << res << "]" << " length = " << (int)(_goban[res].direction((Point::Direction)i).length) << std::endl;
+			}
+			std::cout << "----------------------------------------------" << std::endl;
+		}
 	}
 	return (true);
 }
 
 void						GameState::supprIndex(std::list<unsigned int> &list) {
-	std::cout << "list = " << list.size() << std::endl;
-	PlayerColor tmp = PlayerColor::NONE;
+	unsigned	i = 0;
+	PlayerColor	tmp = PlayerColor::NONE;
+
 	for (std::list<unsigned int>::const_iterator it = list.begin(); it != list.end(); ++it) {
 		tmp = deleteStone(*it);
+		++i;
 	}
-	if (tmp == PlayerColor::WHITE)
-		addWhiteStoneToScore();
-	else if (tmp == PlayerColor::BLACK)
-		addBlackStoneToScore();
-
+	i /= 2;
+	std::cout << "i =" << i << std::endl;
+	while (i > 0)
+	  {
+	    if (tmp == PlayerColor::WHITE)
+	      addWhiteStoneToScore();
+	    else if (tmp == PlayerColor::BLACK)
+	      addBlackStoneToScore();
+	    --i;
+	  }
 	list.clear();
 }
 
@@ -168,6 +190,7 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		putStone(stone, _currentPlayer->getColor());
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
+		_gameAction->factory.changeCurrentPlayer(_world);
 		_printer.print();
 		if (_goban.isGameOver())
 		{
@@ -176,7 +199,6 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		return;
 	}
-
 	_printer.printVictory(_goban.isGameOver());
 	detectEnd(_goban.isGameOver());
 }
