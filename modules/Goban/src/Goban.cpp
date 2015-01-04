@@ -52,6 +52,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
     std::vector<unsigned>	captured;
     PlayerColor			target;
 
+    _referee.consult();
     rc = true;
     point.take(player);
     _startPropagation(index, player);
@@ -64,9 +65,7 @@ bool			Goban::setStone(PlayerColor player, unsigned index)
 	++_freePoints;
       }
     }
-    //_captured.clear();
   }
-  _referee.consult();
   return rc;
 }
 
@@ -92,6 +91,27 @@ PlayerColor		Goban::isGameOver(void) const
 std::list<unsigned>	&Goban::getCapture()
 {
   return _captured;
+}
+
+bool			Goban::isBorderPoint(unsigned index)
+{
+  Point::Direction	directions[] =
+    {
+      Point::Direction::LEFT,
+      Point::Direction::TOP,
+      Point::Direction::RIGHT,
+      Point::Direction::BOTTOM
+    };
+  unsigned	nbDirs = sizeof(directions) / sizeof(*directions);
+  bool		out_of_bounds;
+
+  for (unsigned dir = 0; dir < nbDirs; ++dir) {
+    Traveller::travel(index, directions[dir], out_of_bounds, 1);
+    if (out_of_bounds) {
+      return true;
+    }
+  }
+  return false;
 }
 
 void		Goban::_startPropagation(unsigned index, PlayerColor color)

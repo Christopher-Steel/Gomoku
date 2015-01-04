@@ -30,7 +30,7 @@ Referee &Referee::operator=(const Referee &other)
   _breakableFives = other._breakableFives;
   _doubleTriples = other._doubleTriples;
   _captures = other._captures;
-  return (*this); 
+  return (*this);
 }
 
 bool	Referee::isLegalMove(PlayerColor player, unsigned index)
@@ -93,25 +93,28 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
   unsigned		axisLength;
   unsigned		cursor;
 
-  //  assert(_goban[index].isTaken() != PlayerColor::NONE);
-  if (_goban[index].isTaken() != PlayerColor::NONE)
-    return false;
+  assert(_goban[index].isTaken() != PlayerColor::NONE);
   cursor = index;
   for (unsigned i = 0; i < 5; ++i) {
     for (unsigned j = 0; j < 4; ++j) {
       direction = static_cast<Point::Direction>(j);
       axisLength = _goban[cursor].axis(direction);
       if (axisLength == 2) {
-	if (not watched) {
-	  _watchlist.push_back(std::make_pair(index, dir));
+	if (not Goban::isBorderPoint(cursor)
+	    && not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
+	  if (not watched && (true/* replace this with openness checks */)) {
+	    _watchlist.push_back(std::make_pair(index, dir));
+	    std::cout << "aint watched" << std::endl;
+	    return false;
+	  } else {
+	    std::cout << "watched and good" << std::endl;
+	    return true;
+	  }
 	}
-	return false;
       }
     }
     cursor = Traveller::travel(cursor, dir, out_of_bounds);
-    //assert(out_of_bounds == false);
-    if (out_of_bounds == false)
-      return false;
+    assert(out_of_bounds == false);
   }
   return true;
 }
@@ -126,7 +129,7 @@ void	Referee::consult(void)
   }
 }
 
-bool	Referee::_isVacant(__attribute__((unused))PlayerColor player,
+bool	Referee::_isVacant(__attribute__ ((unused))PlayerColor player,
 			   unsigned index)
 {
   return not (_goban[index].isTaken());
