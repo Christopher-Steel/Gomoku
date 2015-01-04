@@ -141,7 +141,7 @@ void	Referee::consult(void)
     std::tie(cursor, direction, firstTurn) = fiver;
     for (i = 0; i < 5; ++i) {
       if (not _goban[cursor].isTaken()) {
-	std::cout << "broken fiver !" << std::endl;
+	//std::cout << "broken fiver !" << std::endl;
 	return true;
       }
       cursor = Traveller::travel(cursor, direction, out_of_bounds, 1);
@@ -152,12 +152,12 @@ void	Referee::consult(void)
   for (auto &fiver : _watchlist) {
     std::tie(cursor, direction, firstTurn) = fiver;
     if (not firstTurn and isWinningFive(cursor, direction, true)) {
-      std::cout << "checking fiver" << std::endl;
+      //std::cout << "checking fiver" << std::endl;
       _goban._winner = _goban[cursor].isTaken();
       break;
     }
     std::get<2>(fiver) = false;
-    std::cout << "fiver protection : " << std::get<2>(fiver) << std::endl;
+    //std::cout << "fiver protection : " << std::get<2>(fiver) << std::endl;
 
   }
 }
