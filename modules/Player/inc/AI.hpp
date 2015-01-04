@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 
 #include "APlayer.hpp"
 
@@ -18,4 +19,5 @@ public:
  private:
  	unsigned 	_x;
  	unsigned 	_y;
+ 	bool 		_first;
 };

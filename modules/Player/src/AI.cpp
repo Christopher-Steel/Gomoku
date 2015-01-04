@@ -6,7 +6,7 @@
 
 
 AI::AI(PlayerColor color) :
-  APlayer(color, PlayerType::AI) {}
+  APlayer(color, PlayerType::AI) {_first = true;}
 
  auto		AI::getMove(void) const -> Move
 {
@@ -46,55 +46,55 @@ void		AI::print(Goban const &_goban)
   std::cout << std::endl;
 }
 
-bool    check(Goban const &go, int x, int y)
+bool    check(Goban const &go, int y, int x)
 {
   bool  isOk = false;
 
-  if (y - 1 >= 0)
+  if (x - 1 >= 0)
   {
-    isOk = go[x * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[y * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::NONE ? false : true;
    if (isOk) return (isOk);
     //std::cout << x << " " << y-1 << std::endl;
   }
-  if (y + 1 < 19)
+  if (x + 1 < 19)
   {
-    isOk = go[x * Goban::SIZE + y + 1].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[y * Goban::SIZE + x + 1].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x << " " << y+1 << std::endl;
   }
-  if (x - 1 >= 0)
+  if (y - 1 >= 0)
   {
-    isOk = go[(x - 1) * Goban::SIZE + y].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y - 1) * Goban::SIZE + x].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x-1 << " " << y << std::endl;
   }
-  if (x + 1 < 19)
+  if (y + 1 < 19)
   {
-    isOk = go[(x + 1) * Goban::SIZE + y].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + x].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y << std::endl;
   }
-  if (x - 1 >= 0 && y - 1 >= 0)
+  if (y - 1 >= 0 && x - 1 >= 0)
   {
-    isOk = go[(x - 1) * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y - 1) * Goban::SIZE + (x - 1)].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x-1 << " " << y-1 << std::endl;
   }
-  if (x + 1 < 19 && y - 1 >= 0)
+  if (y + 1 < 19 && x - 1 >= 0)
   {
-    isOk = go[(x + 1) * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + (x - 1)].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y-1 << std::endl;
   }
-  if (x - 1 >= 0 && y + 1 < 19)
+  if (y - 1 >= 0 && x + 1 < 19)
   {
-    isOk = go[(x - 1) * Goban::SIZE + (y + 1)].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y - 1) * Goban::SIZE + (x + 1)].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x-1 << " " << y+1 << std::endl;
   }
-  if (x + 1 < 19 && y + 1 < 19)
+  if (y + 1 < 19 && x + 1 < 19)
   {
-    isOk = go[(x + 1) * Goban::SIZE + (y + 1)].isTaken() == PlayerColor::NONE ? false : true;
+    isOk = go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() != PlayerColor::BLACK ? false : true;
     if (isOk) return (isOk);
     //std::cout << x+1 << " " << y+1 << std::endl;
   }
@@ -111,6 +111,75 @@ bool    check(Goban const &go, int x, int y)
 
 void 		AI::chooseMove(Goban const &go)
 {
+  Move  tmp;
+  int   **score;
+  std::vector<Move> pos;
+  Goban goban(go);
+
+  score = new int*[19];
+  for (int y = 0; y < 19; ++y)
+  {
+    score[y] = new int[19];
+  }
+
+  for (int y = 0; y < 19; ++y)
+  {
+    for (int x = 0; x < 19; ++x)
+    {
+      score[y][x] = 0;
+    }
+  }
+
+  for (int y = 0; y < 19; ++y)
+  {
+    for (int x = 0; x < 19; ++x)
+    {
+      if (!check(goban, y, x) || goban[y * Goban::SIZE + x].isTaken() != PlayerColor::NONE)
+        continue;
+      if (_first)
+      {
+        _x = x;
+        _y = y;
+        _first = false;
+        return ; 
+      }
+      if (goban[y * Goban::SIZE + x].direction(Point::LEFT).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOPLEFT).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOP).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOPRIGHT).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::RIGHT).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOMRIGHT).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOM).length == 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOMLEFT).length == 2)
+      {
+        tmp.x = x;
+        tmp.y = y;
+        pos.push_back(tmp);
+      }
+      if (goban[y * Goban::SIZE + x].direction(Point::LEFT).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOPLEFT).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOP).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::TOPRIGHT).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::RIGHT).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOMRIGHT).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOM).length > 2 ||
+          goban[y * Goban::SIZE + x].direction(Point::BOTTOMLEFT).length > 2)
+      {
+        _x = x;
+        _y = y;
+        return;
+      }
+    }
+  }
+  int t = rand() % pos.size();
+  _x = pos[t].x;
+  _y = pos[t].y;
+  _first = false;
+  for (int y = 0; y < 19; ++y)
+  {
+    delete[] score[y];
+  }
+  delete[] score;
 // 	int 	 i = -1;
 // 	PlayerColor player = PlayerColor::WHITE;
 // 	PlayerColor win = PlayerColor::NONE;
