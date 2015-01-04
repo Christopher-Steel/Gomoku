@@ -31,8 +31,9 @@ Goban::Goban(void) :
     }
 }
 
-Goban::Goban(const Goban &other) : _points(other._points), _referee(other._referee)
+Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), other._referee.doubleTriples())
 {
+  _points = other._points;
   _captured = other._captured;
   _freePoints = other._freePoints;
   _winner = other._winner;
@@ -40,8 +41,9 @@ Goban::Goban(const Goban &other) : _points(other._points), _referee(other._refer
 
 Goban     &Goban::operator=(const Goban &other)
 {
+  Referee tmp(*this, other._referee.breakableFives(), other._referee.doubleTriples());
   _points = other._points;
-  _referee = other._referee;
+  _referee = tmp;
   _captured = other._captured;
   _freePoints = other._freePoints;
   _winner = other._winner;
