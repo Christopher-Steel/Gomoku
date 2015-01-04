@@ -53,48 +53,56 @@ bool    check(Goban const &go, int x, int y)
   if (y - 1 >= 0)
   {
     isOk = go[x * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x << " " << y-1 << std::endl;
+   if (isOk) return (isOk);
+    //std::cout << x << " " << y-1 << std::endl;
   }
   if (y + 1 < 19)
   {
     isOk = go[x * Goban::SIZE + y + 1].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x << " " << y+1 << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x << " " << y+1 << std::endl;
   }
   if (x - 1 >= 0)
   {
     isOk = go[(x - 1) * Goban::SIZE + y].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x-1 << " " << y << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x-1 << " " << y << std::endl;
   }
   if (x + 1 < 19)
   {
     isOk = go[(x + 1) * Goban::SIZE + y].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x+1 << " " << y << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x+1 << " " << y << std::endl;
   }
   if (x - 1 >= 0 && y - 1 >= 0)
   {
     isOk = go[(x - 1) * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x-1 << " " << y-1 << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x-1 << " " << y-1 << std::endl;
   }
   if (x + 1 < 19 && y - 1 >= 0)
   {
     isOk = go[(x + 1) * Goban::SIZE + (y - 1)].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x+1 << " " << y-1 << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x+1 << " " << y-1 << std::endl;
   }
   if (x - 1 >= 0 && y + 1 < 19)
   {
     isOk = go[(x - 1) * Goban::SIZE + (y + 1)].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x-1 << " " << y+1 << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x-1 << " " << y+1 << std::endl;
   }
   if (x + 1 < 19 && y + 1 < 19)
   {
     isOk = go[(x + 1) * Goban::SIZE + (y + 1)].isTaken() == PlayerColor::NONE ? false : true;
-    std::cout << x+1 << " " << y+1 << std::endl;
+    if (isOk) return (isOk);
+    //std::cout << x+1 << " " << y+1 << std::endl;
   }
-  if (isOk)
-    std::cout << "true" << std::endl;
-  else
-    std::cout << "false" << std::endl;
-  return isOk;
+  // if (isOk)
+  //   std::cout << "true" << std::endl;
+  // else
+  //   std::cout << "false" << std::endl;
+   return isOk;
 }
 
 void 		AI::go(Goban const &go)
@@ -109,7 +117,6 @@ void 		AI::go(Goban const &go)
 	unsigned posY;
 	int score;
 	int tmp[19][19];
-  bool ok = false;
 
   srand(getpid() * time(NULL));
 	for (unsigned y = 0; y < Goban::SIZE; ++y) {
@@ -122,64 +129,56 @@ void 		AI::go(Goban const &go)
     posX = y;
     posY = x;
     i = 0;
-    ok = false;
     Goban goban(go);
-      if (!ok) {
         if (!check(goban, posX, posY))
         {
           continue;
         }
-        ok = true;
-      }
-    //std::cout << posX << " | " << posY << std::endl;
+    std::cout << posX << " | " << posY << std::endl;
     while (i < 300)
     {
 	 	  Goban goban(go);
-      if (!ok) {
-        if (!check(goban, posX, posY))
-        {
-          break;
-        }
-        ok = true;
-      }
     	player = PlayerColor::WHITE;
     	if (not goban.setStone(player, posX, posY))
-	       break;
+	       continue;
+      //std::cout << posX << " | " << posY << std::endl;
       player = PlayerColor::BLACK;
     	while (not goban.isGameOver())
     	{
     		tmpx = rand() % 19;
     		tmpy = rand() % 19;
-        std::cout << posX << " | " << posY << std::endl;
         //std::cout << tmpx << " [] " << tmpy << std::endl;
     		if (goban.setStone(player, tmpx, tmpy))
 		  {
-        std::cout << "Illegal move" << std::endl;
+        //std::cout << "Illegal move" << std::endl;
         player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
 		  }
     		
     	}
 	win = goban.isGameOver();
 	if (win == PlayerColor::WHITE)
-	  ++tmp[posX][posY];
+	  ++tmp[posY][posX];
 	else
-	  --tmp[posX][posY];
+	  --tmp[posY][posX];
     	++i;
     }
+    std::cout << tmp[posY][posX] << std::endl;
   }
 }
     i = 0;
     score = -10000;
     Goban 	goban(go);
+    std::cout << "TEST" << std::endl;
+    print(goban);
     while (i < 19)
       {
 	for (int j = 0; j < 19; ++j)
 	  {
-	    if (tmp[i][j] > score && goban.setStone(player, i, j))
+	    if (tmp[j][i] >= score && goban.setStone(player, i, j))
 	      {
-		score = tmp[i][j];
-		posX = i;
-		posY = j;
+		      score = tmp[j][i];
+		      posX = i;
+		      posY = j;
 	      }
 	  }
 	++i;
