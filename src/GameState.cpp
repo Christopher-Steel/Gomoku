@@ -134,7 +134,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 			  std::cout << "IA" << std::endl;
 			}
 			supprIndex(_goban.getCapture());
-			_gameAction->factory.changeCurrentPlayer(_world);
 		}
 	}
 	return (true);
@@ -170,6 +169,7 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		putStone(stone, _currentPlayer->getColor());
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
+		_gameAction->factory.changeCurrentPlayer(_world);
 		_printer.print();
 		if (_goban.isGameOver())
 		{
@@ -178,7 +178,6 @@ void					GameState::runModuleGame(Stone &stone) {
 		}
 		return;
 	}
-
 	_printer.printVictory(_goban.isGameOver());
 	detectEnd(_goban.isGameOver());
 }
