@@ -129,7 +129,8 @@ void 		AI::go(Goban const &go)
         {
           continue;
         }
-        ok = true
+        ok = true;
+      }
     //std::cout << posX << " | " << posY << std::endl;
     while (i < 300)
     {
