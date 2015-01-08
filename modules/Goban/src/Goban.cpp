@@ -31,7 +31,7 @@ Goban::Goban(void) :
     }
 }
 
-Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), other._referee.doubleTriples())
+Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), true)
 {
   _points = other._points;
   _captured = other._captured;

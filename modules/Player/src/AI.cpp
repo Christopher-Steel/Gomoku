@@ -111,11 +111,15 @@ bool    check(Goban const &go, int y, int x)
 
 void 		AI::chooseMove(Goban const &go)
 {
-  Move  tmp;
-  int   **score;
+  Move		tmp;
+  int		**score;
   std::vector<Move> pos;
-  Goban goban(go);
-  bool  nothing;
+  Goban		goban(go);
+  bool		nothing;
+  PlayerColor	player = PlayerColor::WHITE;
+  PlayerColor	win = PlayerColor::NONE;
+  int		x;
+  int		y;
 
   score = new int*[19];
   for (int y = 0; y < 19; ++y)
@@ -127,7 +131,7 @@ void 		AI::chooseMove(Goban const &go)
   {
     for (int x = 0; x < 19; ++x)
     {
-      score[y][x] = 0;
+      score[y][x] = -1;
     }
   }
 
@@ -145,6 +149,19 @@ void 		AI::chooseMove(Goban const &go)
         _first = false;
         return ; 
       }
+      if (goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 4 ||
+          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 4)
+	{
+	  _x = x;
+	  _y = y;
+	  return; 
+	}
       if ((goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).color == PlayerColor::BLACK) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).color == PlayerColor::BLACK) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length == 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).color == PlayerColor::BLACK) ||
@@ -167,11 +184,11 @@ void 		AI::chooseMove(Goban const &go)
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).color == PlayerColor::BLACK) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).color == PlayerColor::BLACK) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).color == PlayerColor::BLACK))
-      {
-        _x = x;
-        _y = y;
-        return;
-      }
+	{
+	  _x = x;
+	  _y = y;
+	  return ;
+	}
       if ((goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).color == PlayerColor::WHITE) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).color == PlayerColor::WHITE) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).color == PlayerColor::WHITE) ||
@@ -180,36 +197,64 @@ void 		AI::chooseMove(Goban const &go)
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).color == PlayerColor::WHITE) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).color == PlayerColor::WHITE) ||
           (goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 2 && goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).color == PlayerColor::WHITE))
-     {
-        tmp.x = x;
-        tmp.y = y;
-        pos.push_back(tmp);
-        nothing = true; 
-      }
-      if (goban[y * Goban::SIZE + x].direction(Point::Direction::LEFT).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPLEFT).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::TOP).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::TOPRIGHT).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::RIGHT).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMRIGHT).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOM).length > 4 ||
-          goban[y * Goban::SIZE + x].direction(Point::Direction::BOTTOMLEFT).length > 4)
-      {
-        _x = x;
-        _y = y;
-        return; 
-      }
+	{
+	  tmp.x = x;
+	  tmp.y = y;
+	  pos.push_back(tmp);
+	  nothing = true; 
+	}
       if (!nothing)
-      {
+	{
           tmp.x = x;
           tmp.y = y;
           pos.push_back(tmp);
-      }
+	}
     }
   }
-  int t = rand() % pos.size();
-  _x = pos[t].x;
-  _y = pos[t].y;
+
+  int		tmpX;
+  int		tmpY;
+
+  for (unsigned int i=0; i < pos.size(); ++i)
+    {
+      x = pos[i].x;
+      y = pos[i].y;
+      ++score[y][x];
+      for (int j = 0; j < 100; ++j)
+	{
+	  Goban gob(go);
+	  player = PlayerColor::WHITE;
+	  if (not gob.setStone(player, x, y))
+	    continue;
+	  player = PlayerColor::BLACK;
+	  while (not gob.isGameOver())
+	    {
+	      tmpX = rand() % 19;
+	      tmpY = rand() % 19;
+	      if (not gob.setStone(player, tmpX, tmpY))
+		continue;
+	      player = (player == PlayerColor::WHITE ? PlayerColor::BLACK : PlayerColor::WHITE);
+	    }
+	  win = gob.isGameOver();
+	  if (win == PlayerColor::WHITE)
+	    ++score[y][x];
+	}
+    }
+  int		res = -1;
+  Goban		gob(go);
+  for (int y = 0; y < 19; ++y)
+    {
+      for (int x = 0; x < 19; ++x)
+	{
+	  if (score[y][x] > -1 && score[y][x] > res && gob.setStone(PlayerColor::WHITE, x, y))
+	    {
+	      tmpX = x;
+	      tmpY = y;
+	    }
+	}
+    }
+  _x = tmpX;
+  _y = tmpY;
   _first = false;
   for (int y = 0; y < 19; ++y)
   {
