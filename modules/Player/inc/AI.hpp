@@ -18,6 +18,7 @@ public:
  
  private:
  	bool 		check(Goban const &, int, int);
+ 	bool 		checkEat(Goban const &, int, int);
  	bool 		checkWinAI(Goban &, int, int);
  	bool 		checkAlign(Goban &, int, int, PlayerColor);
  	bool		checkAlignWin(Goban &, int, int, PlayerColor);

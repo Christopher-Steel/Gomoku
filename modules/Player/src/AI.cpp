@@ -64,6 +64,59 @@ bool    AI::check(Goban const &go, int y, int x)
    return isOk;
 }
 
+bool    AI::checkEat(Goban const &go, int x, int y)
+{
+  if (x - 3 >= 0)
+  {
+    if (go[y * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::BLACK && go[y * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
+        && go[y * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+  if (x + 3 < 19)
+  {
+    if (go[y * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[y * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
+        && go[y * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
+      return (true); 
+  }
+  if (y - 3 >= 0)
+  {
+    if (go[(y - 1) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK
+        && go[(y - 3) * Goban::SIZE + x].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+  if (y + 3 < 19)
+  {
+    if (go[(y + 1) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK
+        && go[(y + 3) * Goban::SIZE + x].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+  if (y - 3 >= 0 && x - 3 >= 0)
+  {
+    if (go[(y - 1) * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
+        && go[(y - 3) * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+  if (y + 3 < 19 && x - 3 >= 0)
+  {
+    if (go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
+        && go[(y - 3) * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+  if (y - 3 >= 0 && x + 3 < 19)
+  {
+    if (go[(y - 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
+        && go[(y - 3) * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
+      return (true);    
+  }
+  if (y + 2 < 19 && x + 2 < 19)
+  {
+    if (go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
+        && go[(y + 3) * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
+      return (true);
+  }
+   return false; 
+}
+
 // goban[index].direction(Direction).length -> donne la longueur d'alignement dans la direction.
 // goban[index].direction(Direction).color -> donne la couleur dans la direction.
 // goban[index].direction(Direction).open -> if true alignement ouvert, false alignement fermer donc on peux bouffer
@@ -170,7 +223,7 @@ void 		AI::chooseMove(Goban const &go)
         tmp.y = y;
         pos.push_back(tmp);
         nothing = true;
-        score[y][x] += 20;
+        score[y][x] += 30;
       }
       if (checkAlignWin(goban, x, y, PlayerColor::BLACK))
 	    {
@@ -188,6 +241,15 @@ void 		AI::chooseMove(Goban const &go)
 	      nothing = true;
         score[y][x] += 70;
 	    }
+      if (checkEat(goban, x, y))
+      {
+        std::cout << "Eat" << x << y << std::endl;
+        tmp.x = x;
+        tmp.y = y;
+        pos.push_back(tmp);
+        nothing = true;
+        score[y][x] += 45; 
+      }
       if (!nothing)
 	    {
           tmp.x = x;
@@ -229,17 +291,18 @@ void 		AI::chooseMove(Goban const &go)
   for (int y = 0; y < 19; ++y)
     {
       for (int x = 0; x < 19; ++x)
-	{
-	  if (score[y][x] > -1 && score[y][x] > res && gob.setStone(PlayerColor::WHITE, x, y))
 	    {
-        res = score[y][x]; 
-	      tmpX = x;
-	      tmpY = y;
+	       if (score[y][x] > -1 && score[y][x] > res && gob.setStone(PlayerColor::WHITE, x, y))
+	       {
+            res = score[y][x]; 
+	          tmpX = x;
+	          tmpY = y;
+	       }
 	    }
-	}
     }
   _x = tmpX;
   _y = tmpY;
+  std::cout << "score = " << score[_y][_x] << std::endl;
   _first = false;
   for (int y = 0; y < 19; ++y)
   {
