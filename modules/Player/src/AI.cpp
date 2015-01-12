@@ -162,6 +162,15 @@ void 		AI::chooseMove(Goban const &go)
         tmp.y = y;
         pos.push_back(tmp);
         nothing = true;
+        score[y][x] += 10;
+      }
+      if (checkAlign(goban, x, y, PlayerColor::WHITE))
+      {
+        tmp.x = x;
+        tmp.y = y;
+        pos.push_back(tmp);
+        nothing = true;
+        score[y][x] += 20;
       }
       if (checkAlignWin(goban, x, y, PlayerColor::BLACK))
 	    {
@@ -177,7 +186,7 @@ void 		AI::chooseMove(Goban const &go)
 	      tmp.y = y;
 	      pos.push_back(tmp);
 	      nothing = true;
-        score[y][x] += 50;
+        score[y][x] += 70;
 	    }
       if (!nothing)
 	    {
