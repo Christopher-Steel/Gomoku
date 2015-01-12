@@ -13,11 +13,14 @@ public:
 	virtual ~AI()noexcept = default;
 	AI(const AI& other) = delete;
   	AI&	operator=(const AI& other) = delete;
-  	void 		print(Goban const &);
   	Move		getMove(void) const;
   	void 		chooseMove(Goban const &go);
-
+ 
  private:
+ 	bool 		check(Goban const &, int, int);
+ 	bool 		checkWinAI(Goban &, int, int);
+ 	bool 		checkAlign(Goban &, int, int, PlayerColor);
+ 	bool		checkAlignWin(Goban &, int, int, PlayerColor);
  	unsigned 	_x;
  	unsigned 	_y;
  	bool 		_first;
