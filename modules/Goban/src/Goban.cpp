@@ -180,10 +180,10 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
     point.direction(oppositeDir).open = oldOpen;
     if (not out_of_bounds and point.isTaken() == color) {
       isOpen = _propagateInfo(next, dir, color, diff, oldOpen);
-      // if (point.direction(dir).color == color
-      // 	  /*|| point.direction(dir).color == PlayerColor::NONE*/) {
-      // 	point.direction(dir).open = isOpen;
-      // }
+      if (point.direction(dir).color == color
+      	  /*|| point.direction(dir).color == PlayerColor::NONE*/) {
+      	point.direction(dir).open = isOpen;
+      }
     }
   }
   return (point.isTaken() != color and point.isTaken() != PlayerColor::NONE);
