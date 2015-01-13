@@ -20,13 +20,6 @@ void						GUIState::initialize()
 	_gameAction->factory.createMainMenu(_id, _world, _gameAction->getScreenSize());
 }
 
-void						GUIState::stop(void) {}
-
-bool						GUIState::handleKeyState()
-{
-	return (true);
-}
-
 bool						GUIState::handleKeyEvent(const sf::Event &event)
 {
 	if (event.type == sf::Event::KeyPressed)

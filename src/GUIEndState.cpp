@@ -19,13 +19,6 @@ void						GUIEndState::initialize()
 	_gameAction->factory.createEndMenu(_id, _world, _gameAction->getScreenSize(), _result);
 }
 
-void						GUIEndState::stop(void) {}
-
-bool						GUIEndState::handleKeyState()
-{
-	return (true);
-}
-
 bool						GUIEndState::handleKeyEvent(const sf::Event &event)
 {
 	_state = Gomoku::EndMenu::EXIT;

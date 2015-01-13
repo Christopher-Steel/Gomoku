@@ -18,14 +18,6 @@ void						GUIPauseState::initialize()
 	_gameAction->factory.createPauseMenu(_id, _world, _gameAction->getScreenSize());
 }
 
-void						GUIPauseState::stop(void) {}
-
-
-bool						GUIPauseState::handleKeyState()
-{
-	return (true);
-}
-
 bool						GUIPauseState::handleKeyEvent(const sf::Event &event)
 {
 	if (event.type == sf::Event::KeyPressed)

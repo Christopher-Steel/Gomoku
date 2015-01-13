@@ -3,10 +3,6 @@
 
 #include "GameState.h"
 
-#define AXEX 250
-#define AXEY 125
-#define SPACE 47
-
 GameState::GameState(GameAction *gameAction, Gomoku::MainMenu::MODE mode) : AState(gameAction), _printer(_goban), _black(nullptr), _white(nullptr)
 {
 	_mode = mode;
@@ -19,17 +15,12 @@ void						GameState::initialize()
 {
 	_gameAction->factory.createGameBackground(_idBackground, _world, _gameAction->getScreenSize());
 	_gameAction->factory.createHUD(_idHud, _world, _gameAction->getScreenSize());
-	// _player = false;
-	// _moduleGame = new ModuleGame();
 	if (_mode == Gomoku::MainMenu::PLAYERPLAYER) {
 		std::function<APlayer *(PlayerColor)>	playerFactory[] =
 		{
 		  [](PlayerColor c){ return new Human(c); },
 		  [](PlayerColor c){ return new Human(c); }
 		};
-		// APlayer::Move	move;
-		// APlayer	*currentPlayer = nullptr;
-
 		_black.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::BLACK));
 		_white.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::WHITE));
 	}
@@ -37,7 +28,7 @@ void						GameState::initialize()
 		std::function<APlayer *(PlayerColor)>	playerFactory[] =
 		{
 		  [](PlayerColor c){ return new Human(c); },
-		  [](PlayerColor c){ return new AI(c); } // replace with AI
+		  [](PlayerColor c){ return new AI(c); }
 		};
 		_black.reset(playerFactory[static_cast<unsigned>(PlayerType::HUMAN) - 1](PlayerColor::BLACK));
 		_white.reset(playerFactory[static_cast<unsigned>(PlayerType::AI) - 1](PlayerColor::WHITE));
@@ -112,7 +103,6 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 		if (event.mouseButton.button == sf::Mouse::Left) {
 			stone.x = event.mouseButton.x;
 			stone.y = event.mouseButton.y;
-			std::cout << stone.x << "||" << stone.y << std::endl;
 			if (stone.x > 1100 || stone.x < 240 || stone.y > 980 || stone.y < 110)
 				return true;
 			averagePosition(stone, &tmpX, &tmpY);
@@ -122,32 +112,13 @@ bool						GameState::handleKeyEvent(const sf::Event &event)
 				runModuleGame(stone);
 			}
 			if (_mode == Gomoku::MainMenu::PLAYERIA) {
-				// ludo function's 
-				//runModuleGame(stone);
 			  APlayer::Move			move;
 			  _currentPlayer->chooseMove(_goban);
 			  move = _currentPlayer->getMove();
 			  stone.x = move.x * SPACE + AXEX;
 			  stone.y = move.y * SPACE + AXEY;
 			  runModuleGame(stone);
-			  std::cout << "IA" << std::endl;
 			}
-			supprIndex(_goban.getCapture());
-		}
-		if (event.mouseButton.button == sf::Mouse::Right) {
-			stone.x = event.mouseButton.x;
-			stone.y = event.mouseButton.y;
-			// std::cout << "x = " << x << " y = " << y << std::endl;
-			averagePosition(stone, &tmpX, &tmpY);
-			std::cout << (stone.x = Calcul::findX(tmpX - AXEX)) << "||" << (stone.y = Calcul::findY(tmpY - AXEY))<< std::endl;
-			unsigned int res = stone.y * 19 + stone.x;
-			for (unsigned int i = 0; i < 8; ++i) {
-				std::cout <<  "Direction " << i << std::endl;
-				std::cout <<  "_goban[" << res << "]" << " open = " << (int)(_goban[res].direction((Point::Direction)i).open) << std::endl;
-				std::cout <<  "_goban[" << res << "]" << " color = " << (int)(_goban[res].direction((Point::Direction)i).color) << std::endl;
-				std::cout <<  "_goban[" << res << "]" << " length = " << (int)(_goban[res].direction((Point::Direction)i).length) << std::endl;
-			}
-			std::cout << "----------------------------------------------" << std::endl;
 		}
 	}
 	return (true);
@@ -162,7 +133,6 @@ void						GameState::supprIndex(std::list<unsigned int> &list) {
 		++i;
 	}
 	i /= 2;
-	std::cout << "i =" << i << std::endl;
 	while (i > 0)
 	  {
 	    if (tmp == PlayerColor::WHITE)
@@ -174,16 +144,8 @@ void						GameState::supprIndex(std::list<unsigned int> &list) {
 	list.clear();
 }
 
-void						GameState::stop()
-{
-
-}
-
 void					GameState::runModuleGame(Stone &stone) {
-  // _printer.print();
 	if (not _goban.isGameOver()) {
-		// _move = _currentPlayer->getMove();
-		// std::cout << "x = " << stone.x << " y = " << stone.y << std::endl;
 		if (not _goban.setStone(_currentPlayer->getColor(), Calcul::findX(stone.x - AXEX), Calcul::findY(stone.y - AXEY))) {
 		  _printer.printIllegalMove();
 		  return;
@@ -192,10 +154,12 @@ void					GameState::runModuleGame(Stone &stone) {
 		_currentPlayer = (_currentPlayer == _black.get() ? _white.get() : _black.get());
 		_gameAction->factory.changeCurrentPlayer(_world);
 		_printer.print();
+		supprIndex(_goban.getCapture());
 		if (_goban.isGameOver())
 		{
 			_printer.printVictory(_goban.isGameOver());
-			detectEnd(_goban.isGameOver());		
+			detectEnd(_goban.isGameOver());
+			return;
 		}
 		return;
 	}
@@ -252,7 +216,6 @@ GameState::Stone 					&GameState::findStone(unsigned int rank) {
 		++y;
 		tmp -= 19;	
 	}
-	std::cout << "tmp Y = " << y << std::endl;
 	for (std::vector<Stone>::iterator it = _player1.begin(); it != _player1.end(); ++it) {
 		if (it->x == x) {
 			findx = true;
@@ -336,82 +299,9 @@ bool					GameState::checkPosition(const Stone &stone) {
 	}
 	return (true);
 }
-bool						GameState::handleKeyState()
-{
 
-	// sf::Vector2f			direction = sf::Vector2f(0.0f, 0.0f);
-	// sf::Vector2f			size = _world.transformComponents[_idPlayer[Gomoku::Player::SHIP]]->size;
-	// sf::Vector2f			scale = _world.transformComponents[_idPlayer[Gomoku::Player::SHIP]]->scale;
-	// sf::Vector2f			pos = _world.transformComponents[_idPlayer[Gomoku::Player::SHIP]]->position;
-
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && pos.y > 0)
-	// 	direction += sf::Vector2f(0, -1);
-
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && pos.y < _gameAction->getScreenSize().y - (size.y * scale.y))
-	// 	direction += sf::Vector2f(0, 1);
-
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && pos.x > 0)
-	// 	direction += sf::Vector2f(-1, 0);
-
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && pos.x < _gameAction->getScreenSize().x - (size.x * scale.x))
-	// 	direction += sf::Vector2f(1, 0);
-
-	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = direction;
-	// static int nb = 0;
-	// if (nb == 0)
-	// 	_rfc->sendMove(_world.transformComponents[_idPlayer[RType::Player::SHIP]]->position, direction);
-	// ++nb;
-	// if (nb > 50)
-	// 	nb = 0;
-
-	// // pan pan
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-	// 	_world.weaponComponents[_idPlayer[Gomoku::Player::WEAPON_1]]->fire = true;
-
-	// if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-	// 	_world.weaponComponents[_idPlayer[Gomoku::Player::WEAPON_2]]->fire = true;
-
-	return (true);
-}
 
 void						GameState::update()
 {
-	// TimerSystem::update(_world, elapsed);
-	// WeaponSystem::update(_world, elapsed, _gameAction->factory, _gameAction->getScreenSize());
-	// ParticleSystem::update(_world, elapsed);
 	TransformSystem::update(_world, _gameAction->getScreenSize());
-	// CollisionSystem::update(_world, sf::Vector2u(10, 10), _gameAction->getScreenSize());
-	// HealthSystem::update(_world, elapsed, _gameAction->factory);
-	// AnimationSystem::update(_world, elapsed);
-	// DeathSystem::update(_world);
-	// this->updateBackground();
-	// this->updateHUD();
-
-	// Si vous voulez savoir ce que ça fait, commentez le et essayez d'appuyer sur echap et de bouger en meme temps ingameAction
-	// _world.movementComponents[_idPlayer[RType::Player::SHIP]]->direction = sf::Vector2f(0.0f, 0.0f);
-}
-
-
-void						GameState::updateBackground()
-{
-	// if (_world.transformComponents[_idBackground[RType::GameBackground::DEFAULT]]->position.x + _world.transformComponents[_idBackground[RType::GameBackground::DEFAULT]]->size.x <= 0.0f)
-	// 	_world.transformComponents[_idBackground[RType::GameBackground::DEFAULT]]->position.x = _world.transformComponents[_idBackground[RType::GameBackground::DEFAULT]]->size.x;
-
-	// if (_world.transformComponents[_idBackground[RType::GameBackground::REVERSED]]->position.x + _world.transformComponents[_idBackground[RType::GameBackground::REVERSED]]->size.x <= 0.0f)
-	// 	_world.transformComponents[_idBackground[RType::GameBackground::REVERSED]]->position.x = _world.transformComponents[_idBackground[RType::GameBackground::REVERSED]]->size.x;
-}
-
-void						GameState::updateHUD()
-{
-	// InfoComponent			*info = _world.infoComponents[_idPlayer[RType::Player::SHIP]];
-	// sf::Vector2f			size = sf::Vector2f(200, 10);
-	// float					ratio;
-	
-	// _world.textComponents[_idHud[Gomoku::GAME::SCORE]]->string = "Stone : ";
-
-	// ratio = (static_cast<float>(info->life) / static_cast<float>(info->maxLife));
-	// _world.transformComponents[_idHud[RType::HUD::LIFEBAR]]->size = size * ratio;
-
-	// ratio = (static_cast<float>(info->shield) / static_cast<float>(info->maxShield));
-	// _world.transformComponents[_idHud[RType::HUD::SHIELDBAR]]->size = size * ratio;
 }

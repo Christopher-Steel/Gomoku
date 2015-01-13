@@ -9,9 +9,7 @@ public:
 	~GUIPauseState();
 
 	void						initialize();
-	void						stop(void);
 	bool						handleKeyEvent(const sf::Event &event);
-	bool						handleKeyState();
 
 private:
 

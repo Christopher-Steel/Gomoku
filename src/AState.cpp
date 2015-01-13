@@ -10,7 +10,6 @@ AState::~AState()
 
 void							AState::update()
 {
-	//TimerSystem::update(_world, elapsed);
 	TransformSystem::update(_world, _gameAction->getScreenSize());
 }
 

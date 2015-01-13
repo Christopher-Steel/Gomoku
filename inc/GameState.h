@@ -20,6 +20,10 @@
 #include "Human.hpp"
 #include "AI.hpp"
 
+#define AXEX 250
+#define AXEY 125
+#define SPACE 47
+
 class							GameState : public AState
 {
 public:
@@ -27,9 +31,7 @@ public:
 	~GameState();
 
 	void						initialize();
-	void						stop();
 	bool						handleKeyEvent(const sf::Event &event);
-	bool						handleKeyState();
 	void						update();
 	
 private:
@@ -41,11 +43,6 @@ private:
 		unsigned int 						id;
 	};
 
-	void						updateBackground();
-	void						updateHUD();
-
-	// unsigned int 				findX(unsigned int pos);
-	// unsigned int 				findY(unsigned int pos);
 	Stone  						&findStone(unsigned rank);
 	PlayerColor					deleteStone(unsigned rank);
 	void						averagePosition(Stone &p, int *x2, int *y2);
@@ -66,7 +63,6 @@ private:
 	unsigned int				_idPlayer[Gomoku::Player::MAX];
 	unsigned int				_idHud[Gomoku::HUD::MAX];
 	unsigned int				_idBackground[Gomoku::GameBackground::MAX];
-	// ModuleGame 					*_moduleGame;
 	bool						_player;
 	Gomoku::MainMenu::MODE					_mode;
 	unsigned int 							_valueWhite;
@@ -79,8 +75,8 @@ private:
 	std::unique_ptr<APlayer>	_black;
   	std::unique_ptr<APlayer>	_white;
 
-		APlayer::Move	_move;
-		APlayer	*_currentPlayer = nullptr;
+	APlayer::Move	_move;
+	APlayer	*_currentPlayer = nullptr;
 
 
 };

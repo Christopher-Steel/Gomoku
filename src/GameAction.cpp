@@ -45,7 +45,6 @@ void										GameAction::run()
 				break;
 		}
 
-		state->handleKeyState();
 		_window->clear();
 
 		for (rit = _states.rbegin(); rit != _states.rend(); ++rit)
@@ -84,7 +83,6 @@ void										GameAction::pushState(AState *state)
 
 void										GameAction::popState()
 {
-	_states.back()->stop();
 	_states.pop_back();
 }
 
