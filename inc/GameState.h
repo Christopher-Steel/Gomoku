@@ -58,7 +58,6 @@ private:
 
 	std::vector<Stone>			_player1;
 	std::vector<Stone>			_player2;
-	std::vector<Stone>			_ia;
 
 	unsigned int				_idPlayer[Gomoku::Player::MAX];
 	unsigned int				_idHud[Gomoku::HUD::MAX];
@@ -78,5 +77,5 @@ private:
 	APlayer::Move	_move;
 	APlayer	*_currentPlayer = nullptr;
 
-
+	bool						_end = true;
 };

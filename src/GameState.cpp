@@ -158,13 +158,19 @@ void					GameState::runModuleGame(Stone &stone) {
 		if (_goban.isGameOver())
 		{
 			_printer.printVictory(_goban.isGameOver());
-			detectEnd(_goban.isGameOver());
+			if (_end == true) {
+				detectEnd(_goban.isGameOver());
+				_end = false;
+			}
 			return;
 		}
 		return;
 	}
 	_printer.printVictory(_goban.isGameOver());
-	detectEnd(_goban.isGameOver());
+	if (_end == true) {
+		detectEnd(_goban.isGameOver());
+		_end = false;
+	}
 }
 
 void					GameState::detectEnd(const PlayerColor &player) {
