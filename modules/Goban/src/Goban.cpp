@@ -13,41 +13,38 @@ Goban::Goban(void) :
   bool			out_of_bounds;
   Point::Direction	dir;
 
-  for (unsigned y = 0; y < Goban::SIZE; ++y)
-    {
-      for (unsigned x = 0; x < Goban::SIZE; ++x)
-	{
-	  if (y == 0 || x == 0 || y == Goban::SIZE - 1 || x == Goban::SIZE - 1)
-	    {
-	      for (int i = 0; i < 8; ++i)
-		{
-		  dir = static_cast<Point::Direction>(i);
-		  Traveller::travel(y * Goban::SIZE + x, dir, out_of_bounds, 1);
-		  if (out_of_bounds)
-		    _points[y * Goban::SIZE + x].direction(dir).open = false;
-		}
-	    }
+  for (unsigned y = 0; y < Goban::SIZE; ++y) {
+    for (unsigned x = 0; x < Goban::SIZE; ++x) {
+      if (y == 0 || x == 0 || y == Goban::SIZE - 1 || x == Goban::SIZE - 1) {
+	for (int i = 0; i < 8; ++i) {
+	  dir = static_cast<Point::Direction>(i);
+	  Traveller::travel(y * Goban::SIZE + x, dir, out_of_bounds, 1);
+	  if (out_of_bounds)
+	    _points[y * Goban::SIZE + x].direction(dir).open = false;
 	}
+      }
     }
+  }
 }
 
-Goban::Goban(const Goban &other) : _referee(*this, other._referee.breakableFives(), true)
+Goban::Goban(const Goban &other) :
+  _captured(other._captured),
+  _points(other._points),
+  _freePoints(other._freePoints),
+  _winner(other._winner),
+  _referee(*this, other._referee.breakableFives(), true)
 {
-  _points = other._points;
-  _captured = other._captured;
-  _freePoints = other._freePoints;
-  _winner = other._winner;
+
 }
 
 Goban     &Goban::operator=(const Goban &other)
 {
-  Referee tmp(*this, other._referee.breakableFives(), other._referee.doubleTriples());
   _points = other._points;
-  _referee = tmp;
+  _referee = {*this, other._referee.breakableFives(), other._referee.doubleTriples()};
   _captured = other._captured;
   _freePoints = other._freePoints;
   _winner = other._winner;
-  return (*this);
+  return *this;
 }
 
 const Point&		Goban::operator[](unsigned index) const
@@ -140,7 +137,7 @@ void		Goban::_startPropagation(unsigned index, PlayerColor color)
   unsigned		startPoint;
   bool			out_of_bounds;
   Radar			r;
-  bool			oldOpen = false;
+  bool			oldOpen;
 
   for (unsigned dir = 0; dir < 8; ++dir) {
     direction = static_cast<Point::Direction>(dir);
@@ -149,6 +146,10 @@ void		Goban::_startPropagation(unsigned index, PlayerColor color)
     if (r.color == color) {
       oldOpen = r.open;
       added += r.length;
+    } else if (r.color == PlayerColor::NONE) {
+      oldOpen = true;
+    } else {
+      oldOpen = false;
     }
     startPoint = Traveller::travel(index, direction, out_of_bounds);
     if (not out_of_bounds) {
@@ -163,6 +164,9 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
   assert(index < Goban::SIZE * Goban::SIZE);
   Point			&point = _points[index];
   Point::Direction	oppositeDir = Point::oppositeDirection(dir);
+  unsigned		next;
+  bool			out_of_bounds;
+  bool			isOpen;
 
   point.direction(oppositeDir).color = color;
   point.direction(oppositeDir).length += diff;
@@ -171,9 +175,6 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
       _winner = color;
     }
   }
-  unsigned	next;
-  bool		out_of_bounds;
-  bool		isOpen;
 
   if (_winner == PlayerColor::NONE) {
     next = Traveller::travel(index, dir, out_of_bounds);
@@ -182,11 +183,11 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
       if (point.isTaken() == color) {
 	isOpen = _propagateInfo(next, dir, color, diff, oldOpen);
 	if (point.direction(dir).color == color
-	    /*|| point.direction(dir).color == PlayerColor::NONE*/) {
+	    || point.direction(dir).color == PlayerColor::NONE) {
 	  point.direction(dir).open = isOpen;
 	}
       } else if (point.isTaken() != PlayerColor::NONE) {
-	_propagateClosedness(point, dir, point.isTaken());
+	_propagateClosedness(next, dir, point.isTaken());
       }
     }
   }
@@ -200,6 +201,7 @@ void		Goban::_propagateClosedness(unsigned index, Point::Direction dir, PlayerCo
   unsigned		next;
   bool			out_of_bounds;
 
+  std::cout << "CLOSEDNESS" << std::endl;
   point.direction(oppositeDir).open = false;
   next = Traveller::travel(index, dir, out_of_bounds);
   if (not out_of_bounds and point.isTaken() == color) {

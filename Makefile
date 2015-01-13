@@ -70,7 +70,7 @@ OBJ		=	$(SRC:.cpp=.o)
 #
 ##
 
-DEBUG		?=	true
+DEBUG		?=	false
 
 ifeq		($(DEBUG), true)
 CXXFLAGS	+=	-g3
