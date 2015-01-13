@@ -178,15 +178,33 @@ bool		Goban::_propagateInfo(unsigned index, Point::Direction dir,
   if (_winner == PlayerColor::NONE) {
     next = Traveller::travel(index, dir, out_of_bounds);
     point.direction(oppositeDir).open = oldOpen;
-    if (not out_of_bounds and point.isTaken() == color) {
-      isOpen = _propagateInfo(next, dir, color, diff, oldOpen);
-      // if (point.direction(dir).color == color
-      // 	  /*|| point.direction(dir).color == PlayerColor::NONE*/) {
-      // 	point.direction(dir).open = isOpen;
-      // }
+    if (not out_of_bounds) {
+      if (point.isTaken() == color) {
+	isOpen = _propagateInfo(next, dir, color, diff, oldOpen);
+	if (point.direction(dir).color == color
+	    /*|| point.direction(dir).color == PlayerColor::NONE*/) {
+	  point.direction(dir).open = isOpen;
+	}
+      } else if (point.isTaken() != PlayerColor::NONE) {
+	_propagateClosedness(point, dir, point.isTaken());
+      }
     }
   }
   return (point.isTaken() != color and point.isTaken() != PlayerColor::NONE);
+}
+
+void		Goban::_propagateClosedness(unsigned index, Point::Direction dir, PlayerColor color)
+{
+  Point			&point = _points[index];
+  Point::Direction	oppositeDir = Point::oppositeDirection(dir);
+  unsigned		next;
+  bool			out_of_bounds;
+
+  point.direction(oppositeDir).open = false;
+  next = Traveller::travel(index, dir, out_of_bounds);
+  if (not out_of_bounds and point.isTaken() == color) {
+    _propagateClosedness(next, dir, color);
+  }
 }
 
 void		Goban::_reversePropagation(unsigned index, PlayerColor color)

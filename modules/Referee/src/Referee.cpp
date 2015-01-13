@@ -91,7 +91,7 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
   }
   bool			out_of_bounds;
   Point::Direction	oppositeDir = Point::oppositeDirection(dir);
-  Point::Direction	direction;
+  Point::Direction	direction = static_cast<Point::Direction>(0);
   unsigned		length;
   unsigned		cursor;
 
