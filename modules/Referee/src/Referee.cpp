@@ -100,6 +100,7 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
   for (unsigned i = 0; i < 5; ++i) {
     for (unsigned j = 0; j < 8; ++j) {
       if (direction == dir or direction == oppositeDir) {
+	std::cout << "TOTOTOTO" << std::endl;
 	direction = static_cast<Point::Direction>(j);
 	length = _goban[cursor].direction(direction).length;
 	if (length == 2) {
@@ -229,7 +230,7 @@ unsigned	Referee::_findOpenDoubles(PlayerColor player, unsigned index,
     origin = Traveller::travel(index, dir, out_of_bounds, len + (extended ? 1 : 0));
     len += _getExtendableLength(player, index, Point::oppositeDirection(dir), extended);
     const Point	&r = _goban[index];
-    if (len >= 2 and r.cdirection(dir).open and r.cdirection(direction).open) {
+    if (len >= 2 /*and r.cdirection(dir).open and r.cdirection(direction).open*/) {
       len += (extended ? 1 : 0);
       found.push_back({origin, len, direction});
     }
