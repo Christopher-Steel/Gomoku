@@ -68,80 +68,51 @@ bool    AI::checkEat(Goban const &go, int x, int y)
 {
   if (x - 3 >= 0)
   {
-    std::cout << "1eme if " << x << std::endl;
     if (go[y * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::BLACK && go[y * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
         && go[y * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
       return (true);
   }
   if (x + 3 < 19)
   {
-    std::cout << "2eme if " << x <<  std::endl;
     if (go[y * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[y * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
         && go[y * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
-    {
-      std::cout << "return" << std::endl;
       return (true);
-    } 
   }
   if (y - 3 >= 0)
   {
-    std::cout << "3eme if " << y << std::endl;
     if (go[(y - 1) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK
         && go[(y - 3) * Goban::SIZE + x].isTaken() == PlayerColor::WHITE)
-    {
-      std::cout << "return" << std::endl;
       return (true);
-    }
   }
   if (y + 3 < 19)
   {
-    std::cout << "4eme if " << y << std::endl;
     if (go[(y + 1) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + x].isTaken() == PlayerColor::BLACK
         && go[(y + 3) * Goban::SIZE + x].isTaken() == PlayerColor::WHITE)
-     {
-      std::cout << "return" << std::endl;
       return (true);
-    }
   }
   if (y - 3 >= 0 && x - 3 >= 0)
   {
-    std::cout << "5eme if " << x << " " << y << std::endl;
     if (go[(y - 1) * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
         && go[(y - 3) * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
-     {
-      std::cout << "return" << std::endl;
       return (true);
-    }
   }
   if (y + 3 < 19 && x - 3 >= 0)
   {
-    std::cout << "6eme if " << x << " " << y << std::endl;
     if (go[(y + 1) * Goban::SIZE + (x - 1)].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + (x - 2)].isTaken() == PlayerColor::BLACK
         && go[(y + 3) * Goban::SIZE + (x - 3)].isTaken() == PlayerColor::WHITE)
-     {
-      std::cout << "return" << std::endl;
       return (true);
-    }
   }
   if (y - 3 >= 0 && x + 3 < 19)
   {
-    std::cout << "7eme if " << x << " " << y << std::endl;
     if (go[(y - 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[(y - 2) * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
         && go[(y - 3) * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
-     {
-      std::cout << "return" << std::endl;
       return (true);
-      }    
   }
   if (y + 3 < 19 && x + 3 < 19)
   {
-    std::cout << "8eme if " << x << " " << y << std::endl;
     if (go[(y + 1) * Goban::SIZE + (x + 1)].isTaken() == PlayerColor::BLACK && go[(y + 2) * Goban::SIZE + (x + 2)].isTaken() == PlayerColor::BLACK
         && go[(y + 3) * Goban::SIZE + (x + 3)].isTaken() == PlayerColor::WHITE)
-      {
-        std::cout << "return" << std::endl;
         return (true);
-    }
   }
    return false; 
 }
