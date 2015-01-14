@@ -228,8 +228,8 @@ unsigned	Referee::_findOpenDoubles(PlayerColor player, unsigned index,
     len = _getExtendableLength(player, index, dir, extended);
     origin = Traveller::travel(index, dir, out_of_bounds, len + (extended ? 1 : 0));
     len += _getExtendableLength(player, index, Point::oppositeDirection(dir), extended);
-    //const Point	&r = _goban[index];
-    if (len >= 2 /*and r.cdirection(dir).open and r.cdirection(direction).open*/) {
+    const Point	&r = _goban[index];
+    if (len >= 2 and r.cdirection(dir).open and r.cdirection(direction).open) {
       len += (extended ? 1 : 0);
       found.push_back({origin, len, direction});
     }
