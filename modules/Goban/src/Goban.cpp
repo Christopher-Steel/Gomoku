@@ -201,7 +201,6 @@ void		Goban::_propagateClosedness(unsigned index, Point::Direction dir, PlayerCo
   unsigned		next;
   bool			out_of_bounds;
 
-  std::cout << "CLOSEDNESS" << std::endl;
   point.direction(oppositeDir).open = false;
   next = Traveller::travel(index, dir, out_of_bounds);
   if (not out_of_bounds and point.isTaken() == color) {
