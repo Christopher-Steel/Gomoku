@@ -94,25 +94,24 @@ bool	Referee::isWinningFive(unsigned index, Point::Direction dir, bool watched)
   Point::Direction	direction = static_cast<Point::Direction>(0);
   unsigned		length;
   unsigned		cursor;
+  PlayerColor		color;
 
   assert(_goban[index].isTaken() != PlayerColor::NONE);
   cursor = index;
+  color = _goban[index].isTaken();
   for (unsigned i = 0; i < 5; ++i) {
     for (unsigned j = 0; j < 8; ++j) {
-      if (direction == dir or direction == oppositeDir) {
-	direction = static_cast<Point::Direction>(j);
+      direction = static_cast<Point::Direction>(j);
+      if (direction != dir and direction != oppositeDir) {
 	length = _goban[cursor].direction(direction).length;
-	if (length == 2) {
+	if (_goban[cursor].direction(direction).color == color and length == 1) {
 	  if (not Goban::isBorderPoint(cursor)
 	      and not Goban::isBorderPoint(Traveller::travel(cursor, direction, out_of_bounds))) {
-	    std::cout << "DIRECTION " << direction << " POS " << cursor % 19 << "/" << cursor / 19 << " oob " << out_of_bounds << std::endl;
 	    if (not watched
-		and /*((_goban[cursor].cdirection(direction).open == true)
-		      xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))*/ true) {
+		and ((_goban[cursor].cdirection(direction).open == true)
+		     xor (_goban[cursor].cdirection(Point::oppositeDirection(direction)).open == true))) {
 	      _watchlist.push_back(std::make_tuple(index, dir, true));
 	      return false;
-	    } else {
-	      return true;
 	    }
 	  }
 	}
@@ -141,7 +140,6 @@ void	Referee::consult(void)
     std::tie(cursor, direction, firstTurn) = fiver;
     for (i = 0; i < 5; ++i) {
       if (not _goban[cursor].isTaken()) {
-	//std::cout << "broken fiver !" << std::endl;
 	return true;
       }
       cursor = Traveller::travel(cursor, direction, out_of_bounds, 1);
@@ -152,13 +150,10 @@ void	Referee::consult(void)
   for (auto &fiver : _watchlist) {
     std::tie(cursor, direction, firstTurn) = fiver;
     if (not firstTurn and isWinningFive(cursor, direction, true)) {
-      //std::cout << "checking fiver" << std::endl;
       _goban._winner = _goban[cursor].isTaken();
       break;
     }
     std::get<2>(fiver) = false;
-    //std::cout << "fiver protection : " << std::get<2>(fiver) << std::endl;
-
   }
 }
 
@@ -228,8 +223,8 @@ unsigned	Referee::_findOpenDoubles(PlayerColor player, unsigned index,
     len = _getExtendableLength(player, index, dir, extended);
     origin = Traveller::travel(index, dir, out_of_bounds, len + (extended ? 1 : 0));
     len += _getExtendableLength(player, index, Point::oppositeDirection(dir), extended);
-    //const Point	&r = _goban[index];
-    if (len >= 2 /*and r.cdirection(dir).open and r.cdirection(direction).open*/) {
+    const Point	&r = _goban[index];
+    if (len == 2 and r.cdirection(dir).open and r.cdirection(direction).open) {
       len += (extended ? 1 : 0);
       found.push_back({origin, len, direction});
     }
